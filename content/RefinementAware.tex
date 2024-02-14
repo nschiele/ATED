@@ -1,0 +1,13 @@
+\section{Refinement Awareness}
+
+One of the biggest differences between attack trees and other tree-like data structures is the presence of refinements, or the \AND\ and \OR\ relationships, which state whether all of the children of a node must be satisfied for the parent node to be satisfiable (\AND) or if at least one must be satisfied for a parent node to be satisfiable (\OR).
+
+The presence of refinements in a tree does not significantly complicate the calculation of tree edit distance. As given by RTED?, the tree edit distance can be given by the summation: \NS{include the nice summation from whatever paper I think I saw it in}.
+
+
+\NS{This is where I prove that this method of calculation works}
+
+
+This method of computation works as it is not possible to have an intermediate attack tree node without a refinement~\cite{mauw_foundations_2006}. As such, all non-leaf nodes are either \AND\ or \OR\ nodes, so the distance between refinements is simple given as the cost needed to convert from one refinement to the other. As unlike the calculations of adding ($\Lambda \rightarrow i$), removing ($i \rightarrow \Lambda$), or replacement ($i \rightarrow j$), with refinements there is only on possible operation: replacement. Either \AND $\rightarrow$ \OR\ or \OR $\rightarrow$ \AND.
+
+Critically, this methodology can only work so long as the order of the nodes does not carry any significance (\textit{i.e} the nodes can be reordered without issue). There is an extention of attack trees which adds a sequential \AND\ (\SAND) refinement, in which the nodes in a \SAND\ relationship are given to be ordered~\cite{jhawar_attack_2015}; however, this is out of scope for our purposes. We discuss this further in Section~\NS{ref future work}.

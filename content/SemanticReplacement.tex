@@ -1,0 +1,30 @@
+\section{Semantic Label Replacement}
+
+In tree edit distance, the replacement calculation is made when the root nodes of subtrees are not the same~\cite{zhang_simple_1989}. Prior to calculation, a mapping is made between all nodes with the same labels, and this mapping is used to determine equivalence of nodes within the two trees. The labels of these nodes are typically given to be capital letters of the alphabet. However, in practical application, node labels are typically significantly more complex than mere letters.
+
+One approach would be to ignore labels entirely.
+
+
+\subsection{Semantic comparison}
+
+
+\subsection{Semantic mapping}
+
+As such, we introduce a new mapping step.
+
+The steps:
+\begin{enumerate}
+    \item determine semantic cut off value $\epsilon$
+    \item list all node labels between both trees
+    \item calculate the semantic similarity between all node labels between the two trees
+          \begin{itemize}
+              \item this is given by comparing semantic embeddings
+              \item This is a value between 0 and 1, with 0 being no semantic similarity and 1 being identical semantic similarity
+          \end{itemize}
+    \item starting with node labels with the highest semantic similarity
+    \item remove these labels from both lists
+    \item repeat until at least one list is empty, or all semantic similarity values are below $\epsilon$
+\end{enumerate}
+
+After performing this mapping step, we compute tree edit distance as described by Zhang and Shasha. However, the cost of replacing a node with another node is given as 1 - semantic similarity. In this way, nodes that have highly similar labels (a semantic similarity approaching 1) will have a low replacement cost, while those with little to no semantic similarity will have high replacement cost. Additionally, if we give that the cost of adding or removing a node to be 1, we prime the Zhang and Shasha algorithm to attempt to replace as many nodes as possible. \NS{this may not be a good thing}
+
