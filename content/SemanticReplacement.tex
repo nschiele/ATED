@@ -2,15 +2,25 @@
 
 In tree edit distance, the replacement calculation is made when the root nodes of subtrees are not the same~\cite{zhang_simple_1989}. Prior to calculation, a mapping is made between all nodes with the same labels, and this mapping is used to determine equivalence of nodes within the two trees. The labels of these nodes are typically given to be capital letters of the alphabet. However, in practical application, node labels are typically significantly more complex than mere letters.
 
-One approach would be to ignore labels entirely.
 
 
-\subsection{Semantic comparison}
+
+
+% One approach would be to ignore labels entirely and attempt to perform a tree edit comparison purely based on the structure of attack trees. This would be akin to setting the cost of replacement to 0. However, there is an additional issue as the Zhang and Shasha algorim relies on an initial mapping of like nodes between the two trees, a mapping done primarily based on labels. In order to ignore labels and define an edit distance based on tree structure alone, we would need to perform such a mapping based on the placement of nodes within the tree. Such a mapping would be possible
+
+% , and would .  While this may yield interesting results, it can result in two trees being evaluated with an edit distance of 0 while not at all being similar (as they are structurally the same). A small example is provided in Figure~\NS{Add fig} where the two trees are structurally equivalent, and all that is needed to edit one tree to another would be to replace all nodes. If the cost of replacement is 0, then the edit distance between the two trees is likewise 0. 
+
+
+
+
+\subsection{Semantic similarity}
+
+
 
 
 \subsection{Semantic mapping}
 
-As such, we introduce a new mapping step.
+We introduce a new mapping step. As attack trees without sequential conjunction (\SAND\ refinements) are generally given to be unordered, we must implement an unordered semantic mapping. As described by Paa{\ss}en builds upon the work Zhang~\etal\ described for
 
 The steps:
 \begin{enumerate}
@@ -24,6 +34,12 @@ The steps:
     \item starting with node labels with the highest semantic similarity
     \item remove these labels from both lists
     \item repeat until at least one list is empty, or all semantic similarity values are below $\epsilon$
+\item Once we have our mappings, we reorder siblings as best as possible
+\begin{enumerate}
+    \item Starting with leaves, siblings can be swapped for no cost
+    \item Done if it improves the mapping
+    \item \textit{may result in local minima issues - but will be optimal enough}
+\end{enumerate}
 \end{enumerate}
 
 After performing this mapping step, we compute tree edit distance as described by Zhang and Shasha. However, the cost of replacing a node with another node is given as 1 - semantic similarity. In this way, nodes that have highly similar labels (a semantic similarity approaching 1) will have a low replacement cost, while those with little to no semantic similarity will have high replacement cost. Additionally, if we give that the cost of adding or removing a node to be 1, we prime the Zhang and Shasha algorithm to attempt to replace as many nodes as possible. \NS{this may not be a good thing}

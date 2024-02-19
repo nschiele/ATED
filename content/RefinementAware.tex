@@ -4,10 +4,18 @@ One of the biggest differences between attack trees and other tree-like data str
 
 The presence of refinements in a tree does not significantly complicate the calculation of tree edit distance. As given by RTED?, the tree edit distance can be given by the summation: \NS{include the nice summation from whatever paper I think I saw it in}.
 
+In the Zhang and Shasha algorithm there are three possibilities for nodes, (i) a node must be added, (ii) a node must be removed, or (iii) a node must be replaced. Assume for each case that the resulting refinement must also be changed. If the cost of this change is given to be $\gamma(\Delta)$, then this cost would be applied to all three cases. As such, the min-cost calculation is given as follows:
 
-\NS{This is where I prove that this method of calculation works}
+\NS{include min cost calculation}
 
+Which would subsequently be equal those
+
+\NS{give min cost calculation with the $\gamma(\Delta)$ on the outside}
+
+As the cost of replacing refinements is ever present, we can simply apply the cost of the replacing refinements after computing the tree edit distance by following the mappings and subsequently applying changed refinements. By doing this, we do not add to the time complexity of the Zhang and Shasha algorithm.
 
 This method of computation works as it is not possible to have an intermediate attack tree node without a refinement~\cite{mauw_foundations_2006}. As such, all non-leaf nodes are either \AND\ or \OR\ nodes, so the distance between refinements is simple given as the cost needed to convert from one refinement to the other. As unlike the calculations of adding ($\Lambda \rightarrow i$), removing ($i \rightarrow \Lambda$), or replacement ($i \rightarrow j$), with refinements there is only on possible operation: replacement. Either \AND $\rightarrow$ \OR\ or \OR $\rightarrow$ \AND.
+
+Similarly, \NS{the binary trees people}
 
 Critically, this methodology can only work so long as the order of the nodes does not carry any significance (\textit{i.e} the nodes can be reordered without issue). There is an extention of attack trees which adds a sequential \AND\ (\SAND) refinement, in which the nodes in a \SAND\ relationship are given to be ordered~\cite{jhawar_attack_2015}; however, this is out of scope for our purposes. We discuss this further in Section~\NS{ref future work}.
