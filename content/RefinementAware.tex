@@ -6,7 +6,15 @@ The presence of refinements in a tree does not significantly complicate the calc
 
 In the Zhang and Shasha algorithm there are three possibilities for nodes, (i) a node must be added, (ii) a node must be removed, or (iii) a node must be replaced. Assume for each case that the resulting refinement must also be changed. If the cost of this change is given to be $\gamma(\Delta)$, then this cost would be applied to all three cases. As such, the min-cost calculation is given as follows:
 
-\NS{include min cost calculation}
+\begin{equation*}
+    \text { forestdist }\left(l\left(i_1\right) \ldots i, l\left(j_1\right) . . j\right)=\min \left\{\begin{array}{l}
+        \text { forestdist }\left(l\left(i_1\right) \ldots i-1, l\left(j_1\right) . . j\right)+\gamma\left(T_1[i] \rightarrow \Lambda\right), \\
+        \text { forestdist }\left(l\left(i_1\right) . . i, l\left(j_1\right) . . j-1\right)+\gamma\left(\Lambda \rightarrow T_2[j]\right),    \\
+        \text { forestdist }\left(l\left(i_1\right) . . l(i)-1, l\left(j_1\right) . . l(j)-1\right)                                           \\
+        + \text { forestdist }(l(i) \ldots i-1, l(j) . . j-1)                                                                                 \\
+        +\gamma\left(T_1[i] \rightarrow T_2[j]\right) .
+    \end{array}\right.
+\end{equation*}
 
 Which would subsequently be equal those
 

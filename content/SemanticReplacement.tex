@@ -42,5 +42,44 @@ The steps:
 \end{enumerate}
 \end{enumerate}
 
-After performing this mapping step, we compute tree edit distance as described by Zhang and Shasha. However, the cost of replacing a node with another node is given as 1 - semantic similarity. In this way, nodes that have highly similar labels (a semantic similarity approaching 1) will have a low replacement cost, while those with little to no semantic similarity will have high replacement cost. Additionally, if we give that the cost of adding or removing a node to be 1, we prime the Zhang and Shasha algorithm to attempt to replace as many nodes as possible. \NS{this may not be a good thing}
+% After performing this mapping step, we compute tree edit distance as described by Zhang and Shasha. However, the cost of replacing a node with another node is given as 1 - semantic similarity. In this way, nodes that have highly similar labels (a semantic similarity approaching 1) will have a low replacement cost, while those with little to no semantic similarity will have high replacement cost. Additionally, if we give that the cost of adding or removing a node to be 1, we prime the Zhang and Shasha algorithm to attempt to replace as many nodes as possible. \NS{this may not be a good thing}
 
+\subsection{Semantic replacement}
+
+The second use of semantic similarity is in the Zhang and Shasha replacement operation. In the provided algorithm, a label is comparison is made between the root nodes of two trees when calculating the cost of replacements. If the root node labels are the same, the cost of replacement is given as 0; otherwise the cost is given as 1. We adjust this label comparison by applying a semantic distance comparison.
+
+We calculate the semantic embeddings for each node label, and compare the result embeddings. If the semantic similarity is above a given threshold, $\epsilon$, we give the cost of replacement to be 0; otherwise, we give the cost of replacement to be 1. This allows for the Zhang and Shasha algorithm to replace nodes with similar labels at a lower cost than nodes with dissimilar labels.
+
+When we examine the forest distance equation from Zhang and Shasha~\cite{zhang_simple_1989}, we see the cost of replacing a given node as
+% \begin{equation*}
+\begin{align*}
+    \text { forestdist } & \left(l\left(i_1\right) . . l(i)-1, l\left(j_1\right) . . l(j)-1\right) \\
+                         & + \text { forestdist }(l(i) \ldots i-1, l(j) . . j-1)                   \\
+                         & + \gamma\left(T_1[i] \rightarrow T_2[j]\right)
+\end{align*}
+% \end{equation*}
+
+
+We give the $\gamma\left(T_1[i] \rightarrow T_2[j]\right)$ to be the following:
+
+\begin{equation*}
+    \gamma\left(T_1[i] \rightarrow T_2[j]\right)=\left\{\begin{array}{ll}
+        0, & \text { if } \text { semanticdist }\left(T_1[i], T_2[j]\right)>\epsilon \\
+        1, & \text { otherwise }
+    \end{array}\right.
+\end{equation*}
+
+
+
+
+% \begin{equation*}
+%     \text { forestdist }\left(l\left(i_1\right) \ldots i, l\left(j_1\right) . . j\right)=\min \left\{\begin{array}{l}
+%         \text { forestdist }\left(l\left(i_1\right) \ldots i-1, l\left(j_1\right) . . j\right)+\gamma\left(T_1[i] \rightarrow \Lambda\right), \\
+%         \text { forestdist }\left(l\left(i_1\right) . . i, l\left(j_1\right) . . j-1\right)+\gamma\left(\Lambda \rightarrow T_2[j]\right),    \\
+%         \text { forestdist }\left(l\left(i_1\right) . . l(i)-1, l\left(j_1\right) . . l(j)-1\right)                                           \\
+%         + \text { forestdist }(l(i) \ldots i-1, l(j) . . j-1)                                                                                 \\
+%         +\gamma\left(T_1[i] \rightarrow T_2[j]\right) .
+%     \end{array}\right.
+% \end{equation*}
+
+Selecting the $\epsilon$ value will ultimately depend on the context in which this comparison is used.If $\epsilon$ is too lowe, then the cost of replacemenst will be 0 for all nodes, and the tree edit distance will be purely based on the structure of the treesa as all replacement operations will have no cost. If $\epsilon$ is too high, then the cost of replacement will be 1 for all nodes, and the tree edit distance will be identical to the original Zhang and Shasha algorithm (with all replacement operations having a cost of 1). In Figure~\ref{img:similaritylimits}, we show the average distance between the 38 experimental ATs per semantic similarity limit. We see that as the semantic similarity limit increases, the average distance between the trees increases, as the cost of all replacement operations slowly move toward 1. We discuss this further in Section~\ref{sec:results}
