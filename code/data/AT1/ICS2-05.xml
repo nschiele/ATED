@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<adtree>
+  <node refinement="disjunctive">
+    <label>Steal personal data</label>
+      <node refinement="conjunctive">
+        <label>Unauthorized access to profile</label>
+          <node refinement="disjunctive">
+            <label>Gaining user credential</label>
+              <node refinement="disjunctive">
+                <label>Malware attack</label>
+              </node>
+              <node refinement="disjunctive">
+                <label>Social engineering attack</label>
+              </node>
+          </node>
+          <node refinement="disjunctive">
+            <label>Accessing the profile</label>
+              <node refinement="disjunctive">
+                <label>Stealing phone</label>
+              </node>
+              <node refinement="disjunctive">
+                <label>Remote access</label>
+              </node>
+          </node>
+      </node>
+      <node refinement="disjunctive">
+        <label>Credential creep</label>
+          <node refinement="disjunctive">
+            <label>Submitting request for additional data</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>User profiling</label>
+          </node>
+      </node>
+      <node refinement="conjunctive">
+        <label>Background data attack</label>
+          <node refinement="disjunctive">
+            <label>Obtaining sensitive data set</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>Linking data set via a request for verification</label>
+          </node>
+      </node>
+  </node>
+</adtree>
