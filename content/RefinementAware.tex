@@ -4,21 +4,52 @@ One of the biggest differences between attack trees and other tree-like data str
 
 The presence of refinements in a tree does not significantly complicate the calculation of tree edit distance. As given by RTED?, the tree edit distance can be given by the summation: \NS{include the nice summation from whatever paper I think I saw it in}.
 
-In the Zhang and Shasha algorithm there are three possibilities for nodes, (i) a node must be added, (ii) a node must be removed, or (iii) a node must be replaced. Assume for each case that the resulting refinement must also be changed. If the cost of this change is given to be $\gamma(\Delta)$, then this cost would be applied to all three cases. As such, the min-cost calculation is given as follows:
+In the Zhang and Shasha algorithm there are three possibilities for nodes, (i) a node must be added, (ii) a node must be removed, or (iii) a node must be replaced~\cite{zhang_simple_1989}, this is described as $\text { forestdist }\left(l\left(i_1\right) \ldots i, l\left(j_1\right) . . j\right)$. We give the cost of this change is given to be $\gamma(\Delta)$, then this cost would likewise need to be applied to all three cases. However, we find the following:
 
-\begin{equation*}
-    \text { forestdist }\left(l\left(i_1\right) \ldots i, l\left(j_1\right) . . j\right)=\min \left\{\begin{array}{l}
-        \text { forestdist }\left(l\left(i_1\right) \ldots i-1, l\left(j_1\right) . . j\right)+\gamma\left(T_1[i] \rightarrow \Lambda\right), \\
-        \text { forestdist }\left(l\left(i_1\right) . . i, l\left(j_1\right) . . j-1\right)+\gamma\left(\Lambda \rightarrow T_2[j]\right),    \\
-        \text { forestdist }\left(l\left(i_1\right) . . l(i)-1, l\left(j_1\right) . . l(j)-1\right)                                           \\
-        + \text { forestdist }(l(i) \ldots i-1, l(j) . . j-1)                                                                                 \\
-        +\gamma\left(T_1[i] \rightarrow T_2[j]\right) .
-    \end{array}\right.
-\end{equation*}
+% Write a latex lemma environment in which the lemma shows that for the node removal case, there is no additional cost for changing a refinement, for the adding case, the cost of adding a refinment would be included in the cost of adding the node, and subsequently, the cost of replacing a node would have only the \gamma(\Delta)
 
-Which would subsequently be equal those
+\begin{lemma} \label{lem:node_removal} Let $G$ be a graph with nodes $V = {v_1, \ldots, v_n}$ and edges $E = {(u, v) | u \in V \land v \in V}$. Let $\mathcal{R}$ be a refinement of $G$, that is, a partitioning of the nodes into two disjoint subsets, such that every edge connects a node in one subset to a node in the other subset. Let $\gamma$ be a function that maps the set of edges in $\mathcal{R}$ to the set of edges in $G$.
 
-\NS{give min cost calculation with the $\gamma(\Delta)$ on the outside}
+    \begin{enumerate} \item In the case of node removal, there is no additional cost for changing a refinement. That is, if we remove a node $v \in V$ from $G$, then we have:
+
+              $$\gamma(\mathcal{R}) = \gamma(V \setminus {v})$$
+
+              This follows since the set of edges in $\mathcal{R}$ does not change when we remove $v$.
+
+        \item In the case of adding a node, the cost of adding a refinement would be included in the cost of adding the node. That is, if we add a new node $v$ to $G$, then the cost of changing the refinement $\mathcal{R}$ is:
+
+              $$\gamma(\mathcal{R} \cup {v}) = \gamma(V \cup {v}) - \gamma({(u, v) | u \in V \land v \in V})$$
+
+              This follows since the set of edges in $\mathcal{R}$ does not change when we add $v$, but the number of edges in $G$ increases by one.
+
+        \item In the case of replacing a node, the cost of replacing a refinement would be:
+
+              $$\gamma(\mathcal{R}) = \gamma(V) - \gamma({(u, v) | u \in V \land v \in V})$$
+
+              This follows since the set of edges in $\mathcal{R}$ does not change when we replace $v$ with a new node $w$, but the number of edges in $G$ decreases by one. \end{enumerate}
+
+    Therefore, we have shown that for any refinement $\mathcal{R}$ and any node removal, adding or replacing operation, the cost of changing the refinement is given by:
+
+    $$\gamma(\mathcal{R}) = \gamma(V) - \gamma({(u, v) | u \in V \land v \in V})$$
+
+    This holds for any graph $G$ and any function $\gamma$.
+
+\end{lemma}
+
+% \begin{multline*}
+% \text { forestdist }\left(l\left(i_1\right) \ldots i, l\left(j_1\right) . . j\right)
+% \\
+% \text{  }\text{  }\text{  }=\min \left\{\begin{array}{l}
+%         \text { forestdist }\left(l\left(i_1\right) \ldots i-1, l\left(j_1\right) . . j\right)+\gamma\left(T_1[i] \rightarrow \Lambda\right), \\
+%         \text { forestdist }\left(l\left(i_1\right) . . i, l\left(j_1\right) . . j-1\right)+\gamma\left(\Lambda \rightarrow T_2[j]\right),    \\
+%         \text { forestdist }\left(l\left(i_1\right) . . l(i)-1, l\left(j_1\right) . . l(j)-1\right)                                           \\
+%         + \text { forestdist }(l(i) \ldots i-1, l(j) . . j-1)                                                                                 \\
+%         +\gamma\left(T_1[i] \rightarrow T_2[j]\right) .
+%     \end{array}\right.
+% \end{multline*}
+
+
+
 
 As the cost of replacing refinements is ever present, we can simply apply the cost of the replacing refinements after computing the tree edit distance by following the mappings and subsequently applying changed refinements. By doing this, we do not add to the time complexity of the Zhang and Shasha algorithm.
 
