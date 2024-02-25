@@ -8,17 +8,18 @@ In the Zhang and Shasha algorithm there are three possibilities for nodes, (i) a
 
 % Write a latex lemma environment in which the lemma shows that for the node removal case, there is no additional cost for changing a refinement, for the adding case, the cost of adding a refinment would be included in the cost of adding the node, and subsequently, the cost of replacing a node would have only the \gamma(\Delta)
 
-\begin{lemma} \label{lem:node_removal} Let $G$ be a graph with nodes $V = {v_1, \ldots, v_n}$ and edges $E = {(u, v) | u \in V \land v \in V}$. Let $\mathcal{R}$ be a refinement of $G$, that is, a partitioning of the nodes into two disjoint subsets, such that every edge connects a node in one subset to a node in the other subset. Let $\gamma$ be a function that maps the set of edges in $\mathcal{R}$ to the set of edges in $G$.
+\begin{lemma} \label{lem:refinement_change_cost} Let $T$ be an attack tree with $T = t\Delta(t_1,...,t_n)$ where $t = b|t\Delta(t_1,...,t_i)$ and $\Delta = \AND|\OR$. We give $b$ to be some action within the attack scenario. Let $\gamma$ be the cost function for the tree edit distance, with the cost of removing a subtree to be $\gamma(t_j \rightarrow {\Lambda})$, the cost of adding a subtree to be $\gamma({\Lambda}\rightarrow t_j)$, and the cost of changing a subtree to be $\gamma(t_j \rightarrow t_k)$. We give the cost changing a refinement for subtrees $t_i$ and $t_j$ to be $\gamma(\Delta_i \rightarrow \Delta_j)$ Then we have the following:
 
-    \begin{enumerate} \item In the case of node removal, there is no additional cost for changing a refinement. That is, if we remove a node $v \in V$ from $G$, then we have:
+\begin{enumerate} \item In the case of node removal, there can be no additional cost for changing a refinement. That is, if we remove a node $t_j$ from $T$, then we have:
 
-              $$\gamma(\mathcal{R}) = \gamma(V \setminus {v})$$
+$$\gamma(t_j \rightarrow {\Lambda})$$
 
-              This follows since the set of edges in $\mathcal{R}$ does not change when we remove $v$.
+$\Lambda$ is an empty tree, and by definition does not contain any refinements. Therefore, the cost of changing the refinement is zero.
 
-        \item In the case of adding a node, the cost of adding a refinement would be included in the cost of adding the node. That is, if we add a new node $v$ to $G$, then the cost of changing the refinement $\mathcal{R}$ is:
+\item In the case of adding a node, the cost of adding a refinement would be included in the cost of adding the node. That is, if we add a node $t_j$ to $T$, then we have:
 
-              $$\gamma(\mathcal{R} \cup {v}) = \gamma(V \cup {v}) - \gamma({(u, v) | u \in V \land v \in V})$$
+$$\gamma(\Lambda \rightarrow {t_j})$$
+
 
               This follows since the set of edges in $\mathcal{R}$ does not change when we add $v$, but the number of edges in $G$ increases by one.
 
