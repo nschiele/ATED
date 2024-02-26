@@ -10,24 +10,26 @@ In the Zhang and Shasha algorithm there are three possibilities for nodes, (i) a
 
 \begin{lemma} \label{lem:refinement_change_cost} Let $T$ be an attack tree with $T = t\Delta(t_1,...,t_n)$ where $t = b|t\Delta(t_1,...,t_i)$ and $\Delta = \AND|\OR$. We give $b$ to be some action within the attack scenario. Let $\gamma$ be the cost function for the tree edit distance, with the cost of removing a subtree to be $\gamma(t_j \rightarrow {\Lambda})$, the cost of adding a subtree to be $\gamma({\Lambda}\rightarrow t_j)$, and the cost of changing a subtree to be $\gamma(t_j \rightarrow t_k)$. We give the cost changing a refinement for subtrees $t_i$ and $t_j$ to be $\gamma(\Delta_i \rightarrow \Delta_j)$ Then we have the following:
 
-\begin{enumerate} \item In the case of node removal, there can be no additional cost for changing a refinement. That is, if we remove a node $t_j$ from $T$, then we have:
+\begin{enumerate} 
+      \item In the case of node removal, there can be no additional cost for changing a refinement. That is, if we remove a node $t_j$ from $T$, then we have:
 
-$$\gamma(t_j \rightarrow {\Lambda})$$
+            $$\gamma(t_j \rightarrow {\Lambda})$$
 
-$\Lambda$ is an empty tree, and by definition does not contain any refinements. Therefore, the cost of changing the refinement is zero.
+            $\Lambda$ is an empty tree, and by definition does not contain any refinements. Therefore, the cost of changing the refinement is zero.
 
-\item In the case of adding a node, the cost of adding a refinement would be included in the cost of adding the node. That is, if we add a node $t_j$ to $T$, then we have:
+      \item In the case of adding a node, the cost of adding a refinement would be included in the cost of adding the node. That is, if we add a node $t_j$ to $T$, then we have:
 
-$$\gamma(\Lambda \rightarrow {t_j})$$
+            $$\gamma(\Lambda \rightarrow {t_j})$$
 
+            It is not possible to for a node in an attack tree to not have a refinement. If we allow
 
-              This follows since the set of edges in $\mathcal{R}$ does not change when we add $v$, but the number of edges in $G$ increases by one.
+      \item In the case of replacing a node, the cost of replacing a refinement would be:
 
-        \item In the case of replacing a node, the cost of replacing a refinement would be:
+            $$\gamma({t_i} \rightarrow {t_j})$$
 
-              $$\gamma(\mathcal{R}) = \gamma(V) - \gamma({(u, v) | u \in V \land v \in V})$$
+            This follows since the set of edges in $\mathcal{R}$ does not change when we replace $v$ with a new node $w$, but the number of edges in $G$ decreases by one
 
-              This follows since the set of edges in $\mathcal{R}$ does not change when we replace $v$ with a new node $w$, but the number of edges in $G$ decreases by one. \end{enumerate}
+\end{enumerate}
 
     Therefore, we have shown that for any refinement $\mathcal{R}$ and any node removal, adding or replacing operation, the cost of changing the refinement is given by:
 
