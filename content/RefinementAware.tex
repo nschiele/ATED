@@ -8,36 +8,60 @@ In the Zhang and Shasha algorithm there are three possibilities for nodes, (i) a
 
 % Write a latex lemma environment in which the lemma shows that for the node removal case, there is no additional cost for changing a refinement, for the adding case, the cost of adding a refinment would be included in the cost of adding the node, and subsequently, the cost of replacing a node would have only the \gamma(\Delta)
 
-\begin{lemma} \label{lem:refinement_change_cost} Let $T$ be an attack tree with $T = t\Delta(t_1,...,t_n)$ where $t = b|t\Delta(t_1,...,t_i)$ and $\Delta = \AND|\OR$. We give $b$ to be some action within the attack scenario. Let $\gamma$ be the cost function for the tree edit distance, with the cost of removing a subtree to be $\gamma(t_j \rightarrow {\Lambda})$, the cost of adding a subtree to be $\gamma({\Lambda}\rightarrow t_j)$, and the cost of changing a subtree to be $\gamma(t_j \rightarrow t_k)$. We give the cost changing a refinement for subtrees $t_i$ and $t_j$ to be $\gamma(\Delta_i \rightarrow \Delta_j)$ Then we have the following:
+\begin{definition} \label{def:attack-tree} Let $T$ be an attack tree with $T = t\Delta(t_1,...,t_n)$ where $T = b|T\Delta(T[0],...,T[i])$ and $\Delta = \AND|\OR$. We give $b$ to be some action within the attack scenario. Let $\gamma$ be the cost function for the tree edit distance, with the cost of removing a subtree to be $\gamma(T_1[i] \rightarrow {\Lambda})$, the cost of adding a subtree to be $\gamma({\Lambda}\rightarrow T_1[i])$, and the cost of changing a subtree to be $\gamma(T_1[i] \rightarrow T_2[j])$. We give the cost changing a refinement for subtrees $T_1[i]$ and $T_2[j]$ to be $\gamma(\Delta_1[i] \rightarrow \Delta_2[j])$. To simplify changing refinements, as only two refinements are given, we say the cost of changing a refinement to be $\gamma(\Delta)$.  Given the above, we have the following:
 
 \begin{enumerate} 
-      \item In the case of node removal, there can be no additional cost for changing a refinement. That is, if we remove a node $t_j$ from $T$, then we have:
+\item In the case of node removal, there can be no additional cost for changing a refinement. That is, if we remove a node $T_2[j]$ from $T$, then we have:
 
-            $$\gamma(t_j \rightarrow {\Lambda})$$
+$$\gamma(T_2[j] \rightarrow {\Lambda})$$
 
             $\Lambda$ is an empty tree, and by definition does not contain any refinements. Therefore, the cost of changing the refinement is zero.
 
-      \item In the case of adding a node, the cost of adding a refinement would be included in the cost of adding the node. That is, if we add a node $t_j$ to $T$, then we have:
+\item In the case of adding a node, the cost of adding a refinement would be included in the cost of adding the node. That is, if we add a node $T_2[j]$ to $T$, then we have:
 
-            $$\gamma(\Lambda \rightarrow {t_j})$$
+$$\gamma(\Lambda \rightarrow {T_2[j]})$$
 
-            It is not possible to for a node in an attack tree to not have a refinement. If we allow
+It is not possible to for a node in an attack tree to not have a refinement. If we separate the cost of adding a node and the cost of adding a refinement, we have one of the two following cases:
+\begin{enumerate}
+      \item A node is added without a refinement, which gives a refinement addition cost of 0, but results in an attack tree which is not valid given our attack tree definition.
+      \item The cost of adding a refinement is \textbf{always} added to the cost of adding a node, which results in the new cost of adding a node to always include $\gamma(\Delta)$.
+\end{enumerate}
+
+Given one of these cases results in an invalid tree, the other case must always apply. Therefore, by convention, we do not separate the cost of adding a node and the cost of adding a refinement, these are one and the same.
 
       \item In the case of replacing a node, the cost of replacing a refinement would be:
 
-            $$\gamma({t_i} \rightarrow {t_j})$$
+$$\gamma({T_1[i]} \rightarrow {T_2[j]})$$
 
-            This follows since the set of edges in $\mathcal{R}$ does not change when we replace $v$ with a new node $w$, but the number of edges in $G$ decreases by one
+Which we declare to consist of the sum following two costs:
+
+$$\gamma({T_1[i].\text{label}} \rightarrow {T_2[j].\text{label}})$$
+
+Which is the cost of changing one label to another. This is the original cost of replacing a node according to Zhang-Shasha. We also have:
+
+$$\gamma(\Delta)$$
+
+Which as previously stated is the cost of changing a refinement.
+
+
 
 \end{enumerate}
 
-    Therefore, we have shown that for any refinement $\mathcal{R}$ and any node removal, adding or replacing operation, the cost of changing the refinement is given by:
+\end{definition}
 
-    $$\gamma(\mathcal{R}) = \gamma(V) - \gamma({(u, v) | u \in V \land v \in V})$$
 
-    This holds for any graph $G$ and any function $\gamma$.
+\begin{lemma}
+Let $T$ be some attack tree within the definition of Definition~\ref{def:attack-tree}. It must be the case that
+
+\[\gamma(\Delta) < \gamma(T_2[j] \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {T_2[j]})\]
+
+\begin{proof}
+      test
+\end{proof}
+
 
 \end{lemma}
+
 
 % \begin{multline*}
 % \text { forestdist }\left(l\left(i_1\right) \ldots i, l\left(j_1\right) . . j\right)
