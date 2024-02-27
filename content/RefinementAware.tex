@@ -4,11 +4,28 @@ One of the biggest differences between attack trees and other tree-like data str
 
 The presence of refinements in a tree does not significantly complicate the calculation of tree edit distance. As given by RTED?, the tree edit distance can be given by the summation: \NS{include the nice summation from whatever paper I think I saw it in}.
 
-In the Zhang and Shasha algorithm there are three possibilities for nodes, (i) a node must be added, (ii) a node must be removed, or (iii) a node must be replaced~\cite{zhang_simple_1989}, this is described as $\text { forestdist }\left(l\left(i_1\right) \ldots i, l\left(j_1\right) . . j\right)$. We give the cost of this change is given to be $\gamma(\Delta)$, then this cost would likewise need to be applied to all three cases. However, we find the following:
+In the Zhang and Shasha algorithm there are three possibilities for calculating distance between individual nodes, (i) a node must be added, (ii) a node must be removed, or (iii) a node must be replaced~\cite{zhang_simple_1989}.
+% this is described as $\text { forestdist }\left(l\left(i_1\right) \ldots i, l\left(j_1\right) . . j\right)$. 
+
 
 % Write a latex lemma environment in which the lemma shows that for the node removal case, there is no additional cost for changing a refinement, for the adding case, the cost of adding a refinment would be included in the cost of adding the node, and subsequently, the cost of replacing a node would have only the \gamma(\Delta)
 
-\begin{definition} \label{def:attack-tree} Let $T$ be an attack tree with $T = t\Delta(t_1,...,t_n)$ where $T = b|T\Delta(T[0],...,T[i])$ and $\Delta = \AND|\OR$. We give $b$ to be some action within the attack scenario. Let $\gamma$ be the cost function for the tree edit distance, with the cost of removing a subtree to be $\gamma(T_1[i] \rightarrow {\Lambda})$, the cost of adding a subtree to be $\gamma({\Lambda}\rightarrow T_1[i])$, and the cost of changing a subtree to be $\gamma(T_1[i] \rightarrow T_2[j])$. We give the cost changing a refinement for subtrees $T_1[i]$ and $T_2[j]$ to be $\gamma(\Delta_1[i] \rightarrow \Delta_2[j])$. To simplify changing refinements, as only two refinements are given, we say the cost of changing a refinement to be $\gamma(\Delta)$.  Given the above, we have the following:
+\begin{definition} \label{def:attack-tree} We define attack trees to be a rooted acyclic structure with the following recursive definition adapted from Gadyatskaya~\etal\. And attack tree with $n$ nodes is defined as $T = T[n]\Delta(T[i],...,T[j])$ for some $i,j|1 \le i, i < j, j < n$. We define the $i\text{th}$ node according to left-right post-order number to be the following, $T[i] = b\Delta(T[j],...,T[k])$. We give $b$ to be some action within the attack scenario, which is the node label of $T[i]$. For clarity, we additionally refer to this label as $T[i].\text{label}$. We give $\Delta$ to be the refinement $\Delta = \AND|\OR$. For clarity and consistency, we refer to the refinement of a given node to be $T[i].\Delta$. Following the refinement, we have a list of nodes which are the children of $T[i]$, $T[j],...,T[k]$. This list of nodes can be empty, in the case of leaf nodes.
+\end{definition}
+      
+
+
+\begin{definition}\label{def:cost-function}
+Similar to Zhang and Shasha, we define $\gamma$ be the cost function for the node edit distance, with the cost of removing a node to be $\gamma(T_1[i] \rightarrow {\Lambda})$, the cost of adding a node to be $\gamma({\Lambda}\rightarrow T_1[i])$, and the cost of changing a node to be $\gamma(T_1[i] \rightarrow T_2[j])$. We give the cost changing a refinement for node  $T_1[i]$ and $T_2[j]$ to be $\gamma(\Delta_1[i] \rightarrow \Delta_2[j])$. To simplify changing refinements, as only two refinements are given, we say the cost of changing a refinement to be $\gamma(\Delta)$. That is to say $\gamma(\AND \rightarrow \OR) = \gamma(\OR \rightarrow \AND)$.
+
+\end{definition}
+
+
+
+\begin{lemma}\label{lem:gamma-delta}
+
+      $\gamma(\Delta)$ only applies in the case of changing one node into another.
+
 
 \begin{enumerate} 
 \item In the case of node removal, there can be no additional cost for changing a refinement. That is, if we remove a node $T_2[j]$ from $T$, then we have:
@@ -47,20 +64,48 @@ Which as previously stated is the cost of changing a refinement.
 
 \end{enumerate}
 
-\end{definition}
+\end{lemma}
 
 
-\begin{lemma}
+
+
+\begin{lemma}\label{lem:gamma-delta-2}
 For attack trees within the definition of Definition~\ref{def:attack-tree}. It must be the case that
 
-\[\gamma(\Delta) < \gamma(T_2[j] \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {T_2[j]})\]
+\[\gamma(\Delta) \le \gamma(T_2[j] \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {T_2[j]})\]
 
 \begin{proof}
 Let $T$ be an attack tree.
 
-Assume that $\gamma(\Delta) \geq \gamma(T_2[j] \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {T_2[j]})$.
+Assume that $\gamma(\Delta) > \gamma(T_2[j] \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {T_2[j]})$.
 
-Let $M(S)$ be the optimal edit path according to the Zhang-Shasha algoirthm. Let some operation $m \in M(S)$ be an operation to change one node into another.
+Let $S$ be the optimal sequence of edit operations according to the Zhang-Shasha algorithm. That is, $\gamma(S)$ is minimal for all possible edit sequences for $\delta(T_1, T_2)$ Let some operation $s \in S$ be an operation to replace some node, $T_1[i]$, with another, $T_2[j]$.
+
+Thus, $\gamma(s) = \gamma({T_1[i].\text{label}} \rightarrow {T_2[j].\text{label}}) + \gamma(\Delta)$
+
+We have two cases:
+
+\begin{enumerate}
+\item $T_1[i].\Delta = T_2[j].\Delta$ 
+
+In this case, both $T_1[i]$ and $T_2[j]$ have the same refinement. Thus, $\gamma(\Delta) = 0$. Therefore, $\gamma(s) = \gamma({T_1[i].\text{label}} \rightarrow {T_2[j].\text{label}})$. 
+
+\item $T_1[i].\Delta \ne T_2[j].\Delta$
+
+In this case, both $T_1[i]$ and $T_2[j]$ have different refinements. Thus, $\gamma(\Delta) > 0$. Therefore, $\gamma(s) = \gamma({T_1[i].\text{label}} \rightarrow {T_2[j].\text{label}}) + \gamma(\Delta)$.
+
+However, we have assumed that $\gamma(\Delta) > \gamma(T_2[j] \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {T_2[j]})$. Therefore, $\gamma(s) = \gamma({T_1[i].\text{label}} \rightarrow {T_2[j].\text{label}}) + \gamma(\Delta) > \gamma(T_2[j] \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {T_2[j]})$, as by convention $\gamma$ cannot result in a negative value.
+
+As such, we can replace $s$ with the sequence of operations $s_1$ and $s_2$, where $s_1$ is the operation to remove $T_1[i]$ and $s_2$ is the operation to add $T_2[j]$. Thus, $\gamma(s_1) = \gamma(T_2[j] \rightarrow {\Lambda})$ and $\gamma(s_2) = \gamma(\Lambda \rightarrow {T_2[j]})$. Therefore, $\gamma(s_1) + \gamma(s_2) < \gamma(s)$.
+
+This results in a contradiction, as $S$ is the optimal sequence of edit operations according to the Zhang-Shasha algorithm, it must not be possible to replace any $s \in S$ with an operation, or sequence of operations, with lower cost.
+\end{enumerate}
+
+Therefore, if $\gamma(\Delta) > \gamma(T_2[j] \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {T_2[j]})$, then $\gamma(\Delta)$ either must be 0 for a change node edit operation to be included in the optimal sequence of edit operations (case 1), or the optimal sequence of edit operations must always result in node removal then replacement (case 2). In both cases, $\gamma(\Delta)$ is not used. 
+
+Therefore, in order to include the cost of changing refinements in the cost of replacing a node, it must be the case that $\gamma(\Delta) \le \gamma(T_2[j] \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {T_2[j]})$.
+
+
 \end{proof}
 
 
