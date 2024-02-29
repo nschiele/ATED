@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<adtree>
+  <node refinement="disjunctive">
+    <label>A</label>
+      <node refinement="conjunctive">
+        <label>B</label>
+          <node refinement="disjunctive">
+            <label>C</label>
+              <node refinement="disjunctive">
+                <label>D</label>
+              </node>
+              <node refinement="disjunctive">
+                <label>E</label>
+              </node>
+          </node>
+          <node refinement="disjunctive">
+            <label>F</label>
+              <node refinement="disjunctive">
+                <label>G</label>
+              </node>
+              <node refinement="disjunctive">
+                <label>H</label>
+              </node>
+          </node>
+      </node>
+      <node refinement="disjunctive">
+        <label>I</label>
+          <node refinement="disjunctive">
+            <label>J</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>K</label>
+          </node>
+      </node>
+      <node refinement="conjunctive">
+        <label>L</label>
+          <node refinement="disjunctive">
+            <label>M</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>N</label>
+          </node>
+      </node>
+  </node>
+</adtree>

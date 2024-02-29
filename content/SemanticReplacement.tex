@@ -1,7 +1,36 @@
 \section{Semantic Label Replacement}
 
-In tree edit distance, the replacement calculation is made when the root nodes of subtrees are not the same~\cite{zhang_simple_1989}. Prior to calculation, a mapping is made between all nodes with the same labels, and this mapping is used to determine equivalence of nodes within the two trees. The labels of these nodes are typically given to be capital letters of the alphabet. However, in practical application, node labels are typically significantly more complex than mere letters.
+In tree edit distance, the replacement calculation is made when the root nodes of subtrees are not the same~\cite{zhang_simple_1989}. 
 
+
+\tikzstyle{block} = [rectangle, draw, fill=black!290, 
+    text width=5em, text=white,  text centered,  minimum height=4em]
+
+    
+\begin{figure*}
+\begin{tikzpicture}[node distance = 2cm, auto]
+    % Place nodes
+    \node [xshift=-5cm](t1) {$T_1[i].\text{label}$};
+    \node [below of = t1] (t2) {$T_2[j].\text{label}$};
+    \node [block, below right = .5cm and 1cm of t1, yshift=.3cm]  (genbeddings) {\shortstack{Generate\\Semantic\\Embeddings}};
+    \node [right of = t1, xshift=4cm]  (et1) {$\vec{e}(T_1[i].\text{label})$};
+    \node [below of = et1]  (et2) {$\vec{e}(T_2[j].\text{label})$};
+    \node [block, right of = genbeddings, xshift= 4.5cm]  (comp) {\shortstack{Vector\\Comparison}};
+    \node [right of = comp, xshift = 2cm]  (end) {$\delta(T_1[i].\text{label}, T_2[j].\text{label})$};
+
+
+    % Draw edges
+    \draw [->] (t1.east)  -| ($(t1)!0.5!(genbeddings)$) coordinate |-(genbeddings);
+    \draw [->] (t2.east)  -| ($(t2)!0.5!(genbeddings)$) coordinate |-(genbeddings);
+    \draw [->] (genbeddings.east)  -| ($(genbeddings)!0.5!(et1)$) coordinate |-(et1);
+    \draw [->] (genbeddings.east)  -| ($(genbeddings)!0.5!(et2)$) coordinate |-(et2);
+    \draw [->] (et1.east)  -| ($(et1)!0.5!(comp)$) coordinate |-(comp);
+    \draw [->] (et2.east)  -| ($(et2)!0.5!(comp)$) coordinate |-(comp);
+    \draw [->] (comp)  -- (end);
+\end{tikzpicture}
+\caption{Process of calculating the distance between two node labels.}
+\label{fig:semanticreplacement}
+\end{figure*}
 
 
 
@@ -18,29 +47,8 @@ In tree edit distance, the replacement calculation is made when the root nodes o
 
 
 
-\subsection{Semantic mapping}
 
-We introduce a new mapping step. As attack trees without sequential conjunction (\SAND\ refinements) are generally given to be unordered, we must implement an unordered semantic mapping. As described by Paa{\ss}en builds upon the work Zhang~\etal\ described for
 
-The steps:
-\begin{enumerate}
-    \item determine semantic cut off value $\epsilon$
-    \item list all node labels between both trees
-    \item calculate the semantic similarity between all node labels between the two trees
-          \begin{itemize}
-              \item this is given by comparing semantic embeddings
-              \item This is a value between 0 and 1, with 0 being no semantic similarity and 1 being identical semantic similarity
-          \end{itemize}
-    \item starting with node labels with the highest semantic similarity
-    \item remove these labels from both lists
-    \item repeat until at least one list is empty, or all semantic similarity values are below $\epsilon$
-\item Once we have our mappings, we reorder siblings as best as possible
-\begin{enumerate}
-    \item Starting with leaves, siblings can be swapped for no cost
-    \item Done if it improves the mapping
-    \item \textit{may result in local minima issues - but will be optimal enough}
-\end{enumerate}
-\end{enumerate}
 
 % After performing this mapping step, we compute tree edit distance as described by Zhang and Shasha. However, the cost of replacing a node with another node is given as 1 - semantic similarity. In this way, nodes that have highly similar labels (a semantic similarity approaching 1) will have a low replacement cost, while those with little to no semantic similarity will have high replacement cost. Additionally, if we give that the cost of adding or removing a node to be 1, we prime the Zhang and Shasha algorithm to attempt to replace as many nodes as possible. \NS{this may not be a good thing}
 
@@ -60,11 +68,11 @@ When we examine the forest distance equation from Zhang and Shasha~\cite{zhang_s
 % \end{equation*}
 
 
-We give the $\gamma\left(T_1[i] \rightarrow T_2[j]\right)$ to be the following:
+We give the $\gamma\left(T_1[i].\text{label} \rightarrow T_2[j].\text{label}\right)$ to be the following:
 
 \begin{equation*}
-    \gamma\left(T_1[i] \rightarrow T_2[j]\right)=\left\{\begin{array}{ll}
-        0, & \text { if } \text { semanticdist }\left(T_1[i], T_2[j]\right)>\epsilon \\
+    \gamma\left(T_1[i].\text{label} \rightarrow T_2[j].\text{label}\right)=\left\{\begin{array}{ll}
+        0, & \text { if } \delta\left(T_1[i].\text{label}, T_2[j].\text{label}\right)>\epsilon \\
         1, & \text { otherwise }
     \end{array}\right.
 \end{equation*}

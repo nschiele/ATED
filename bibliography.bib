@@ -165,3 +165,118 @@
 	file = {Kordy et al. - 2013 - ADTool Security Analysis with Attack–Defense Tree.pdf:/Users/nathanschiele/Zotero/storage/DCUX8897/Kordy et al. - 2013 - ADTool Security Analysis with Attack–Defense Tree.pdf:application/pdf},
 }
 
+
+
+@inproceedings{gadyatskayaRefinementAwareGenerationAttack2017,
+  address   = {Cham},
+  series    = {Lecture {Notes} in {Computer} {Science}},
+  title     = {Refinement-{Aware} {Generation} of {Attack} {Trees}},
+  isbn      = {978-3-319-68063-7},
+  doi       = {10.1007/978-3-319-68063-7_11},
+  abstract  = {Attack trees allow a security analyst to obtain an overview of the potential vulnerabilities of a system. Due to their refinement structure, attack trees support the analyst in understanding the system vulnerabilities at various levels of abstraction. However, contrary to manually synthesized attack trees, automatically generated attack trees are often not refinement-aware, making subsequent human processing much harder. The generation of attack trees in which the refined nodes correspond to semantically relevant levels of abstraction is still an open question. In this paper, we formulate the attack-tree generation problem and propose a methodology to, given a system model, generate attack trees with meaningful levels of abstraction.},
+  language  = {en},
+  booktitle = {Security and {Trust} {Management}},
+  publisher = {Springer International Publishing},
+  author    = {Gadyatskaya, Olga and Jhawar, Ravi and Mauw, Sjouke and Trujillo-Rasua, Rolando and Willemse, Tim A. C.},
+  editor    = {Livraga, Giovanni and Mitchell, Chris},
+  year      = {2017},
+  pages     = {164--179},
+  annote    = {Extracted Annotations (4/19/2021, 5:47:01 PM)"Automatic generation of attack trees can be interpreted as model transformation." (Gadyatskaya et al 2017:164)"This reasoning is applied recursively to traverse complete attack paths." (Gadyatskaya et al 2017:165)"In fact, [VNN14] does not provide any meaning to intermediate nodes, which only serve to express how child nodes are combined, while [IPHK15, Gad15, HKT13] have intermediate nodes at the same level of abstraction as child nodes, representing actions in the system model." (Gadyatskaya et al 2017:165)Debate on whether intermediate nodes should carry meaning or not (note on p.165)"Automatic generation approaches work with concrete attacks, while manual creation of attack trees focuses on the refinement of goals into subgoals." (Gadyatskaya et al 2017:165)"Our approach utilizes a heuristic for encoding and decomposing attack traces that is based on the edge biclique problem [Pee03]." (Gadyatskaya et al 2017:166)"an attack tree defines how higher (parent) nodes are interpreted through lower (child) nodes." (Gadyatskaya et al 2017:166)"::= {\textbar} OR( t) {\textbar} AND( t) {\textbar} SAND( t). t b b t, . . . , b t, . . . , b t, . . . ," (Gadyatskaya et al 2017:166)"An expression like SAND( tn) b t1, . . . , denotes an attack tree of which the top node is labelled with action b, and which has children that have to be executed sequentially. n t1, . . . , tn" (Gadyatskaya et al 2017:166)"We define the auxiliary function to obtain the action at the root node as top follows (for SAND\vphantom{\{}\}): Δ OR,AND, top(b) = top( Δ( t)) = b. b t, . . . ," (Gadyatskaya et al 2017:167)" We say that is a subtree of t, denoted ∈ t, if = or = Δ( tn) t t t t t b, t1, . . . , and ∈ for some ∈ \{ 1, n\}, where ∈ \{ SAND\}. t ti i . . . , Δ OR,AND," (Gadyatskaya et al 2017:167)"The transition from one level in an attack tree to the next level defines a refinement. More precisely, a refinement is an expression of the form Δ( bn), where ∈ and ∈ \{ SAND\vphantom{\{}\}. That b b1, . . . , b, b1, . . . , bn Δ OR,AND, B is to say, a refinement corresponds to a tree of depth one. It follows that the set of refinements, denoted R, is a subset of the set of attack trees . In SAND particular, the refinement of the root node of an attack tree is determined by the partial function ref : R, defined by SAND ref ( Δ( tn)) = Δ(top( t1), top( tn)). b t1, . . . , b . . . , This is a partial function, since the refinement of an attack tree that consists of a single node is not defined. This function can be generalized to non-root nodes, allowing us to determine the set of all refinements that occur in an attack tree. Therefore, we define the function refs : P(R), as follows: T SAND refs(t) = ref (t ) {\textbar} ∈ ∧ ¬∃b ∈ B : = b\}. t t t" (Gadyatskaya et al 2017:168)"A refinement specification specifies which refinements should be satisfied by an attack tree. A refinement specification is simply defined as a set of refinements. Given an attack tree and a refinement specification ⊆ R, we use t ρ t ρ SAND to denote that satisfies ρ. We define satisfaction by ⇐⇒ refs(t) ⊆ ρ. t t ρ That is, a tree satisfies a refinement specification, if all refined actions in the tree also occur as refined actions in the specification." (Gadyatskaya et al 2017:169)},
+  file      = {Gadyatskaya et al_2017_Refinement-Aware Generation of Attack Trees.pdf:/Users/nschiele/Zotero/storage/78I8M85T/Gadyatskaya et al_2017_Refinement-Aware Generation of Attack Trees.pdf:application/pdf}
+}
+
+
+@article{naikEvaluationPotentialAttack2022,
+  title    = {An evaluation of potential attack surfaces based on attack tree modelling and risk matrix applied to self-sovereign identity},
+  volume   = {120},
+  issn     = {0167-4048},
+  url      = {https://www.sciencedirect.com/science/article/pii/S0167404822002024},
+  doi      = {10.1016/j.cose.2022.102808},
+  abstract = {Self-Sovereign Identity (SSI) empowers users to govern their digital identity and personal data. This approach has changed the identity paradigm where users become the central governor of their identity; hence the rapid growth of the SSI model. Utilizing the security and privacy properties of blockchain, together with other security technologies, SSI purports to provide a robust security and privacy service. However, this governing power for users comes with a greater accountability and security risk, as not all users are capable or trained in its use and therefore in its efficient application. This trade-off requires a systematic evaluation of potential attacks on the SSI system and their security risks. Hitherto, there have been no noteworthy research studies performed to evaluate potential attacks on the SSI system and their security risks. This paper proposes an easy, efficient and economical approach to perform an evaluation of potential attacks on the SSI system and their security risks. This approach utilises a combination of an attack tree model and risk matrix model to perform this evaluation of potential attacks and their security risks, in addition to outlining a systematic approach including describing the system architecture and determining its assets in order to perform this evaluation of potential attacks and their security risks. This evaluation work has identified three potential attacks on the SSI system: faking identity, identity theft and distributed denial of service attacks, and performed their security risk evaluation utilising the proposed approach. Finally, this paper has proposed several mitigation strategies for the three evaluated attacks on the SSI system. This proposed evaluation approach is a systematic and generalised approach for evaluating attacks and their security risks, and can be applied to any other IT system.},
+  urldate  = {2024-02-29},
+  journal  = {Computers \& Security},
+  author   = {Naik, Nitin and Grace, Paul and Jenkins, Paul and Naik, Kshirasagar and Song, Jingping},
+  month    = sep,
+  year     = {2022},
+  keywords = {Attack tree model, Blockchain, Decentralized IDentifier, Diamond model of intrusion analysis, DID, Digital identity, Distributed denial of service, Distributed ledger technology, Faking identity, Identity management system, Identity theft, Lockheed Martin’s cyber kill chain, MITRE ATT\&CK framework, Risk matrix model, Self-sovereign identity, SSI, Verifiable credential},
+  pages    = {102808}
+}
+
+
+@mastersthesis{mohalaiaImplementingUserInterface2023,
+  title    = {Implementing a {User} {Interface} for {Attack}-{Defense} {Tree} {WebApp} {Using} {Human}-{Computer} {Interaction} {Principles}},
+  url      = {https://theses.liacs.nl/2644},
+  abstract = {A thesis written by Mohalaia, M. (Marwa) at Leiden University (LIACS).},
+  language = {en},
+  type     = {Bachelor's Thesis},
+  urldate  = {2024-02-29},
+  school   = {LIACS, Leiden University},
+  author   = {Mohalaia, M. (Marwa)},
+  year     = {2023},
+  file     = {Full Text PDF:/Users/nschiele/Zotero/storage/3Z5WBE7H/Mohalaia - 2023 - Implementing a User Interface for Attack-Defense T.pdf:application/pdf;Mohalaia_2023_Implementing a User Interface for Attack-Defense Tree WebApp Using.pdf:/Users/nschiele/Zotero/storage/X98HEL38/Mohalaia_2023_Implementing a User Interface for Attack-Defense Tree WebApp Using.pdf:application/pdf}
+}
+
+@mastersthesis{mezaADTLangDeclarativeLanguage2023,
+  title      = {{ADTLang}: {A} {Declarative} {Language} to {Describe} {Attack} {Defense} {Trees}},
+  shorttitle = {{ADTLang}},
+  url        = {https://theses.liacs.nl/2669},
+  abstract   = {A thesis written by Meza Orellana, S.G. (Stephan) at Leiden University (LIACS).},
+  type       = {Bachelor's Thesis},
+  language   = {en},
+  urldate    = {2024-02-29},
+  school     = {LIACS, Leiden University},
+  author     = {Meza, Stephan Orellana},
+  year       = {2023},
+  file       = {S.G. (Stephan)_2023_ADTLang.pdf:/Users/nschiele/Zotero/storage/PPR49VRC/S.G. (Stephan)_2023_ADTLang.pdf:application/pdf}
+}
+
+
+
+@article{karpatiComparingAttackTrees2014,
+  title    = {Comparing attack trees and misuse cases in an industrial setting},
+  volume   = {56},
+  issn     = {09505849},
+  url      = {https://linkinghub.elsevier.com/retrieve/pii/S0950584913001924},
+  doi      = {10.1016/j.infsof.2013.10.004},
+  abstract = {The last decade has seen an increasing focus on addressing security already during the earliest stages of system development, such as requirements determination. Attack trees and misuse cases are established techniques for representing security threats along with their potential mitigations. Previous work has compared attack trees and misuse cases in two experiments with students. The present paper instead presents an experiment where industrial practitioners perform the experimental tasks in their workplace. The industrial experiment conﬁrms a central ﬁnding from the student experiments: that attack trees tend to help identifying more threats than misuse cases. It also presents a new result: that misuse cases tend to encourage identiﬁcation of threats associated with earlier development stages than attack trees. The two techniques should therefore be considered complementary and should be used together in practical requirements work.},
+  language = {en},
+  number   = {3},
+  urldate  = {2023-08-25},
+  journal  = {Information and Software Technology},
+  author   = {Karpati, Peter and Redda, Yonathan and Opdahl, Andreas L. and Sindre, Guttorm},
+  month    = mar,
+  year     = {2014},
+  pages    = {294--308},
+  file     = {Karpati et al. - 2014 - Comparing attack trees and misuse cases in an indu.pdf:/Users/nschiele/Zotero/storage/PD76AJB6/Karpati et al. - 2014 - Comparing attack trees and misuse cases in an indu.pdf:application/pdf}
+}
+
+@inproceedings{naiakshinaConductingSecurityDeveloper2020,
+  address    = {New York, NY, USA},
+  series     = {{CHI} '20},
+  title      = {On {Conducting} {Security} {Developer} {Studies} with {CS} {Students}: {Examining} a {Password}-{Storage} {Study} with {CS} {Students}, {Freelancers}, and {Company} {Developers}},
+  isbn       = {978-1-4503-6708-0},
+  shorttitle = {On {Conducting} {Security} {Developer} {Studies} with {CS} {Students}},
+  url        = {https://dl.acm.org/doi/10.1145/3313831.3376791},
+  doi        = {10.1145/3313831.3376791},
+  abstract   = {Ecological validity is a major concern in usable security studies with developers. Many studies are conducted with computer science (CS) students out of convenience, since recruiting professional software developers in sufficient numbers is very challenging. In a password-storage study, Naiakshina et al. (CHI'19) showed that CS students behave similarly to freelance developers recruited online. While this is a promising result for conducting developer studies with students, an open question remains: Do professional developers employed in companies behave similarly as well? To provide more insight into the ecological validity of recruiting students for security developer studies, we replicated the study of Naiakshina et al. with developers from diverse companies in Germany. We found that developers employed in companies performed better than students and freelancers in a direct comparison. However, treatment effects were found to be significant in all groups; the treatment effects on CS students also held for company developers.},
+  urldate    = {2024-02-05},
+  booktitle  = {Proceedings of the 2020 {CHI} {Conference} on {Human} {Factors} in {Computing} {Systems}},
+  publisher  = {Association for Computing Machinery},
+  author     = {Naiakshina, Alena and Danilova, Anastasia and Gerlitz, Eva and Smith, Matthew},
+  month      = apr,
+  year       = {2020},
+  keywords   = {developer password study, security developer study, student developer, usable security and privacy},
+  pages      = {1--13},
+  file       = {Naiakshina et al_2020_On Conducting Security Developer Studies with CS Students.pdf:/Users/nschiele/Zotero/storage/DYCHYDUC/Naiakshina et al_2020_On Conducting Security Developer Studies with CS Students.pdf:application/pdf}
+}
+
+
+@misc{hendersonZssTreeEdit,
+  title      = {zss: {Tree} edit distance using the {Zhang} {Shasha} algorithm},
+  copyright  = {UNKNOWN},
+  shorttitle = {zss},
+  url        = {https://www.github.com/timtadh/zss},
+  urldate    = {2024-02-29},
+  author     = {Henderson, Tim},
+  file       = {Snapshot:/Users/nschiele/Zotero/storage/LP6AAFPX/1.1.4.html:text/html}
+}
