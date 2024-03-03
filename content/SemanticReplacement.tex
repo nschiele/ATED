@@ -54,6 +54,10 @@ text width=5em, text=white,  text centered, rounded corners, minimum height=4em]
 
 \subsection{Semantic replacement}
 
+In the original Zhang and Shasha algorithm, nodes are only matched (``replaced'' with no cost) if the node labels are identical. In the examples we provide in Section~\ref{sec:results}, this would result in the node labels ``Obtain personal data'' and ``obtain personal data'' to not be matched, as these labels are not identical. While other label reconciliation schemes have been proposed, many are based on the string edit distance (Levenshtein distance) of the two node labels. This method is not ideal, as it is possible for two unrelated nodes to have small edit distances, such as ``obtain personnel'' and ``obtain personal data'' (edit distance of 7) while related nodes have larger edit distances; such as comparing ``obtain personal data'' and ``gather private info'' (edit distance of 17). In our first example, the two nodes are not related, but due to similar verbiage, the edit distance is relatively small. In the second example, the two nodes have identical meaning, but due to different vocabulary used, the Levenshtein distance between them is significantly larger. If we implemented a distance between the two labels  $\delta\left(T_1[i].\text{label}, T_2[j].\text{label}\right)$ to be based on Levenshtein distance, nodes that should incur a cost to edit may not while those that should not incur a cost to edit may. 
+
+What we subsequently would desire is a method of comparing the two labels and making a determination of whether or not nodes are the same based on meaning. If nodes have identical, or relatively identical, meanings, then the cost of replacement should be 0 (\textit{i.e.} matching). If the nodes have dissimilar meanings, then the cost of replacement should be $>0$. We can achieve this by generating semantic embeddings for each node label, and comparing the resulting embeddings. If the semantic similarity is above a given threshold, $\epsilon$, we give the cost of replacement to be 0; otherwise, we give the cost of replacement to be 1. This allows for the Zhang and Shasha algorithm to replace nodes with similar labels at a lower cost than nodes with dissimilar labels.
+
 % The second use of semantic similarity is in the Zhang and Shasha replacement operation. In the provided algorithm, a label is comparison is made between the root nodes of two trees when calculating the cost of replacements. If the root node labels are the same, the cost of replacement is given as 0; otherwise the cost is given as 1. We adjust this label comparison by applying a semantic distance comparison.
 
 % We calculate the semantic embeddings for each node label, and compare the result embeddings. If the semantic similarity is above a given threshold, $\epsilon$, we give the cost of replacement to be 0; otherwise, we give the cost of replacement to be 1. This allows for the Zhang and Shasha algorithm to replace nodes with similar labels at a lower cost than nodes with dissimilar labels.
@@ -63,7 +67,9 @@ text width=5em, text=white,  text centered, rounded corners, minimum height=4em]
     $\gamma\left(T_1[i].\text{label} \rightarrow T_2[j].\text{label}\right) \le \gamma(T_2[j] \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {T_2[j]})$
 
     \begin{proof}
-        We refer to the proof in Lemma~\ref{lem:gamma-delta-2}. If we assume $\gamma\left(T_1[i].\text{label} \rightarrow T_2[j].\text{label}\right) > \gamma(T_2[j] \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {T_2[j]})$,
+        We refer to the proof in Lemma~\ref{lem:gamma-delta-2}. 
+        
+        If we assume $\gamma\left(T_1[i].\text{label} \rightarrow T_2[j].\text{label}\right) > \gamma(T_2[j] \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {T_2[j]})$, we arrive at the same conclusion that it is not possible to have an optimal edit sequence with a change node operation. As such, either $\gamma\left(T_1[i].\text{label} \rightarrow T_2[j].\text{label}\right) \le \gamma(T_2[j] \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {T_2[j]})$ or edit sequences can only consist of removal and a
     \end{proof}
 \end{lemma}
 
@@ -79,14 +85,16 @@ When we examine the forest distance equation from Zhang and Shasha~\cite{zhang_s
 % \end{equation*}
 
 
-We give the $\gamma\left(T_1[i].\text{label} \rightarrow T_2[j].\text{label}\right)$ to be the following:
+We previously defined $\gamma\left(T_1[i] \rightarrow T_2[j]\right)$  as the sum $\gamma({T_1[i].\text{label}} \rightarrow {T_2[j].\text{label}}) + \gamma(\Delta)$. We now define $\gamma\left(T_1[i].\text{label} \rightarrow T_2[j].\text{label}\right)$ to be the following:
 
-\begin{equation*}
-    \gamma\left(T_1[i].\text{label} \rightarrow T_2[j].\text{label}\right)=\left\{\begin{array}{ll}
+\begin{multline*}
+    \gamma\left(T_1[i].\text{label} \rightarrow T_2[j].\text{label}\right)=\\\left\{\begin{array}{ll}
         0, & \text { if } \delta\left(T_1[i].\text{label}, T_2[j].\text{label}\right)>\epsilon \\
         1, & \text { otherwise }
     \end{array}\right.
-\end{equation*}
+\end{multline*}
+
+And from this we give $\delta\left(T_1[i].\text{label}, T_2[j].\text{label}\right)$ to be the semantic similarity between the two node labels. We calculate the semantic similarity by generating semantic embeddings for each node label, and comparing the resulting embeddings. If the semantic similarity is above a given threshold, $\epsilon$, we give the cost of replacement to be 0; otherwise, we give the cost of replacement to be 1. This allows for the Zhang and Shasha algorithm to replace nodes with similar labels at a lower cost than nodes with dissimilar labels. The manner in which these embeddings are created and the comparison of the resulting embedding vectors is not a contribution of this work, and ultimately our work is agnostic to the method used. Our contribution is the application of these methods to tree edit distance in the context of cyber security, not the methods themselves. his method allows for a more nuanced edit comparison to take place. 
 
 
 
