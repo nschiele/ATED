@@ -3,6 +3,16 @@
 The Zhang and Shasha edit distance algorithm is specifically given for ordered trees, that is, the order of child nodes is taken to be significant. In attack trees without sequential conjunction, the order of nodes is not given to be significant~\cite{mauw_foundations_2006,jhawar_attack_2015}. This results in an issue where node
 
 
+\begin{figure}
+    \begin{subfigure}{.45\linewidth}
+        \includegraphics[width=\linewidth]{img/NodeFlip1.png}
+    \end{subfigure}
+    \begin{subfigure}{.45\linewidth}
+        \includegraphics[width=\linewidth]{img/NodeFlip2.png}
+    \end{subfigure}
+    \caption{Two attack trees (subtrees of the example in Figure~\ref{fig:tartgetAT}) with identical information but different node order. These trees would evaluate to have a distance of 2 (two replacement operations).}
+    \label{fig:nodeflipping}
+\end{figure}
 
 
 
