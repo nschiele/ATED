@@ -21,31 +21,16 @@ Attack trees, by virtue of their construction, tend to be organized in levels of
 
 \subsection{Semantic mapping}
 
-% Prior to calculation, a mapping is made between all nodes with the same labels, and this mapping is used to determine equivalence of nodes within the two trees. The labels of these nodes are typically given to be capital letters of the alphabet. However, in practical application, node labels are typically significantly more complex than mere letters.
+Zhang and Shasha motivate and validate their approach by creating a node mapping between the two trees (source and target)~\cite{zhang_simple_1989}. How this mapping is created was not a contribution of that work; however, simple rules for defining mappings based on node placement were included. For example, two nodes could only be mapped if they shared the same placement in terms of parents and siblings. A left-most sibling could not be mapped to a right-most sibling, even if they were the same node. This is part of the reasoning applied to establish that creating this mapping, and thus defining optimal tree-edit distance for unordered trees is an MAX SNP-hard problem~\cite{zhangMAXSNPhardResults1994}.
 
-% We introduce a new mapping step. As attack trees without sequential conjunction (\SAND\ refinements) are generally given to be unordered, we must implement an unordered semantic mapping. As described by Paa{\ss}en builds upon the work Zhang~\etal\ described for
+We adapt the idea of a mapping to instead map nodes based on a comparison of semantic label embeddings. Starting with the root nodes of both source and target trees, we create a matrix of all semantic similarities between the children of these nodes. Starting with the two nodes with the highest label semantic similarity, we map those two nodes together and remove the row and column corresponding to that value from the similarities matrix. Finally, we reorder the children in each tree such that mapped nodes have the same left-wise index. We then repeat this process until the similarities matrix is empty. We then repeat this process for all newly added mappings. This process is shown in Algorithm~\ref{alg:sibling_reorder}. It is a top down algorithm, starting from the root node and working down to the leaf nodes.
 
-% The steps:
-% \begin{enumerate}
-%     \item determine semantic cut off value $\epsilon$
-%     \item list all node labels between both trees
-%     \item calculate the semantic similarity between all node labels between the two trees
-%           \begin{itemize}
-%               \item this is given by comparing semantic embeddings
-%               \item This is a value between 0 and 1, with 0 being no semantic similarity and 1 being identical semantic similarity
-%           \end{itemize}
-%     \item starting with node labels with the highest semantic similarity
-%     \item remove these labels from both lists
-%     \item repeat until at least one list is empty, or all semantic similarity values are below $\epsilon$
-% \item Once we have our mappings, we reorder siblings as best as possible
-% \begin{enumerate}
-%     \item Starting with leaves, siblings can be swapped for no cost
-%     \item Done if it improves the mapping
-%     \item \textit{may result in local minima issues - but will be optimal enough}
-% \end{enumerate}
-% \end{enumerate}
+This methodology is not guaranteed to return smaller edit distance. If it were, this would represent a polynomial approximate solution to an MAX SNP-hard problem. We can construct a counter example by considering two trees with some identical subtree. If prior to the mapping the parent nodes of these subtrees were in the correct order such that these identical subtrees would be matched by the Zhang and Shasha algorithm, and the process of creating the semantic mapping caused the parent nodes of these identical subtrees to be placed out of order, the tree edit distance would increase as a result of our mapping step, as the previous matching operations (which are given to not have a cost) would no longer occur in the Zhang and Shasha algorithm, and would likely be replaced with a large series of add and remove operations (which each incur a cost). However, this scenario is only possible if the root nodes of these identical subtrees are not semantically mapped together, which is highly unlikely to occur in practice. This potential could be mitigated by calculating the tree edit distance twice: once with semantic node remapping and once without, to check that the node mapping has not increased edit distance. Such a step would not increase the computational complexity of the overall calculation, but would ensure that the worse case scenario does not occur.
 
-\subsection{Semantic Sibling Reordering}
+
+
+
+
 \begin{algorithm}
     \caption{An algorithm to reorder siblings based on semantic similarity}
     \label{alg:sibling_reorder}
@@ -58,7 +43,8 @@ Attack trees, by virtue of their construction, tend to be organized in levels of
         \State $D \gets []$ \Comment{Matrix of semantic similarity values}
         \For{left-wise index $i$ in $m[0].\text{children}$}
             \For{leftwise index $j$ in $m[1].\text{children}$}
-                \State $D[i][j] \gets \delta(m[0].\text{children}[i].\text{label}, m[1].\text{children}[j].\text{label})$
+                \State $D[i][j] \gets$ 
+                \State$\text{  }\text{  }\text{  }\text{  }\text{  }\text{  }\text{  }\text{  }\text{  }\delta(m[0].\text{children}[i].\text{label}, m[1].\text{children}[j].\text{label})$
             \EndFor
         \EndFor
         \State $M_t \gets \emptyset$ \Comment{Temporary set of mappings} 
@@ -77,3 +63,8 @@ Attack trees, by virtue of their construction, tend to be organized in levels of
         \EndFor
     \end{algorithmic}
     \end{algorithm}
+
+
+    \subsection{Ordered Subtrees}
+
+    As we have discussed in Sections~\ref{sec:background}~and~\ref{sec:refinement-awareness}, there are components of attack trees which can be given to be ordered; namely, \SAND\ attack trees~\cite{jhawar_attack_2015}. While these attack trees are out of scope for our definition and contribution, they are a common extension on the attack tree formalism~\cite{lallieReviewAttackGraph2020}. If a \SAND\ node exists within an attack tree, Algorithm~\ref{alg:sibling_reorder} can be modified to check the relationship between children of nodes and to directly map ordered nodes together regardless of label semantic similarity. As stated previously, this is out of scope for our contribution; the validation and testing of such an approach will have to be attended to in a future work.
