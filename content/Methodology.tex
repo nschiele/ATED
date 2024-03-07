@@ -13,7 +13,7 @@ The third component of the study contains two parts. In part A, students were ta
 
 \texttt{Many attackers aim to obtain personal data. Gathering personal data can be completed through unauthorized access to profile, credential creep, or a background data attack. Unauthorized access to profile requires gaining user credentials and accessing the profile. The credentials can be gained through a malware attack or a social engineering attack, and the profile can be accessed by stealing a phone or by remote access. Credential creep can be completed by submitting a request for additional data other than what is needed for verification or by user profiling. Finally, a background data attack requires both obtaining a sensitive dataset and linking the dataset via a request for verification.}
 
-This description was created by reading the attack tree in Naik~\etal\ abstraction level by abstraction level, always going from left to right. 
+This description was created by reading the attack tree in Naik~\etal\ abstraction level by abstraction level, always going from left to right~\cite{naikEvaluationPotentialAttack2022}. 
 
 We then asked students in part B to expand upon their attack tree by ``doing your own research, add at least 5 new nodes and 2 new refinements to the attack tree you created in the previous section''. In all, this creates a relatively predictable, yet varied, dataset. In Part A, all trees should roughly be the same, baring minor changes in the label of nodes or the order of nodes. We expect that any large differences in part A to be due to misunderstanding the assignment or misreading the scenario. As Part B is built from each students' part A, we expect that the ``core'' of their attack tree to remain unchanged but the added nodes and refinement should introduce an ability to evaluate edit distance. Based on previous experience with similar studies, we expect most students to add exactly 5 new nodes and 2 new refinements, which should allows for some predictable edit distance (namely, the cost of adding 5 new nodes).
 
@@ -25,6 +25,10 @@ For this assignment, we created a web application which can be used to create at
 
 The attack tree data was collected in the form of XML data. This data was then processed using a Python script. The script was used to extract the attack trees from the XML data and to convert the attack trees into a format that could be used by our implementation of the Zhang and Shasha algorithm. We started with the pre-implemented and tested \texttt{zss} library from Tim Henderson~\cite{hendersonZssTreeEdit}. We then modified the library to include our semantic label replacement cost, refinement chang cost, and our abstraction layer-wise semantic node flipping to create an implementation of the Zhang and Shasha algorithm that should be effective for attack trees. We subsequently used this implementation to calculate the tree edit distance between the attacks trees. Our code is provided here: \url{http://}\NS{link.to.github?}.
 
+
+\subsection{Sentence Embeddings}
+
+As we discussed in Section~\ref{ssec:semantic-similarity}, BERT is a state-of-the-art method for creating sentence embeddings. We use the \texttt{SentenceTransformers} library to calculate the sentence embeddings and cosine similarity to calculate embedding vector difference. As stated previously, our contribution is not the creation of these embeddings; additionally, our use of sentence embeddings is method agnostic, and any method for generating sentence embeddings could be used with our methodology. We used multiple different pre-trained BERT models and aggregated the results to illustrate that any results we found were not the result of the use of a specific model. Additionally, we did not fine tune any model. We used the following models: \texttt{paraphrase-multilingual-MiniLM-L12}, \texttt{all-mpnet-base}, and \texttt{all-MiniLM-L12}.
 
 \subsection{Ethics}
 \label{ssec:ethics}
