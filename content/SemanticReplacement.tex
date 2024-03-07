@@ -62,13 +62,13 @@ We can see the extreme example of ``door open'' and ``open door'' which has a Le
 \begin{table}[]
     \begin{tabular}{@{}llll@{}}
         \toprule
-        Label 1              & Label 2             & \begin{tabular}[c]{@{}l@{}}Levenshtein\\ Distance\end{tabular} & \begin{tabular}[c]{@{}l@{}}Semantic \\ Similarity\end{tabular} \\ \midrule
-        obtain personal data & obtain personnel    & 7                                                              & 0.4507                                                         \\
-        obtain personal data & gather private info & 15                                                             & 0.5521                                                         \\
-        break open safe      & break open door     & 4                                                              & 0.7855                                                         \\
-        break open safe      & crack safe open     & 11                                                             & 0.814                                                          \\
-        crack safe           & crack door          & 4                                                              & 0.6692                                                         \\
-        door open            & open door           & 8                                                              & 0.992                                                          \\ \bottomrule
+Label 1              & Label 2             & \begin{tabular}[c]{@{}l@{}}Normalized\\Levenshtein\\ Distance\end{tabular} & \begin{tabular}[c]{@{}l@{}}Semantic \\ Similarity\end{tabular} \\ \midrule
+obtain personal data & obtain personnel    & 0.6111                                                              & 0.4507                                                         \\
+obtain personal data & gather private info & 0.1176                                                             & 0.5521                                                         \\
+break open safe      & break open door     & 0.6923                                                              & 0.7855                                                         \\
+break open safe      & crack safe open     & 0.1538                                                             & 0.814                                                          \\
+crack safe           & crack door          & 0.5556                                                              & 0.6692                                                         \\
+door open            & open door           & 0.0                                                             & 0.992                                                          \\ \bottomrule
     \end{tabular}
     \caption{Select examples of potential node label comparisons using both Levenshtein distance and semantic similarity. Semantic similarity is calculated using the methodology described in Section~\ref{sec:results}}
     \label{tab:distances}
