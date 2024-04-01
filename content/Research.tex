@@ -1,33 +1,51 @@
-\section{Requirements}
-\label{sec:requirements}
 
-The application of tree edit distance to attack trees requires a number of considerations. We outline these requirements in this section.
+\section{Research}
+
+Our primary research goal is to determine a mechanism to calculate the distance between two attack trees. This is a novel problem, as attack trees contain the concept of refinements, and the application of tree edit distance to the cybersecurity domain has yet to be seen.
+
+\subsection{Research Questions}
+
+We posit the following research questions:
+
+\begin{enumerate}
+    \item[\RQ{1}] How can we best calculate the distance between two attack trees?
+    \item[\RQ{2}] Is this method of attack tree distance valid?
+    \item[\RQ{3}] What are the industry applications of attack tree distance?
+\end{enumerate}
 
 
-\subsection{Refinement Awareness}
-\label{ssec:refinement}
+\subsection{Requirements}
+\label{ssec:requirements}
+
+The application of tree edit distance to attack trees requires a number of considerations. These considerations are as follows:
+
+
+\subsubsection{Refinement Awareness}
+\label{sssec:refinement}
 
 The primary difference between attack trees and most directed acyclic graphs (DAGs) are the presence of refinements, or the given relationship between children. This is a critical part of the attack tree structure and must be included in the tree edit distance algorithm.
 
-\subsection{Semantic Label Similarity}
-\label{ssec:label-similarity}
+\subsubsection{Semantic Label Similarity}
+\label{sssec:label-similarity}
 
 In early iterations of tree edit distance problems, node labels were said to be equivalent if the labels were identical. However, in most contexts, it will not be the case that node labels will be identical. Especially in the context of cyber security, it is easily possible for two nodes in a DAG to represent the same idea but presented in a radically different manner. As such, the distance between attack trees must have a mechanism to account for the similarity between node labels on the basis of their meaning.
 
-\subsection{Order of children}
-\label{ssec:order-of-children}
+\subsubsection{Order of children}
+\label{sssec:order-of-children}
 
 It is a known problem that tree edit distance of unordered trees is an \textit{NP}-Complete problem~\cite{zhang_editing_1992}. However, attack trees are unique in that the order of children is dependent on the refinement of the parent node. As such, the distance between attack trees must be able to account for the order of children in the context of the refinement of the parent node. In the case of \AND\ and \OR\ refinements, the children are unordered. However, in the case of \SAND\ (\emph{Sequential} \AND) refinements, the order of children is important. As such, the edit distance between two attack trees must optimize to allow for the reordering of nodes when calculating the edit distance; however, this optimization must be such that it is selectively applicable, and can be not applied in the case of \SAND\ refinements.
 
-\subsection{Metric}
-\label{ssec:metric}
+\subsubsection{Metric}
+\label{sssec:metric}
 
 The distance between two attack trees must be a metric. That is to say, the distance between two attack trees must be non-negative, symmetric, and satisfy the triangle inequality.
 
 
 
+\subsubsection{Consensus Trees}
+\label{sssec:consensus-trees}
+
 \NS{I dunno if this should be included in this paper - but it'd make it SO MUCH EASIER to argue utility}
-\subsection{Consensus Trees}
-\label{ssec:consensus-trees}
+
 
 One potential utility of tree edit distance would be to allow for the recognition missing vectors or components of attack trees \NS{cite AG distance paper}. For example, if we find that one tree is a whole subset of another tree, that is the consensus tree between two trees is equivalent to one of the trees, then we can infer that the components of the larger tree are components that would be directly applicable to the subset tree. As such, we can use this method of calculating a consensus tree to find missing components of attack trees.
