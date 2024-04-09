@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<adtree>
+  <node refinement="disjunctive">
+    <label>Obtain Personal Data</label>
+      <node refinement="conjunctive">
+        <label>Unauthorised access</label>
+          <node refinement="disjunctive">
+            <label>Gaining user credentials</label>
+              <node refinement="disjunctive">
+                <label>Malware or exploits</label>
+              </node>
+              <node refinement="disjunctive">
+                <label>Social engineering</label>
+              </node>
+          </node>
+          <node refinement="disjunctive">
+            <label>Accessing the profile</label>
+              <node refinement="disjunctive">
+                <label>Gaining remote access</label>
+                  <node refinement="disjunctive">
+                    <label>Phishing attack</label>
+                      <node refinement="disjunctive">
+                        <label>Deceptive email or message</label>
+                      </node>
+                  </node>
+              </node>
+              <node refinement="disjunctive">
+                <label>Manipulating the users device</label>
+                  <node refinement="disjunctive">
+                    <label>Stealing the users device</label>
+                  </node>
+              </node>
+          </node>
+      </node>
+      <node refinement="disjunctive">
+        <label>Credential Creep</label>
+          <node refinement="disjunctive">
+            <label>Submitting additional data request</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>User profiling</label>
+          </node>
+      </node>
+      <node refinement="disjunctive">
+        <label>Background Data Attack</label>
+          <node refinement="disjunctive">
+            <label>Obtaining a sensitive dataset</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>Linking the dataset via request for verification</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>Exploiting trust relationships between entities</label>
+          </node>
+      </node>
+      <node refinement="disjunctive">
+        <label>Brute force attack</label>
+      </node>
+  </node>
+</adtree>

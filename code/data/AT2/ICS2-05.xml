@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<adtree>
+  <node refinement="disjunctive">
+    <label>Steal personal data</label>
+      <node refinement="conjunctive">
+        <label>Unauthorized access to profile</label>
+          <node refinement="disjunctive">
+            <label>Gaining user credential</label>
+              <node refinement="conjunctive">
+                <label>Malware attack</label>
+                  <node refinement="disjunctive">
+                    <label>Send phising emails</label>
+                  </node>
+                  <node refinement="disjunctive">
+                    <label>Have user click on infected attached link</label>
+                  </node>
+              </node>
+              <node refinement="disjunctive">
+                <label>Social engineering attack</label>
+              </node>
+          </node>
+          <node refinement="disjunctive">
+            <label>Accessing the profile</label>
+              <node refinement="disjunctive">
+                <label>Stealing phone</label>
+                  <node refinement="disjunctive">
+                    <label>Pick pocket</label>
+                  </node>
+                  <node refinement="disjunctive">
+                    <label>Hack phone</label>
+                  </node>
+              </node>
+              <node refinement="disjunctive">
+                <label>Remote access</label>
+                  <node refinement="disjunctive">
+                    <label>VPN</label>
+                  </node>
+                  <node refinement="disjunctive">
+                    <label>Local Area Network</label>
+                  </node>
+              </node>
+          </node>
+      </node>
+      <node refinement="disjunctive">
+        <label>Credential creep</label>
+          <node refinement="disjunctive">
+            <label>Submitting request for additional data</label>
+          </node>
+          <node refinement="conjunctive">
+            <label>User profiling</label>
+              <node refinement="disjunctive">
+                <label>Collect data on the user</label>
+              </node>
+              <node refinement="disjunctive">
+                <label>Find data most sensitive to the user</label>
+              </node>
+          </node>
+      </node>
+      <node refinement="conjunctive">
+        <label>Background data attack</label>
+          <node refinement="disjunctive">
+            <label>Obtaining sensitive data set</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>Linking data set via a request for verification</label>
+          </node>
+      </node>
+  </node>
+</adtree>

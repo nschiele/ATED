@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<adtree>
+  <node refinement="disjunctive">
+    <label>Obtain personal data</label>
+      <node refinement="conjunctive">
+        <label>Unauthorised access</label>
+          <node refinement="disjunctive">
+            <label>Access by gaining user credentials</label>
+              <node refinement="disjunctive">
+                <label>Malware attack</label>
+                  <node refinement="disjunctive">
+                    <label>Fileless malware</label>
+                  </node>
+              </node>
+              <node refinement="disjunctive">
+                <label>Social engineering attack</label>
+                  <node refinement="disjunctive">
+                    <label>Watering hole</label>
+                  </node>
+                  <node refinement="disjunctive">
+                    <label>Phishing</label>
+                  </node>
+              </node>
+          </node>
+          <node refinement="disjunctive">
+            <label>Accessing the profile</label>
+              <node refinement="disjunctive">
+                <label>Stealing a phone number</label>
+                  <node refinement="disjunctive">
+                    <label>Port out scam</label>
+                  </node>
+                  <node refinement="disjunctive">
+                    <label>SIM jacking</label>
+                  </node>
+              </node>
+              <node refinement="disjunctive">
+                <label>Remote access</label>
+              </node>
+          </node>
+      </node>
+      <node refinement="disjunctive">
+        <label>Credential creep</label>
+          <node refinement="disjunctive">
+            <label>Additional data not needed</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>User profiling</label>
+          </node>
+      </node>
+      <node refinement="conjunctive">
+        <label>Background data attack</label>
+          <node refinement="disjunctive">
+            <label>Obtaining sensitive dataset</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>Linking the dataset to user</label>
+          </node>
+      </node>
+  </node>
+</adtree>
