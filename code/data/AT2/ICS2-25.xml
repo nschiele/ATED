@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<adtree>
+  <node refinement="disjunctive">
+    <label>obtain personal data</label>
+      <node refinement="conjunctive">
+        <label>unauthorized access to profile</label>
+          <node refinement="disjunctive">
+            <label>gain user credentials</label>
+              <node refinement="disjunctive">
+                <label>malware attack</label>
+              </node>
+              <node refinement="disjunctive">
+                <label>social engineering attack</label>
+              </node>
+              <node refinement="conjunctive">
+                <label>copy credentials from user diary</label>
+                  <node refinement="disjunctive">
+                    <label>find diary entry with credentials</label>
+                  </node>
+                  <node refinement="disjunctive">
+                    <label>jump through window into users room</label>
+                  </node>
+              </node>
+          </node>
+          <node refinement="disjunctive">
+            <label>access the profile</label>
+              <node refinement="disjunctive">
+                <label>stealing phone</label>
+              </node>
+              <node refinement="disjunctive">
+                <label>remote access</label>
+              </node>
+              <node refinement="disjunctive">
+                <label>force user to log in</label>
+              </node>
+          </node>
+      </node>
+      <node refinement="disjunctive">
+        <label>credential creep</label>
+          <node refinement="disjunctive">
+            <label>submit request for additional data</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>user profiling</label>
+          </node>
+      </node>
+      <node refinement="conjunctive">
+        <label>background data attack</label>
+          <node refinement="disjunctive">
+            <label>linking the data set via request for verification</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>obtain sensitive data set</label>
+          </node>
+      </node>
+      <node refinement="disjunctive">
+        <label>track user interaction with advertisements</label>
+          <node refinement="conjunctive">
+            <label>put personalized advertisements on the users instagram</label>
+              <node refinement="disjunctive">
+                <label>get ability to advertise on instagram</label>
+              </node>
+              <node refinement="disjunctive">
+                <label>create fake marketing company</label>
+              </node>
+          </node>
+      </node>
+  </node>
+</adtree>

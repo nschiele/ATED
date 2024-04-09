@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<adtree>
+  <node refinement="disjunctive">
+    <label>Steal personal data</label>
+      <node refinement="disjunctive">
+        <label>Unauthorized access to profile</label>
+          <node refinement="disjunctive">
+            <label>Use user credentials</label>
+              <node refinement="disjunctive">
+                <label>Access profile</label>
+                  <node refinement="disjunctive">
+                    <label>Remote access</label>
+                  </node>
+                  <node refinement="disjunctive">
+                    <label>Steal phone</label>
+                  </node>
+              </node>
+              <node refinement="disjunctive">
+                <label>Obtain user credentials</label>
+                  <node refinement="disjunctive">
+                    <label>Dolev Yoa attacker model</label>
+                  </node>
+                  <node refinement="disjunctive">
+                    <label>Malware attack</label>
+                      <node refinement="disjunctive">
+                        <label>Trojan horse</label>
+                      </node>
+                      <node refinement="disjunctive">
+                        <label>Computer virus</label>
+                      </node>
+                  </node>
+                  <node refinement="disjunctive">
+                    <label>Social engineering attack</label>
+                      <node refinement="disjunctive">
+                        <label>Pretexting</label>
+                      </node>
+                      <node refinement="disjunctive">
+                        <label>Baiting</label>
+                      </node>
+                  </node>
+                  <node refinement="disjunctive">
+                    <label>Credential creep</label>
+                      <node refinement="disjunctive">
+                        <label>User profiling</label>
+                      </node>
+                      <node refinement="disjunctive">
+                        <label>Request for additional data</label>
+                      </node>
+                  </node>
+              </node>
+          </node>
+          <node refinement="disjunctive">
+            <label>Use token</label>
+              <node refinement="disjunctive">
+                <label>Cross site scripting attack</label>
+              </node>
+              <node refinement="disjunctive">
+                <label>Cross site forgery</label>
+              </node>
+          </node>
+      </node>
+      <node refinement="conjunctive">
+        <label>Background data attack</label>
+          <node refinement="disjunctive">
+            <label>Obtaining sensitive data</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>Linking data via request for verification</label>
+          </node>
+      </node>
+  </node>
+</adtree>
