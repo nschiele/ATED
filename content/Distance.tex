@@ -1,0 +1,59 @@
+\section{Distance Measures}
+
+In this section, we describe the distance measures that we use to compare attack trees. 
+
+\subsection{Measurement Comparison}
+
+A comparison of a series of measurements of two attack trees. These measurements could include, but would not be limited to, the number of nodes, the number of leaf nodes, the number of refinements, the number of \AND\ and \OR\ refinements, the depth of the tree, and the average number of children per node. By comparing this series of measurements, we can roughly describe the difference between two attack trees. This means of measuring the difference between two trees has been used in lieu of a more established difference mechanism. \NS{I'm refering to myself in acceptability 1}
+
+\subsection{Label Distance}
+
+Label distance is a measure of the difference between the labels of a given tree. This is derived from the mappings suggested in Tai~\cite{tai_tree--tree_1979} and Zhang and Shasha~\cite{Zhang_Shasha_1989}, with an algorithm influenced by the A$^*$ tree edit distance algorithm from Yoshino~\etal~\cite{yoshino_dynamic_2013}. We can calculate the distance between two labels by using a pre-trained BERT model to calculate the semantic similarity between two labels. This is done by calculating the cosine similarity between the embeddings of the two labels. This is shown in Figure~\ref{fig:semanticreplacement}. We create a matrix $D$ which is an $M \times N$ matrix which represents all of the distances between the labels between two trees. We then take the largest value at index $i, j$ of this matrix and remove that row ($i$) and column ($j$) from $D$, recording the mapping between $l_i$ and $l_j$. This is repeated until all nodes are included in a mapping set. If the largest value in $D$ is below some value $\epsilon$, we consider the labels to be different, and a direct mapping is not created. We add the nodes as individuals to the mapping (mapping to/from $\Lambda$ indicating that these labels would be removed or added). We then calculate the cost of each node that would be removed or added, giving a cost of 1. This algorithm is defined in detail in \NS{@TODO DEFINE ALGORITHM}. We can divide this value by the number of nodes in the largest tree to get a normalized value. 
+
+\tikzstyle{block} = [rectangle, draw, fill=black!290,
+text width=5em, text=white,  text centered, rounded corners, minimum height=4em]
+\begin{figure*}
+    \begin{tikzpicture}[node distance = 2cm, auto]
+        % Place nodes
+        \node [xshift=-5cm](t1) {$\ATlabel{d}{i}$};
+        \node [below of = t1] (t2) {$\ATlabel{e}{j}$};
+        \node [block, below right = .5cm and 1cm of t1, yshift=.3cm]  (genbeddings) {\shortstack{Generate\\Semantic\\Embeddings}};
+        \node [right of = t1, xshift=4cm]  (et1) {$\vec{e}(\ATlabel{d}{i})$};
+        \node [below of = et1]  (et2) {$\vec{e}(\ATlabel{e}{j})$};
+        \node [block, right of = genbeddings, xshift= 4.5cm]  (comp) {\shortstack{Vector\\Comparison}};
+        \node [right of = comp, xshift = 2cm]  (end) {$\delta(\ATlabel{d}{i}, \ATlabel{e}{j})$};
+
+
+        % Draw edges
+        \draw [->] (t1.east)  -| ($(t1)!0.5!(genbeddings)$) coordinate |-(genbeddings);
+        \draw [->] (t2.east)  -| ($(t2)!0.5!(genbeddings)$) coordinate |-(genbeddings);
+        \draw [->] (genbeddings.east)  -| ($(genbeddings)!0.5!(et1)$) coordinate |-(et1);
+        \draw [->] (genbeddings.east)  -| ($(genbeddings)!0.5!(et2)$) coordinate |-(et2);
+        \draw [->] (et1.east)  -| ($(et1)!0.5!(comp)$) coordinate |-(comp);
+        \draw [->] (et2.east)  -| ($(et2)!0.5!(comp)$) coordinate |-(comp);
+        \draw [->] (comp)  -- (end);
+    \end{tikzpicture}
+    \caption{Process of calculating the distance between two node labels.}
+    \label{fig:semanticreplacement}
+\end{figure*}
+
+This measurement considers all the labels of each node within an attack tree. It uses a semantic comparison to examine the meanings of the nodes, which would allow for this distance measure to work on unfiltered trees. However, this measure does not consider the structure of the tree in any way, and therefore does not represent how the nodes are organized. If we examine the attack tree in Figure~\ref{fig:tartgetAT}, if create an attack tree with all the same label names, but all nodes directly attached to the root (a single root node with 13 child nodes with identical names as in Figure~\ref{fig:tartgetAT}), the resulting label distance would be zero. As such, label distance offers a way to quickly examine if the meanings of the nodes are similar, but does not offer a way to examine the structure of the tree. 
+
+\subsubsection{Threshold Problem}
+
+In defining label distance, we encounter the threshold problem; the problem of defining a threshold $\epsilon$ for the semantic similarity between two labels. This threshold is necessary to determine if two labels are similar enough to be considered the same. As our definition of label distance does not allow for partial costs. In essence, either nodes are considered the same (label distance is above $\epsilon$), match with each other, and are given a cost of 0, or they are considered different (label distance is below $\epsilon$), do not match with each other, and are given a cost of 1. We do not offer a mechanism to account for partial similarity. This could be allowed, but would present a similar problem to the threshold problem; namely, where to set $\epsilon$. We simplify our calculation by not allowing partial calculations, and in Sections~\ref{sec:results}~and~\ref{sec:discussion}, we examine the effect of different $\epsilon$ on the results of our distance calculation.
+
+\NS{This section might make more sense in a discussion section.}
+
+
+\subsection{Tree Edit Distance}
+
+Tree edit distance is a measure of the difference between two trees by defining an optimal edit path; that is, what changes are needed to turn one tree into another.
+
+\subsection{Tree Semantic Difference}
+
+\subsection{Recursive Radical Distance}
+
+\subsection{Tree Embedding Distance}
+
+\NS{I can't find a good way to do this - I could simulate this by combinding BFS position data with the label semantic embeddings, but I dunno if this is a good option}
