@@ -58,7 +58,7 @@ The tree edit distance from Zhang and Shasha works on ordered trees, which for o
 We modify the Zhang and Shasha algorithm in three ways, we introduce a mechanism for comparing the semantic meaning of node labels (similar to label distance), we introduce a new cost for changing the refinement of a node, and we introduce a mechanism to reorder children.
 
 \subsubsection{Semantic Label Comparison}
-We introduce a mechanism for comparing the semantic meaning of node labels, similar to label distance.
+We use the same semantic label comparison as described in Section~\ref{ssec:label-distance} and shown in Figure~\ref{fig:semanticreplacement}. For the Zhang and Shasha algorithm, 
 
 \subsubsection{Refinement Cost}
 We introduce a new cost for changing the refinement of a node.
@@ -72,9 +72,13 @@ We introduce a mechanism to reorder children.
 
 \subsection{Tree Semantic Difference}
 
-Attack trees can be represented mathematically in many different ways. The definition we offer in Definition~\ref{def:attack-tree} is a recursive definition. Multiple different representations of attack trees have been proposed, the two most popular being multiset semantics and SP-graph semantics.
+Attack trees can be represented mathematically in many different ways. The definition we offer in Definition~\ref{def:attack-tree} is a recursive definition. Multiple different representations of attack trees have been proposed, the two most popular being multiset semantics and SP-graph semantics. \NS{city mauw}. In multiset semantics, each multiset represents a single a complete attack vector within the attack tree. A multiset consisting of multisets represents a node with multiple children. In SP-graph semantics, each node is represented by a single node, and the children of a node are represented by the edges of the node. In this representation, the refinement of a node is represented by the type of edge between the parent and child node. \NS{cite Jhawar}
 
 \subsection{Recursive Radical Distance}
+
+In a previous work on attack trees, a proposed mechanism of attack tree decomposition focused on the concept of radicals, or subtrees consisting of a single parent, refinement, and set of children \NS{again, talking about myself here}. We take this decomposition and compare the resulting set of radicals. We define the distance between the resulting sets in the following algorithm \NS{@TODO WRITE THIS ALGORITHM}.
+
+
 
 \subsection{Tree Embedding Distance}
 
