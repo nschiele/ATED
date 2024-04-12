@@ -9,7 +9,7 @@ A comparison of a series of measurements of two attack trees. These measurements
 \subsection{Label Distance}
 \label{ssec:label-distance}
 
-Label distance is a measure of the difference between the labels of a given tree. This is derived from the mappings suggested in Tai~\cite{tai_tree--tree_1979} and Zhang and Shasha~\cite{Zhang_Shasha_1989}, with an algorithm influenced by the A$^*$ tree edit distance algorithm from Yoshino~\etal~\cite{yoshino_dynamic_2013}. We can calculate the distance between two labels by using a pre-trained BERT model to calculate the semantic similarity between two labels. This is done by calculating the cosine similarity between the embeddings of the two labels. This is shown in Figure~\ref{fig:semanticreplacement}. We create a matrix $D$ which is an $M \times N$ matrix which represents all of the distances between the labels between two trees. We then take the largest value at index $i, j$ of this matrix and remove that row ($i$) and column ($j$) from $D$, recording the mapping between $l_i$ and $l_j$. This is repeated until all nodes are included in a mapping set. If the largest value in $D$ is below some value $\epsilon$, we consider the labels to be different, and a direct mapping is not created. We add the nodes as individuals to the mapping (mapping to/from $\Lambda$ indicating that these labels would be removed or added). We then calculate the cost of each node that would be removed or added, giving a cost of 1. This algorithm is defined in detail in \NS{@TODO DEFINE ALGORITHM}. We can divide this value by the number of nodes in the largest tree to get a normalized value. 
+Label distance is a measure of the difference between the labels of a given tree. This is derived from the mappings suggested in Tai~\cite{tai_tree--tree_1979} and Zhang and Shasha~\cite{Zhang_Shasha_1989}, with an algorithm influenced by the A$^*$ tree edit distance algorithm from Yoshino~\etal~\cite{yoshino_dynamic_2013}. We can calculate the distance between two labels by using a pre-trained BERT model to calculate the semantic similarity between two labels. This is done by calculating the cosine similarity between the embeddings of the two labels. This is shown in Figure~\ref{fig:semanticreplacement}. We create a matrix $D$ which is an $M \times N$ matrix which represents all of the distances between the labels between two trees. We then take the largest value at index $i, j$ of this matrix and remove that row ($i$) and column ($j$) from $D$, recording the mapping between $l_i$ and $l_j$. This is repeated until all nodes are included in a mapping set. If the largest value in $D$ is below some value $\epsilon$, we consider the labels to be different, and a direct mapping is not created. We add the nodes as individuals to the mapping (mapping to/from $\Lambda$ indicating that these labels would be removed or added). We then calculate the cost of each node that would be removed or added, giving a cost of 1. This algorithm is defined in detail in Algorithm~\ref{alg:label-distance}. We can divide this value by the number of nodes in the largest tree to get a normalized value.
 
 \tikzstyle{block} = [rectangle, draw, fill=black!290,
 text width=5em, text=white,  text centered, rounded corners, minimum height=4em]
@@ -40,12 +40,70 @@ text width=5em, text=white,  text centered, rounded corners, minimum height=4em]
 
 This measurement considers all the labels of each node within an attack tree. It uses a semantic comparison to examine the meanings of the nodes, which would allow for this distance measure to work on unfiltered trees. However, this measure does not consider the structure of the tree in any way, and therefore does not represent how the nodes are organized. If we examine the attack tree in Figure~\ref{fig:tartgetAT}, if create an attack tree with all the same label names, but all nodes directly attached to the root (a single root node with 13 child nodes with identical names as in Figure~\ref{fig:tartgetAT}), the resulting label distance would be zero. As such, label distance offers a way to quickly examine if the meanings of the nodes are similar, but does not offer a way to examine the structure of the tree. 
 
+We can see the extreme example of ``door open'' and ``open door'' which has a Levenshtein distance of 8 (normalized Levenshtein distance of 0), as all letters must be changed. However, the semantic similarity is 0.992, which is the highest of our selected examples. This is because the two labels are near identical in meaning, and the only difference is the order of the words. In contrast, the two labels ``obtain personal data'' and ``obtain personnel'' have a normalized Levenshtein distance of .5882, but a semantic similarity of 0.4507. This is because the two labels are not related, but due to similar verbiage, the normalized string edit distance is relatively small. If we implemented a distance between the two labels  $\delta\left(\ATlabel{d}{i}, \ATlabel{e}{j}\right)$ to be based on Levenshtein distance, nodes that should incur a cost to edit may not while those that should not incur a cost to edit may.
+% This method is not ideal, as it is possible for two unrelated nodes to have small edit distances, such as ``obtain personnel'' and ``obtain personal data'' (edit distance of 7) while related nodes have larger edit distances; such as comparing ``obtain personal data'' and ``gather private info'' (edit distance of 15). In our first example, the two nodes are not related, but due to similar verbiage, the edit distance is relatively small. In the second example, the two nodes have identical meaning, but due to different vocabulary used, the Levenshtein distance between them is significantly larger. If we implemented a distance between the two labels  $\delta\left(\ATlabel{d}{i}, \ATlabel{e}{j}\right)$ to be based on Levenshtein distance, nodes that should incur a cost to edit may not while those that should not incur a cost to edit may.
+
+\begin{table}[]
+    \begin{tabular}{@{}llll@{}}
+        \toprule
+        Label 1              & Label 2             & \begin{tabular}[c]{@{}l@{}}Normalized\\Levenshtein\\ Distance\end{tabular} & \begin{tabular}[c]{@{}l@{}}Semantic \\ Similarity\end{tabular} \\ \midrule
+        obtain personal data & obtain personnel    & 0.5882                                                                     & 0.4507                                                         \\
+        obtain personal data & gather private info & 0.1176                                                                     & 0.5521                                                         \\
+        break open safe      & break open door     & 0.6923                                                                     & 0.7855                                                         \\
+        break open safe      & crack safe open     & 0.1538                                                                     & 0.814                                                          \\
+        crack safe           & crack door          & 0.5556                                                                     & 0.6692                                                         \\
+        door open            & open door           & 0.0                                                                        & 0.992                                                          \\ \bottomrule
+    \end{tabular}
+    \caption{Select examples of potential node label comparisons using both Levenshtein distance and semantic similarity. Semantic similarity is calculated using the methodology described in Section~\ref{sec:results}}
+    \label{tab:distances}
+\end{table}
+
 \subsubsection{Threshold Problem}
 \label{sssec:threshold-problem}
 
 In defining label distance, we encounter the threshold problem; the problem of defining a threshold $\epsilon$ for the semantic similarity between two labels. This threshold is necessary to determine if two labels are similar enough to be considered the same. As our definition of label distance does not allow for partial costs. In essence, either nodes are considered the same (label distance is above $\epsilon$), match with each other, and are given a cost of 0, or they are considered different (label distance is below $\epsilon$), do not match with each other, and are given a cost of 1. We do not offer a mechanism to account for partial similarity. This could be allowed, but would present a similar problem to the threshold problem; namely, where to set $\epsilon$. We simplify our calculation by not allowing partial calculations, and in Sections~\ref{sec:results}~and~\ref{sec:discussion}, we examine the effect of different $\epsilon$ on the results of our distance calculation.
 
 \NS{This section might make more sense in a discussion section.}
+
+
+\begin{algorithm}
+    \caption{An algorithm to calculate the label distance between two attack trees.}
+    \label{alg:label-distance}
+    \begin{algorithmic}
+        \State Two attack trees $T_1$ and $T_2$ according to Definition~\ref{def:attack-tree} with $a$ and $b$ total nodes respectively
+        \State $M$ is the set of mappings between nodes in $T_1$ and $T_2$
+        \State $A$ is the list of node labels in $T_1$
+        \State $B$ is the list of node labels in $T_2$
+        \State $d$ is the distance between attack trees
+        \State $M \gets \emptyset$
+        \State Let $L$ be the $a \times b$ matrix of semantic similarity values between labels in $A$ and $B$
+        \While{$L$ is not empty}
+        \State Find the maximum value, $\delta$, in $L$ at index $i, j$
+        \State Remove row $i$ and column $j$ from $L$
+        \If{$\delta > \epsilon$}
+        \State Add $(A[i], B[j], \delta)$ to $M$
+        \Else
+        \State Add $(A[i], \Lambda, 0)$ to $M$
+        \State Add $(\Lambda, B[j], 0)$ to $M$
+        \State $d = d + 1$
+        \EndIf
+        \State Remove $A[i]$ from $A$
+        \State Remove $B[j]$ from $B$
+        \EndWhile
+        \For{each $a \in A$}
+        \State Add $(a, \Lambda, 1)$ to $M$
+        \State $d = d + 1$
+        \EndFor
+        \For{each $b \in B$}
+        \State Add $(\Lambda, b, 1)$ to $M$
+        \State $d = d + 1$
+        \EndFor
+        \State \Return $d$, $M$
+    \end{algorithmic}
+\end{algorithm}
+
+
+
 
 
 \subsection{Tree Edit Distance}
@@ -58,13 +116,179 @@ The tree edit distance from Zhang and Shasha works on ordered trees, which for o
 We modify the Zhang and Shasha algorithm in three ways, we introduce a mechanism for comparing the semantic meaning of node labels (similar to label distance), we introduce a new cost for changing the refinement of a node, and we introduce a mechanism to reorder children.
 
 \subsubsection{Semantic Label Comparison}
-We use the same semantic label comparison as described in Section~\ref{ssec:label-distance} and shown in Figure~\ref{fig:semanticreplacement}. For the Zhang and Shasha algorithm, 
+In the original Zhang and Shasha algorithm, nodes are only matched (``replaced'' with no cost) if the node labels are identical. In the examples we provide in Section~\ref{sec:results}, this would result in the node labels ``Obtain personal data'' and ``obtain personal data'' to not be matched, as these labels are not identical. While other label reconciliation schemes have been proposed, many are based on the string edit distance (Levenshtein distance) of the two node labels. This method is not ideal as it can result in two nodes that are entirely unrelated but with similar vocabulary having small edit distances, while two nodes that are related or identical having large edit distances. In Table~\ref{tab:distances}, we provide a few examples of potential node label comparisons using both normalized Levenshtein distance and semantic similarity. Semantic similarity is calculated using the methodology described in Section~\ref{sec:results}. The normalized Levenshtein distance is calculated as one minus the Levenshtein distance divided by the length of the longest string:
+
+\[
+    \delta_L\left(\ATlabel{d}{i}, \ATlabel{e}{j}\right) = 1 - \frac{\text{Levenshtein}\left(\ATlabel{d}{i}, \ATlabel{e}{j}\right)}{\max\left(\left|\ATlabel{d}{i}\right|, \left|\ATlabel{e}{j}\right|\right)}
+\]
+
+
+
+
+What we subsequently would desire is a method of comparing the two labels and making a determination of whether or not nodes are the same based on meaning. If nodes have identical, or relatively identical, meanings, then the cost of replacement should be 0 (\textit{i.e.} matching). If the nodes have dissimilar meanings, then the cost of replacement should be $>0$. We can achieve this by generating semantic embeddings for each node label, and comparing the resulting embeddings. If the semantic similarity is above a given threshold, $\epsilon$, we give the cost of replacement to be 0; otherwise, we give the cost of replacement to be 1. This allows for the Zhang and Shasha algorithm to replace nodes with similar labels at a lower cost than nodes with dissimilar labels.
 
 \subsubsection{Refinement Cost}
-We introduce a new cost for changing the refinement of a node.
+One of the biggest differences between attack trees and other tree-like data structures is the presence of refinements, or the \AND\ and \OR\ relationships, which state whether all of the children of a node must be satisfied for the parent node to be satisfiable (\AND) or if at least one must be satisfied for a parent node to be satisfiable (\OR). This is a critical part of the attack tree structure and must be included in the tree edit distance algorithm.
+
+
+
+
+\begin{definition}\label{def:cost-function}
+    Similar to Zhang and Shasha, we define $\gamma$ be the cost function for the node edit distance, with the cost of removing a node to be $\gamma(\ATnode{d}{i} \rightarrow {\Lambda})$, the cost of adding a node to be $\gamma({\Lambda}\rightarrow \ATnode{d}{i})$, and the cost of changing a node to be $\gamma(\ATnode{d}{i} \rightarrow \ATnode{e}{i})$. We give the cost changing a refinement for node  $\ATnode{d}{i}$ and $\ATnode{e}{j}$ to be $\gamma(\Delta(\ATnode{d}{i}) \rightarrow \Delta(\ATnode{e}{j}))$. To simplify changing refinements, as only three refinements are given and we consider the cost of changing any refinement into another refinement to be the same, we say the cost of changing a refinement to be $\gamma(\Delta)$. That is to say $\gamma(\ATnode{d}{i} \rightarrow \ATnode{e}{j})$ for any $\ATnode{d}{i}.\Delta \ne \ATnode{e}{j}.\Delta$.
+\end{definition}
+
+
+
+\begin{lemma}\label{lem:gamma-delta}
+
+    $\gamma(\Delta)$ only applies in the case of changing one node into another.
+
+    \begin{proof}
+
+
+        \begin{enumerate}
+            \item In the case of node removal, there can be no additional cost for changing a refinement. That is, if we remove a node $\ATnode{d}{i}$ from $T$, then we have:
+
+                  $$\gamma(\ATnode{d}{i} \rightarrow {\Lambda})$$
+
+                  $\Lambda$ is an empty tree, and by definition does not contain any refinements. Therefore, the cost of changing the refinement is zero.
+
+            \item In the case of adding a node, the cost of adding a refinement would be included in the cost of adding the node. That is, if we add a node $\ATnode{d}{i}$ to $T$, then we have:
+
+                  $$\gamma(\Lambda \rightarrow {\ATnode{d}{i}})$$
+
+                  It is not possible to for a node in an attack tree to not have a refinement. If we separate the cost of adding a node and the cost of adding a refinement, we have one of the two following cases:
+                  \begin{enumerate}
+                      \item A node is added without a refinement, which gives a refinement addition cost of 0, but results in an attack tree which is not valid given our attack tree definition.
+                      \item The cost of adding a refinement is \textbf{always} added to the cost of adding a node, which results in the new cost of adding a node to always include $\gamma(\Delta)$.
+                  \end{enumerate}
+
+                  Given one of these cases results in an invalid tree, the other case must always apply. Therefore, by convention, we do not separate the cost of adding a node and the cost of adding a refinement, these are one and the same.
+
+            \item In the case of replacing a node, the cost of replacing a refinement would be:
+
+                  $$\gamma({\ATnode{d}{i}} \rightarrow {\ATnode{e}{j}})$$
+
+                  Which we declare to consist of the sum following two costs:
+
+                  $$\gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}})$$
+
+                  Which is the cost of changing one label to another. This is the original cost of replacing a node according to Zhang-Shasha. We also have:
+
+                  $$\gamma(\Delta)$$
+
+                  Which as previously stated is the cost of changing a refinement.
+
+
+
+        \end{enumerate}
+
+    \end{proof}
+
+\end{lemma}
+
+
+
+
+\begin{lemma}\label{lem:gamma-delta-2}
+    For attack trees within the definition of Definition~\ref{def:attack-tree}. It must be the case that
+
+    \[\gamma(\Delta) \le \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})\]
+
+    \begin{proof}
+        Let $T$ be an attack tree.
+
+        Assume that $\gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$.
+
+        Let $S$ be the optimal sequence of edit operations according to the Zhang-Shasha algorithm. That is, $\gamma(S)$ is minimal for all possible edit sequences for $\delta(T_1, T_2)$ Let some operation $s \in S$ be an operation to replace some node, $\ATnode{d}{i}$, with another, $\ATnode{e}{j}$.
+
+        Thus, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}}) + \gamma(\Delta)$
+
+        We have two cases:
+
+        \begin{enumerate}
+            \item $\ATnode{d}{i}.\Delta = \ATnode{e}{j}.\Delta$
+
+                  In this case, both $\ATnode{d}{i}$ and $\ATnode{e}{j}$ have the same refinement. Thus, $\gamma(\Delta) = 0$. Therefore, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}})$.
+
+            \item $\ATnode{d}{i}.\Delta \ne \ATnode{e}{j}.\Delta$
+
+                  In this case, both $\ATnode{d}{i}$ and $\ATnode{e}{j}$ have different refinements. Thus, $\gamma(\Delta) > 0$. Therefore, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}}) + \gamma(\Delta)$.
+
+                  However, we have assumed that $\gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$. Therefore, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}}) + \gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$, as by convention $\gamma$ cannot result in a negative value.
+
+                  As such, we can replace $s$ with the sequence of operations $s_1$ and $s_2$, where $s_1$ is the operation to remove $\ATnode{d}{i}$ and $s_2$ is the operation to add $\ATnode{e}{j}$. Thus, $\gamma(s_1) = \gamma(\ATnode{e}{j} \rightarrow {\Lambda})$ and $\gamma(s_2) = \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$. Therefore, $\gamma(s_1) + \gamma(s_2) < \gamma(s)$.
+
+                  This results in a contradiction, as $S$ is the optimal sequence of edit operations according to the Zhang-Shasha algorithm, it must not be possible to replace any $s \in S$ with an operation, or sequence of operations, with lower cost.
+        \end{enumerate}
+
+        Therefore, if $\gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$, then $\gamma(\Delta)$ either must be 0 for a change node edit operation to be included in the optimal sequence of edit operations (case 1), or the optimal sequence of edit operations must always result in node removal then replacement (case 2). In both cases, $\gamma(\Delta)$ is not used.
+
+        Therefore, in order to include the cost of changing refinements in the cost of replacing a node, it must be the case that $\gamma(\Delta) \le \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$.
+
+
+    \end{proof}
+
+
+\end{lemma}
+
+
+
+As the cost of replacing refinements is ever present, we can simply apply the cost of the replacing refinements after computing the tree edit distance by following the mappings and subsequently applying changed refinements. By doing this, we do not add to the time complexity of the Zhang and Shasha algorithm.
+
+This method of computation works as it is not possible to have an intermediate attack tree node without a refinement~\cite{mauw_foundations_2006}. As such, all non-leaf nodes are either \AND\ or \OR\ nodes, so the distance between refinements is simple given as the cost needed to convert from one refinement to the other. As unlike the calculations of adding ($\Lambda \rightarrow i$), removing ($i \rightarrow \Lambda$), or replacement ($i \rightarrow j$), with refinements there is only on possible operation: replacement: either \AND $\rightarrow$ \OR\ or \OR $\rightarrow$ \AND.
+
+
 
 \subsubsection{Children Reordering}
-We introduce a mechanism to reorder children.
+The Zhang and Shasha edit distance algorithm is specifically given for ordered trees, that is, the order of child nodes is taken to be significant. In attack trees without sequential conjunction, the order of nodes is not given to be significant~\cite{mauw_foundations_2006,jhawar_attack_2015}. This results in an issue where trees with identical, but unordered nodes are given to have a high edit distance. This is shown in Figure~\ref{fig:nodeflipping}, where two trees with identical information but different node order are given to have a distance of 2. This is due to the fact that the Zhang and Shasha algorithm is not designed to handle unordered trees. Zhang and Jiang have shown that the tree edit distance problem for unordered trees is an MAX SNP-hard~\cite{zhangMAXSNPhardResults1994}. We suggest a novel method for handling tree edit distance in unordered attack trees by taking advantage of the inherent structure of attack trees.
+
+
+\begin{figure}
+    \begin{subfigure}{.45\linewidth}
+        \includegraphics[width=\linewidth]{img/NodeFlip1.png}
+    \end{subfigure}
+    \begin{subfigure}{.45\linewidth}
+        \includegraphics[width=\linewidth]{img/NodeFlip2.png}
+    \end{subfigure}
+    \caption{Two attack trees (subtrees of the example in Figure~\ref{fig:tartgetAT}) with identical information but different node order. These trees would evaluate to have a distance of 2 (two replacement operations).}
+    \label{fig:nodeflipping}
+\end{figure}
+
+Attack trees, by virtue of their construction, tend to be organized in levels of abstraction. That is, with each new level of an attack tree, the nodes are given to be more specific than the nodes in the previous level. This is shown in Figure~\ref{fig:tartgetAT}, where the root node is given to be the most abstract (as the overall goal), while the leaf nodes are the most concrete (as the individual actions). From this, we find siblings in an attack tree to be on the same level of abstraction. As such, the order of siblings can be changed without affecting the meaning of the attack tree. By checking the order of sibling sets between the two attack trees
+
+\begin{algorithm}
+    \caption{An algorithm to reorder siblings based on semantic similarity}
+    \label{alg:sibling_reorder}
+    \begin{algorithmic}
+        \State Two attack trees $T_1$ and $T_2$ according to Definition~\ref{def:attack-tree} with $a$ and $b$ total nodes respectively
+        \State $M$ is the mapping of nodes between $T_1$ and $T_2$ \Comment{We give $m[0]$ and $m[1]$ to be the source and target nodes of a mapping for $m \in M$}
+        \State $M \gets T_1[a]\mapsto T_2[b]$\Comment{Root nodes are always mapped}
+        \For{$m \in M$}
+
+        \State $D \gets []$ \Comment{Matrix of semantic similarity values}
+        \For{left-wise index $i$ in $m[0].\text{children}$}
+        \For{leftwise index $j$ in $m[1].\text{children}$}
+        \State $D[i][j] \gets$
+        \State$\text{  }\text{  }\text{  }\text{  }\text{  }\text{  }\text{  }\text{  }\text{  }\delta(m[0].\text{children}[i].\text{label}, m[1].\text{children}[j].\text{label})$
+        \EndFor
+        \EndFor
+        \State $M_t \gets \emptyset$ \Comment{Temporary set of mappings}
+        \While{$D$ is not empty}
+        \State $i, j \gets \text{argmax}(D)$ \Comment{Largest value in $D$}
+        \State $M_t \gets M_t \cup m[0].\text{children}[i]\mapsto m[1].\text{children}[j]$
+        \State $D \gets D - i$ \Comment{Remove row $i$}
+        \State $D \gets D - j$ \Comment{Remove column $j$}
+        \EndWhile
+        \For{$p$ in $M_t$}
+        \If{indicies $i$, $j$ of $p$ are not equal}
+        \State{Swap nodes $i$ and $j$ \textbf{in $T_1$}}
+        \EndIf
+        \EndFor
+        \State $M \gets M \cup M_t$
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
 
 
 
@@ -72,7 +296,11 @@ We introduce a mechanism to reorder children.
 
 \subsection{Tree Semantic Difference}
 
-Attack trees can be represented mathematically in many different ways. The definition we offer in Definition~\ref{def:attack-tree} is a recursive definition. Multiple different representations of attack trees have been proposed, the two most popular being multiset semantics and SP-graph semantics. \NS{city mauw}. In multiset semantics, each multiset represents a single a complete attack vector within the attack tree. A multiset consisting of multisets represents a node with multiple children. In SP-graph semantics, each node is represented by a single node, and the children of a node are represented by the edges of the node. In this representation, the refinement of a node is represented by the type of edge between the parent and child node. \NS{cite Jhawar}
+Attack trees can be represented mathematically in many different ways. The definition we offer in Definition~\ref{def:attack-tree} is a recursive definition. Multiple different representations of attack trees have been proposed, the two most popular being multiset semantics and SP-graph semantics. \NS{city mauw}. In multiset semantics, each multiset represents a single a complete attack vector within the attack tree. A multiset consisting of multisets represents a node with multiple children. For defining multiset difference, we can use the Jaccard distance between two multisets. However, if we were to use this method, we would need node labels in order for the elements to be considered identical.
+
+If we want to expand the Jaccard distance to count similar meaning elements of multisets as identical, we would need to calculate the semantic similarity between the elements of the multisets. This would result in a similar problem to the label distance problem or the modification of Zhang and Shasha tree edit distance, as we would need to define a threshold $\epsilon$ for the semantic similarity between two elements. This would result in the same threshold problem as described in Section~\ref{sssec:threshold-problem}, but allow for the multiset distance to account for similar meaning but not identical labels.
+
+In SP-graph semantics, each node is represented by a single node, and the children of a node are represented by the edges of the node. In this representation, the refinement of a node is represented by the type of edge between the parent and child node. \NS{cite Jhawar}
 
 \subsection{Recursive Radical Distance}
 
