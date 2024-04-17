@@ -116,6 +116,9 @@ The tree edit distance from Zhang and Shasha works on ordered trees, which for o
 We modify the Zhang and Shasha algorithm in three ways, we introduce a mechanism for comparing the semantic meaning of node labels (similar to label distance), we introduce a new cost for changing the refinement of a node, and we introduce a mechanism to reorder children.
 
 \subsubsection{Semantic Label Comparison}
+
+\NS{Maybe this part  needs to be in the background? Or in a different subsection?}
+
 In the original Zhang and Shasha algorithm, nodes are only matched (``replaced'' with no cost) if the node labels are identical. In the examples we provide in Section~\ref{sec:results}, this would result in the node labels ``Obtain personal data'' and ``obtain personal data'' to not be matched, as these labels are not identical. While other label reconciliation schemes have been proposed, many are based on the string edit distance (Levenshtein distance) of the two node labels. This method is not ideal as it can result in two nodes that are entirely unrelated but with similar vocabulary having small edit distances, while two nodes that are related or identical having large edit distances. In Table~\ref{tab:distances}, we provide a few examples of potential node label comparisons using both normalized Levenshtein distance and semantic similarity. Semantic similarity is calculated using the methodology described in Section~\ref{sec:results}. The normalized Levenshtein distance is calculated as one minus the Levenshtein distance divided by the length of the longest string:
 
 \[
@@ -257,6 +260,8 @@ The Zhang and Shasha edit distance algorithm is specifically given for ordered t
 
 Attack trees, by virtue of their construction, tend to be organized in levels of abstraction. That is, with each new level of an attack tree, the nodes are given to be more specific than the nodes in the previous level. This is shown in Figure~\ref{fig:tartgetAT}, where the root node is given to be the most abstract (as the overall goal), while the leaf nodes are the most concrete (as the individual actions). From this, we find siblings in an attack tree to be on the same level of abstraction. As such, the order of siblings can be changed without affecting the meaning of the attack tree. By checking the order of sibling sets between the two attack trees
 
+
+
 \begin{algorithm}
     \caption{An algorithm to reorder siblings based on semantic similarity}
     \label{alg:sibling_reorder}
@@ -292,22 +297,59 @@ Attack trees, by virtue of their construction, tend to be organized in levels of
 
 
 
+\subsection{Tree Semantic Difference (Multiset Difference)}
 
-
-\subsection{Tree Semantic Difference}
-
-Attack trees can be represented mathematically in many different ways. The definition we offer in Definition~\ref{def:attack-tree} is a recursive definition. Multiple different representations of attack trees have been proposed, the two most popular being multiset semantics and SP-graph semantics. \NS{city mauw}. In multiset semantics, each multiset represents a single a complete attack vector within the attack tree. A multiset consisting of multisets represents a node with multiple children. For defining multiset difference, we can use the Jaccard distance between two multisets. However, if we were to use this method, we would need node labels in order for the elements to be considered identical.
+Attack trees can be represented mathematically in many different ways. The definition we offer in Definition~\ref{def:attack-tree} is a recursive definition. Multiple different representations of attack trees have been proposed, the arguably most established attack tree semantics would be multiset semantics proposed by Mauw and Oostdijk. \NS{city mauw}. In multiset semantics, each multiset represents a single a complete attack vector within the attack tree. A multiset consisting of multisets represents a node with multiple children. For defining multiset difference, we can use the Jaccard distance between two multisets. However, if we were to use this method, we would need node labels in order for the elements to be considered identical.
 
 If we want to expand the Jaccard distance to count similar meaning elements of multisets as identical, we would need to calculate the semantic similarity between the elements of the multisets. This would result in a similar problem to the label distance problem or the modification of Zhang and Shasha tree edit distance, as we would need to define a threshold $\epsilon$ for the semantic similarity between two elements. This would result in the same threshold problem as described in Section~\ref{sssec:threshold-problem}, but allow for the multiset distance to account for similar meaning but not identical labels.
 
-In SP-graph semantics, each node is represented by a single node, and the children of a node are represented by the edges of the node. In this representation, the refinement of a node is represented by the type of edge between the parent and child node. \NS{cite Jhawar}
+Multiset semantics, like most mathematical attack tree semantics, contain only the leaf node labels. All other labels are reduced from the tree. Additionally, the exact structure of the tree is not generally reconstructible. Ultimately, semantics are means to answer the question of if two trees are equivalent, which would mean that the exact structure of tree is not necessarily important. In tree distance, however, the exact structure may be important. By comparing the difference between multisets, we lose some information about the structure of the tree. We also lose the information contained in any intermediate nodes within the tree.
+
+
 
 \subsection{Recursive Radical Distance}
 
-In a previous work on attack trees, a proposed mechanism of attack tree decomposition focused on the concept of radicals, or subtrees consisting of a single parent, refinement, and set of children \NS{again, talking about myself here}. We take this decomposition and compare the resulting set of radicals. We define the distance between the resulting sets in the following algorithm \NS{@TODO WRITE THIS ALGORITHM}.
+In a previous work on attack trees, a proposed mechanism of attack tree decomposition focused on the concept of radicals, or subtrees consisting of a single parent, refinement, and set of children \NS{again, talking about myself here}. We take this decomposition and compare the resulting set of radicals. We define the distance between the resulting radicals according to Algorithm~\ref{alg:recursive-radical}.
+
+
+\begin{algorithm}
+    \caption{An algorithm to compute recursive radical distance}
+    \label{alg:recursive-radical}
+    \begin{algorithmic}
+        \State Two attack trees $T_1$ and $T_2$ according to Definition~\ref{def:attack-tree} with $a$ and $b$ total nodes respectively
+        \State $D_1$, $D_2$ $\gets$ the radical dictionary according to the decomposition in \NS{cite myself} for $T_1$ and $T_2$, respectively
+        \State $M$ $\gets$ the mapping between $D_1$ and $D_2$ indexed by radical root nodes according to semantic similarity (from semantic label distance)
+        \State $d \gets 0$
+        \For{$m \in M$, where $m = (\ATnode{d}{i}, \ATnode{e}{j})$ and $\ATnode{d}{i}, \ATnode{e}{j}$ are indices for $D_1$, and $D_2$, respectively}
+        \If {$\delta(\ATnode{d}{i}, \ATnode{e}{j}) < \epsilon$}
+        \State $d \gets d + 1$
+        \EndIf
+        \If {$Delta(\ATnode{d}{i}) \ne Delta(\ATnode{e}{j})$ and $\ATnode{d}{i}, \ATnode{e}{j} \ne \Lambda$}
+        \State $d \gets d + 0.5$
+        \EndIf
+        \State $M_c \gets$ the semantic mappings (from semantic label distance) between child$(\ATnode{d}{i})$ and child$(\ATnode{e}{j})$
+        \For{$c \in M_c$ where  $c = (\ATnode{d+1}{p}, \ATnode{e+1}{q})$}
+        \If{$\ATnode{d+1}{p} \not\in D_1$ and $\ATnode{e+1}{p} \not\in D_2$
+            \If $\delta(\ATnode{d+1}{p}, \ATnode{e+1}{q}) < \epsilon$}
+        \State $d \gets d + 1$
+        \EndIf
+        \EndIf
+        \EndFor
+        \EndFor
+        \State \Return $d$
+    \end{algorithmic}
+\end{algorithm}
+
+In Recursive Radical Distance (RRD), we first decompose into a collection of subtrees that are each a single height, indexed by each subtree's root node. We then perform a semantic comparison of each of the subtree roots, finding a semantic mapping similar to the one discussed for label distance in Section~\ref{ssec:label-distance}. We then calculate the distance subtree by subtree, adding a distance of 1 if the root nodes are not equal, a distance of 0.5 if the refinements are not equal. For the children, we perform an operation very similar to label distance, but we do not add distance to our calculation if one of the children is already present as a key of the radical dictionaries, as this would result in double counting of that child. This repeats until all children are compared, added or removed.
+
+RRD as we have defined it does not contain a mechanism to enable tracking of modifications unlike tree edit distance. Unlike label distance however, the full structure of the tree is taken into account. Just as almost all distances we have proposed, our distance does account for the semantic difference between node labels.
 
 
 
 \subsection{Tree Embedding Distance}
 
 \NS{I can't find a good way to do this - I could simulate this by combinding BFS position data with the label semantic embeddings, but I dunno if this is a good option}
+Algorithm 2 An algorithm to reorder siblings based on semantic
+similarity
+
+

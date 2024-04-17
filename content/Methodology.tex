@@ -1,7 +1,7 @@
 \section{Experimental methodology}
 \label{sec:methodology}
 
-We evaluated our results using study data from a study that was performed with student participants.
+We conducted a study to collected experimental data on which we can test our distance measures. In this section, we describe the study and the data collected.
 
 \subsection{Participants}
 The participants in this study were all third year bachelor students taking part in a minor on cyber security and governance. Most students were in policy related majors such as Security Studies or International Relations. The participants on average had only a few months of programming experience, which was a result of another course in the minor. Students were asked if they had any prior knowledge of threat models or attack trees, and only a few students had any prior knowledge. Students took this course in the fall semester of 2023. As shown by Naiakshina~\etal\ and Karpati~\etal, in the context of cyber security, students are a sufficient proxy for practitioners~\cite{karpatiComparingAttackTrees2014, naiakshinaConductingSecurityDeveloper2020}.
@@ -29,7 +29,7 @@ The attack tree data was collected in the form of XML data. This data was then p
 
 \subsection{Sentence Embeddings}
 
-As we discussed in Section~\ref{ssec:semantic-similarity}, BERT is a state-of-the-art method for creating sentence embeddings. We use the \texttt{SentenceTransformers} library to calculate the sentence embeddings and cosine similarity to calculate embedding vector difference. As stated previously, our contribution is not the creation of these embeddings; additionally, our use of sentence embeddings is method agnostic, and any method for generating sentence embeddings could be used with our methodology. We used multiple different pre-trained BERT models and aggregated the results to illustrate that any results we found were not the result of the use of a specific model. Additionally, we did not fine tune any model. We used the following models: \texttt{paraphrase-multilingual-MiniLM-L12}, \texttt{all-mpnet-base}, and \texttt{all-MiniLM-L12}.
+As we discussed in Section~\ref{ssec:semantic-similarity}, BERT is a state-of-the-art method for creating sentence embeddings. We use the \texttt{SentenceTransformers} library to calculate the sentence embeddings and cosine similarity to calculate embedding vector difference. As stated previously, our contribution is not the creation of these embeddings; additionally, our use of sentence embeddings is method agnostic, and any method for generating sentence or word embeddings could be used with our methodology. We used multiple different pre-trained BERT models and aggregated the results to illustrate that any results we found were not the result of the use of a specific model. Additionally, we did not fine tune any model. We used the following models: \texttt{paraphrase-multilingual-MiniLM-L12}, \texttt{all-mpnet-base}, and \texttt{all-MiniLM-L12}.
 
 \subsection{Ethics}
 \label{ssec:ethics}
