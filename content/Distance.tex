@@ -107,6 +107,7 @@ In defining label distance, we encounter the threshold problem; the problem of d
 
 
 \subsection{Tree Edit Distance}
+\label{ssec:ted}
 
 Tree edit distance is a measure of the difference between two trees by defining an optimal edit path; that is, what changes are needed to turn one tree into another. The seminal work in this field is by Zhang and Shasha~\cite{Zhang_Shasha_1989}. In their work, they describe a simple algorithm for calculating the distance between two trees. This algorithm is based on the idea of a \textit{forest} distance, which is the distance between two forests, or sets of trees. The result of this algorithm is a measure of the costs of edits needed to transform one tree into another, with the convention being that any edit requires a cost of 1. The possible edits are matching, in which two nodes are defined to be equivalent which is the only edit without cost. Insertion in which a node is added, deletion in which a node is removed, and changing one node into another, in which a node has its label replaced. It is possible to take this absolute edit distance number and divide it by the tree with the largest number of nodes to find a normalized value.
 

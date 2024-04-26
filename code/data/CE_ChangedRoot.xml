@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<adtree>
+  <node refinement="disjunctive">
+    <label>Z</label>
+      <node refinement="disjunctive">
+        <label>I</label>
+          <node refinement="disjunctive">
+            <label>A</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>B</label>
+          </node>
+      </node>
+      <node refinement="conjunctive">
+        <label>J</label>
+          <node refinement="disjunctive">
+            <label>C</label>
+          </node>
+          <node refinement="disjunctive">
+            <label>D</label>
+          </node>
+      </node>
+  </node>
+</adtree>
