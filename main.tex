@@ -6,6 +6,7 @@
 \usepackage{enumitem}
 \usepackage{subcaption}
 % \usepackage{subfig}
+\usepackage{subcaption}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{url}
@@ -18,6 +19,24 @@
 \usetikzlibrary{shapes.geometric,arrows,decorations.markings, arrows.meta}
 \usetikzlibrary{positioning, calc}
 
+
+\usepackage{forest}
+
+\usetikzlibrary{graphs}
+\usetikzlibrary{arrows,automata}
+
+\forestset{%
+angle below/.style={
+tikz+={%
+\draw ($(!1.child anchor)!.25!(.parent anchor)$) [bend right=15] to ($(.parent anchor)!.75!(!l.child anchor)$);
+},
+},
+arrow below/.style={
+tikz+={%
+\draw[->] ($(!1.child anchor)!.30!(.parent anchor)$) [bend right=20] to ($(.parent anchor)!.7!(!l.child anchor)$);
+},
+},
+}
 
 
 
@@ -107,7 +126,7 @@
 
 
 \appendix
-% \input{content/appendix}
+\input{content/appendix}
 
 % \appendix
 % \input{content/questionnaire}

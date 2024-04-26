@@ -3,10 +3,37 @@
 
 
 
+\subsection{Effect of semantic similarity}
+
+Our primary contribution is the application and examination of using semantic similarity to compare node labels when comparing two trees, which would enable the use of tree distance on real world examples and not only on curated datasets. Of interest is how our datasets change with rising a semantic similarity limit ($\epsilon$). We expect that for each distance measure, that the distance between trees will increase with a rising $\epsilon$, as the semantic distance between two labels rises above $\epsilon$, nodes that were previously marked as matching (as the cosine similarity of their semantic embeddings was below $\epsilon$) become considered as needing a ``change'' operation. In Figures~\ref{fig:semsim-at1}~\ref{fig:semsim-at2}~and~\ref{fig:semsim-at1-2}, this is precisely the behavior we see. As described in Section~\ref{ssec:method-embeddings}, we use three pre-trained embeddings models in order to ensure that our results are not biased to a particular model. Each solid line is the mean value across the three models of the given distance, with the deviations above and below the mean value represented by the shaded areas.
+
+
+\begin{figure}
+    \includegraphics[width=\linewidth]{code/img/similaritylimits_at1_percentage.pdf}
+    \caption{AT1 for semantic similarity limit ($\epsilon$) ranging from 0 to 1 with steps of 0.01}
+    \label{fig:semsim-at1}
+\end{figure}
+
+In Figure~\ref{fig:semsim-at1}, we can see the normalized distance values for each of the distance measures. As described in Section~\ref{ssec:method-study-design}, \ATone\ consists of participants creating an attack tree from a written description (the attack tree shown in Figure~\ref{fig:tartgetAT}), which should result in idential (or nearly identical) trees. We can see that for label distance, radical distance, and multiset distance, the normalized distances are all below 0.10, which show near identical trees for similarity limit ($\epsilon$) below ~0.7. Of note, the tree edit distance shows an early increase in distance for similarity limit ~0.15 and then matches this later increase around 0.7 of the other three distance measures. As we show later in this section, this may be due to the order of nodes. Overall, this results suggest that a similarity limit ($\epsilon$) between 0.6 and 0.8 would be ideal for evaluating semantic similarity between trees.
+
+\begin{figure}
+    \includegraphics[width=\linewidth]{code/img/similaritylimits_at2_percentage.pdf}
+    \caption{AT2 for semantic similarity limit ($\epsilon$) ranging from 0 to 1 with steps of 0.01}
+    \label{fig:semsim-at2}
+\end{figure}
 
 
 
-\subsection{Comparison of operations}
+\begin{figure}
+    \includegraphics[width=\linewidth]{code/img/similaritylimits_at1-2_percentage.pdf}
+    \caption{The comparison of AT1 and AT2 for semantic similarity limit ($\epsilon$) ranging from 0 to 1 with steps of 0.01}
+    \label{fig:semsim-at1-2}
+\end{figure}
+
+
+
+
+\subsubsection{Comparison of operations}
 
 One means of comparison across the different distance calculation is in how they differ by operation. As discussed in Section~\ref{ssec:ted}, we compare different modification ``operations'', which describe how one tree differs to another. In tree edit distance, this is the sequence of steps taken to modify one tree into another. In the other distance calculations, we can simulate these operations. Unlike tree edit distance, these operations will not necessarily yield a perfectly equivalent tree after modification; however, by counting these ``operations'' per different similarity limit ($\epsilon$) described in Section~\ref{sssec:threshold-problem}, we can better compare how the different distance calculations arrive at their final distance calculation.
 
@@ -15,35 +42,58 @@ We can see this comparison in Figure~\ref{fig:operations}, the distribution of o
 \begin{figure}
 \begin{tabular}{lccc}
     Distance & AT1                                                                         & AT1 vs AT2                                                                    & AT2                                                                         \\
-    LD       & \includegraphics[width=.25\linewidth]{code/img/operation_count_ld_AT1.pdf}  & \includegraphics[width=.25\linewidth]{code/img/operation_count_ld_AT1-2.pdf}  & \includegraphics[width=.25\linewidth]{code/img/operation_count_ld_AT2.pdf}  \\
-    TED      & \includegraphics[width=.25\linewidth]{code/img/operation_count_zss_AT1.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_zss_AT1-2.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_zss_AT2.pdf} \\
-    RRD      & \includegraphics[width=.25\linewidth]{code/img/operation_count_rrd_AT1.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_rrd_AT1-2.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_rrd_AT2.pdf} \\
-    MSD      & \includegraphics[width=.25\linewidth]{code/img/operation_count_ms_AT1.pdf}  & \includegraphics[width=.25\linewidth]{code/img/operation_count_ms_AT1-2.pdf}  & \includegraphics[width=.25\linewidth]{code/img/operation_count_ms_AT2.pdf}
+\shortstack{Label\\Distance\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }}       & \includegraphics[width=.25\linewidth]{code/img/operation_count_ld_AT1.pdf}  & \includegraphics[width=.25\linewidth]{code/img/operation_count_ld_AT1-2.pdf}  & \includegraphics[width=.25\linewidth]{code/img/operation_count_ld_AT2.pdf}  \\
+\shortstack{Tree Edit\\Distance\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }}      & \includegraphics[width=.25\linewidth]{code/img/operation_count_zss_AT1.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_zss_AT1-2.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_zss_AT2.pdf} \\
+\shortstack{Radical\\Distance\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }}       & \includegraphics[width=.25\linewidth]{code/img/operation_count_rrd_AT1.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_rrd_AT1-2.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_rrd_AT2.pdf} \\
+\shortstack{Multiset\\Distance\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }}       & \includegraphics[width=.25\linewidth]{code/img/operation_count_ms_AT1.pdf}  & \includegraphics[width=.25\linewidth]{code/img/operation_count_ms_AT1-2.pdf}  & \includegraphics[width=.25\linewidth]{code/img/operation_count_ms_AT2.pdf}
 \end{tabular}
 \caption{Plots showing each type of modification operation as a percentage of the total number of operations for increasing similarity limit $\epsilon$. {\color{color1} \textbf{Blue}} indicates a removal operation. {\color{color2} \textbf{Orange}} indicates an addition operation. {\color{color3} \textbf{Green}} indicates a changing operation, and {\color{color4} \textbf{Red}} indicates a matching operation. }
 \label{fig:operations}
 \end{figure}
 
 
-\begin{table}
-    \begin{tabular}{lrrrr}
-        \toprule
-        Counterexample       & Label Distance & Tree Edit Distance & Radical Distance & Multiset Distance \\
-        \midrule
-        Refinement Switch    & 0              & 1                  & 1                & 3                 \\
-        Extra Intermediate   & 1              & 1                  & 1                & 0                 \\
-        Missing Intermediate & 1              & 1                  & 4                & 0                 \\
-        Extra Leaf           & 1              & 1                  & 1                & 1                 \\
-        Missing Leaf         & 1              & 1                  & 1                & 1                 \\
-        Order Reversed       & 0              & 7                  & 0                & 0                 \\
-        Changed Root         & 1              & 1                  & 1                & 0                 \\
-        Changed Intermediate & 1              & 1                  & 1                & 0                 \\
-        Changed Leaf         & 1              & 1                  & 1                & 1                 \\
-        \bottomrule
+
+
+
+\subsection{Counterexamples Examples}
+\label{ssec:results-examples}
+
+\begin{table*}[t]
+\begin{tabular}{lccccc}
+\toprule
+Counterexample & \shortstack{Intuitive\\answer} & \shortstack{Label\\Distance} & \shortstack{Tree Edit\\Distance} & \shortstack{Radical\\Distance} & \shortstack{Multiset\\Distance} \\
+\midrule
+Order Reversed & 0 & 0 & 7 & 0 & 0 \\
+Refinement Switch & 1 & 0 & 1 & 1 & 3 \\
+Extra Intermediate & 1 & 1 & 1 & 1 & 0 \\
+Missing Intermediate & 1 & 1 & 1 & 5 & 0 \\
+Extra Leaf & 1 & 1 & 1 & 1 & 1 \\
+Missing Leaf & 1 & 1 & 1 & 1 & 1 \\
+Changed Root & 1 & 1 & 1 & 1 & 0 \\
+Changed Intermediate & 1 & 1 & 1 & 1 & 0 \\
+Changed Leaf & 1 & 1 & 1 & 1 & 1 \\
+Move Adjacent & 2 & 0 & 2 & 2 & 3 \\
+Move Up & 2 & 0 & 2 & 2 & 0 \\
+Move Down & 2 & 0 & 2 & 3 & 1 \\
+\bottomrule
     \end{tabular}
-    \caption{The distances provided by each of the distance measurements. Each of these changes should result in an intuitive distance of 1.}
-    \label{tab:counterexamples}
-\end{table}
+\caption{The distances provided by each of the distance measurements. The intuitive distance for each of these examples is provided in column 1}
+\label{tab:counterexamples}
+\end{table*}
+
+As enumerated in Section~\ref{ssec:methodology-examples}, we have 12 examples of various small changes that could occur between attack trees. These are meant to assess if each of our distance measures is able to represent these changes in a manner we would consider intuitive. The absolute distance for each distance measure for each example is provided in Table~\ref{tab:counterexamples}.
+
+In Table~\ref{tab:counterexamples}, we describe an ``intuitive answer''. This is what we believe a practitioner would describe as the distance between the given counter examples and the base attack tree, shown in Figure~\ref{sfig:base}. The intuitive answer is the number of ``operations'' that would be required to convert the base attack tree into the counter example.
+
+We can see that TED nearly perfectly follows our intuition, with the major exception of nodes that are not in order. In this example, the tree edit distance marks that all nodes need to be changed as it is unable to match any nodes. This behavior is to be expected as TED is meant to be run on an ordered tree. Algorithms to calculate unordered TED exist, however they are incompatible with our usage of semantic similarity. Each of these algorithms makes assumptions about equality, and these assumptions cannot be made in our case.
+
+Label distance behaves exactly as expected, it perfectly matches the intuitive answer for all examples in which a label is changed, added or removed. It then does not match the intuition for any example in which the labels all remain the same but the structure is changed in some way.
+
+Radical distance nearly matches the intuitive answer except for a few specific situations. In the example of a missing intermediate node, radical distance considers this as needing to remove threes nodes (the leaf nodes in the base attack tree and the intermediate) and then re-adding the two leaf nodes. This is caused as the radicals are mapped between the two trees by their roots, which means that radical distance has no mechanism to recognize that the two child nodes of one radical best suit another radical. This is potentially addressable with a post processing step checking for mappings in which the same label is added and removed. For the example of moving a node down, this creates a new radical, which causes radical distance to add an extra value of one. Additionally, if we applied a post processing step of removing additional and removal operations of identical labels, then all of the movement counterexamples would have resulted in 0 distance (as all examples consist of removing and adding the same node). As such, this post processing step may result in unexpected behavior.
+
+Finally, multiset distance behaves in ways that are not at all intuitive. First, because of the construction of multisets, only the labels of leaf nodes are considered in the calculation. Some structure of the original tree exists in how the multisets are constructed, but reconstruction of the original tree is not possible \cite{mauw_foundations_2006}. Any modification that only applied to intermediate nodes or the root node will not be represented by multiset representations of attack trees, which likewise results in a distance of 0. For changes that affect leaf nodes, multiset semantics seem to over-represent the distance. In the 12 counter examples we created, multiset semantics only provided the intuitive distance in 4 cases.
+
+
 
 
 

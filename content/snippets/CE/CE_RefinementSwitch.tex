@@ -1,0 +1,15 @@
+\begin{forest}
+        for tree={
+        draw,
+        minimum height=.25cm,
+        anchor=parent,
+        align=center,
+        child anchor=parent,
+        edge=-
+        },
+        adnode/.style={rounded rectangle,},
+        [{R}, adnode,
+                        [{I}, adnode,  angle below, [{A}, adnode,] [{B}, adnode,]]
+                                [{J}, adnode,  [{C}, adnode,] [{D}, adnode,]]
+                ]
+\end{forest}

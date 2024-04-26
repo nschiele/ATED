@@ -4,10 +4,125 @@
 We evaluate and validate our distance measurements in two ways. We performed an experiment in which participants created attack trees following a written scenario, and then modified those same attack trees using information they collected on their own. We also evaluated the distance measures using a selected set of counter examples, selected to encompass all of the ways a tree could have a distance of one.
 
 
+
+
+
+\subsection{Counter Examples}
+\label{ssec:methodology-examples}
+
+
+Outside of the real-world experiment we developed to test the attack tree distance measurements, we also examine the distances measures with a series of theoretical examples. For these examples, we are not concerned with the semantic similarity,  as this is assessed in our experiment. As such, all labels are single capital letters and we set the similar limit ($\epsilon$) to 1, which would require node to be equivalent in order to be matched.
+
+Each of these examples are simple enough that we can intuitively describe a distance. From this, we can examine how each of our distance measures handle each case. If a distance measure differs significantly from what we expect, this is indicative of the measure being deficient in measure some aspect of the distance between attack trees. The examples are shown in Figure~\ref{fig:counterexamples}.
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.95\linewidth}
+        \centering
+        \resizebox{2cm}{!}{
+            \input{content/snippets/CE/CE_Base.tex}
+        }
+        \subcaption{Base Attack Tree}\label{sfig:base}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \resizebox{2cm}{!}{
+            \input{content/snippets/CE/CE_OrderReversed.tex}
+        }
+        \subcaption{Order Reversed}\label{fig:b}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \resizebox{2cm}{!}{
+            \input{content/snippets/CE/CE_RefinementSwitch.tex}
+        }
+        \subcaption{Refinements Switched}\label{fig:b}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \resizebox{2cm}{!}{
+            \input{content/snippets/CE/CE_ExtraIntermediate.tex}
+        }
+        \subcaption{Extra Intermediate}\label{fig:b}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \resizebox{2cm}{!}{
+            \input{content/snippets/CE/CE_MissingIntermediate.tex}
+        }
+        \subcaption{Missing Intermediate}\label{fig:b}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \resizebox{2.5cm}{!}{
+            \input{content/snippets/CE/CE_ExtraLeaf.tex}
+        }
+        \subcaption{Extra Leaf}\label{fig:b}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \resizebox{2cm}{!}{
+            \input{content/snippets/CE/CE_MissingLeaf.tex}
+        }
+        \subcaption{MissingLeaf}\label{fig:b}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \resizebox{2cm}{!}{
+            \input{content/snippets/CE/CE_ChangedRoot.tex}
+        }
+        \subcaption{Changed Root}\label{fig:b}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \resizebox{2cm}{!}{
+            \input{content/snippets/CE/CE_ChangedIntermediate.tex}
+        }
+        \subcaption{Changed Intermediate}\label{fig:b}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \resizebox{2cm}{!}{
+            \input{content/snippets/CE/CE_ChangedLeaf.tex}
+        }
+        \subcaption{Changed Leaf}\label{fig:b}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \resizebox{2cm}{!}{
+            \input{content/snippets/CE/CE_MoveAdjacent.tex}
+        }
+        \subcaption{Move Adjacent}\label{fig:b}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \resizebox{2cm}{!}{
+            \input{content/snippets/CE/CE_MoveUp.tex}
+        }
+        \subcaption{Move Up}\label{fig:b}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \resizebox{1.8cm}{!}{
+            \input{content/snippets/CE/CE_MoveDown.tex}
+        }
+        \subcaption{Move Down}\label{fig:b}
+    \end{subfigure}
+    \caption{Counterexamples}\label{fig:counterexamples}
+\end{figure}
+
+
+
+
+
+
+
 \subsection{Participants}
 The participants in this study were all third year bachelor students taking part in a minor on cyber security and governance. Most students were in policy related majors such as Security Studies or International Relations. The participants on average had only a few months of programming experience, which was a result of another course in the minor. Students were asked if they had any prior knowledge of threat models or attack trees, and only a few students had any prior knowledge. Students took this course in the fall semester of 2023. As shown by Naiakshina~\etal\ and Karpati~\etal, in the context of cyber security, students are a sufficient proxy for practitioners~\cite{karpatiComparingAttackTrees2014, naiakshinaConductingSecurityDeveloper2020}.
 
 \subsection{Experimental Study Design}
+\label{ssec:method-study-design}
 
 Students were assigned a project related to attack defense trees as a part of their regular coursework. The project was a mandatory, graded assignment. Students had the option to provide consent for their anonymized responses to be collected for research purposes, this is described in detail in Section~\ref{ssec:ethics}. The assignment consisted of four components. In each component, students were required to create an attack (defense) tree (ADT) using a web application of our own design. Of the four components, the third was included in the assignment for the purposes of validating our approach. The text of the entire study is included in Appendix~\NS{INCLUDE}; however, we only expound upon the relevant section in this work.
 
@@ -29,12 +144,16 @@ The attack tree data was collected in the form of XML data. This data was then p
 
 
 \subsection{Sentence Embeddings}
+\label{ssec:method-embeddings}
 
 As we discussed in Section~\ref{ssec:semantic-similarity}, BERT is a state-of-the-art method for creating sentence embeddings. We use the \texttt{SentenceTransformers} library to calculate the sentence embeddings and cosine similarity to calculate embedding vector difference. As stated previously, our contribution is not the creation of these embeddings; additionally, our use of sentence embeddings is method agnostic, and any method for generating sentence or word embeddings could be used with our methodology. We used multiple different pre-trained BERT models and aggregated the results to illustrate that any results we found were not the result of the use of a specific model. Additionally, we did not fine tune any model. We used the following models: \texttt{paraphrase-multilingual-MiniLM-L12}, \texttt{all-mpnet-base}, and \texttt{all-MiniLM-L12}.
 
 \subsection{Ethics}
 \label{ssec:ethics}
 This study was approved by the the Ethics Review Board at a european university\anonfoot. Students were informed of study and were requested to give consent for their responses to be included in the study. Multiple safeguards were used to ensure that students did not feel pressured into giving consent, as the assignment was a mandatory course component. Students were informed that they could withdraw their consent at any time, and that their responses would be anonymized. 
+
+
+
 
 
 
