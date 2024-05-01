@@ -1,2 +1,2 @@
 # ATED
-Paper about Attack Tree Edit Distance
+Paper about Attack Tree Distance
