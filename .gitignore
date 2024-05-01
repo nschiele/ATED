@@ -9,3 +9,10 @@
 *.bbl
 *.blg
 .DS_Store
+1001*
+*_ops
+old_similarity_store
+AT1_*
+AT2_*
+AT1-2_*
+code/img/*
