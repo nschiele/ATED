@@ -1,2 +1,19 @@
 \section{Discussion}
 \label{sec:dicsussion}
+
+% RQ1 How can we best calculate the distance between two attack trees?
+% RQ2 Is this method of attack tree distance valid?
+% RQ3 What are the industry applications of attack tree distance?
+
+\subsection{RQ2: Validity}
+
+To start, we apply tree edit distance, which is a well established and documented mechanism to describe the distance between two trees~\cite{Zhang_Shasha_1989,zhang_editing_1992,akutsu_tree_2021,pawlik_rted_2011,mcvicar_sumoted_2016}. If we can show the distance measures we suggest, label distance, radical distance, and multiset distance, behave similarly to tree edit distance, we can infer that these distance measures are similarly valid. In Figure~\ref{fig:semsim-at2}, we see distance measures for all distance measures as applied to a dataset of trees that all have the same base tree, but have been extended differently by participants. This distance is averaged across all samples we have, and modified by a changing semantic similarity limit. This figure shows how different distance measures change with different semantic similarity limits. This gives us a mechanism to compare different distance measures, as if measures are fundamentally measuring trees similarly, then these lines should roughly correspond to each other. We can see in Figure~\ref{fig:semsim-at2} that the tree edit distance, radical distance and label distance are all remarkably similar, with the lines for these distances translated vertically on the $y$-axis. This suggests that these distance measures are fundamentally measuring the same thing, and as tree edit distance can be argued to be valid, similarly, both label and radical distance must likewise be valid.
+
+Figure~\ref{fig:semsim-at1-2}
+
+Our main contribution to tree distance is the novel technique of comparing components in DAGs by using semantic similarity. To our knowledge, all previous tree distance measurements have worked with either artificial data or with a ``clean'' dataset, which would entirely negate the need to assess node similarity by anything other than equivalence. We are the first to attempt to define tree distance for node labels that are not identical, but should still be considered equivalent. By applying this method to a series of attack trees that should be more or less equivalent, we can assess if this technique is valid. As described in Section~\NS{TODO: Add section reference}, the first attack tree that subjects drew was based on a provided written scenario. Subjects were instructed to include only information provided by the scenario, to include no additional information and to include all the information in the scenario. As such and as discussed in Section~\NS{TODO: Add section reference}, while we expect natural variations in these trees due to participants interpreting the scenario differently, missing information or organizing information different, ultimately the resulting trees should be fairly equivalent. As shown in Figure~\ref{fig:semsim-at1}, for semantic similarity limits  below 0.75, we see this expected equivalence. This suggests that our method is producing an output that is measuring the distance between two attack trees, and thus is valid.
+
+To further validate our approach, we apply our distance measurements
+
+
+We have shown that our method is able to calculate the distance between two attack trees, and that this distance is valid. We have also shown that this method can be used to compare attack trees in a real-world scenario, and that it can be used to identify similar attack trees.
