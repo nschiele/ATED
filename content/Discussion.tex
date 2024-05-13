@@ -17,3 +17,20 @@ To further validate our approach, we apply our distance measurements
 
 
 We have shown that our method is able to calculate the distance between two attack trees, and that this distance is valid. We have also shown that this method can be used to compare attack trees in a real-world scenario, and that it can be used to identify similar attack trees.
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+\begin{table*}[]
+    \resizebox{\linewidth}{!}{%
+        \begin{tabular}{@{}lcccccccc@{}}
+            \toprule
+            \textbf{Distance Measure} & \textbf{Simple} & \textbf{Unfiltered} & \textbf{Effect Size} & \textbf{Description} & \textbf{Labels} & \textbf{Refinements} & \textbf{Position} & \textbf{Metric} \\ \midrule
+            \textbf{Statistics}       &                 & \Checkmark          & \footnotemark        & \Checkmark           &                 & \Checkmark           &                   &                 \\
+            \textbf{TED}              & \Checkmark      & \Checkmark          & \Checkmark           & \Checkmark           & \Checkmark      & \Checkmark           & \Checkmark        & \Checkmark      \\
+            \textbf{LD}               & \Checkmark      & \Checkmark          & \Checkmark           &                      & \Checkmark      &                      &                   & \Checkmark      \\
+            \textbf{RD}               & \Checkmark      & \Checkmark          & \Checkmark           & \Checkmark           & \Checkmark      & \Checkmark           & \footnotemark     & \Checkmark      \\
+            \textbf{MSD}              & \Checkmark      & \Checkmark          &                      &                      & \Checkmark      &                      &                   &                 \\ \bottomrule
+        \end{tabular}
+    }
+\end{table*}
