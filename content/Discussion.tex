@@ -5,6 +5,8 @@
 % RQ2 Is this method of attack tree distance valid?
 % RQ3 What are the industry applications of attack tree distance?
 
+\subsection{RQ1: Best Measure}
+
 \subsection{RQ2: Validity}
 
 To start, we apply tree edit distance, which is a well established and documented mechanism to describe the distance between two trees~\cite{Zhang_Shasha_1989,zhang_editing_1992,akutsu_tree_2021,pawlik_rted_2011,mcvicar_sumoted_2016}. If we can show the distance measures we suggest, label distance, radical distance, and multiset distance, behave similarly to tree edit distance, we can infer that these distance measures are similarly valid. In Figure~\ref{fig:semsim-at2}, we see distance measures for all distance measures as applied to a dataset of trees that all have the same base tree, but have been extended differently by participants. This distance is averaged across all samples we have, and modified by a changing semantic similarity limit. This figure shows how different distance measures change with different semantic similarity limits. This gives us a mechanism to compare different distance measures, as if measures are fundamentally measuring trees similarly, then these lines should roughly correspond to each other. We can see in Figure~\ref{fig:semsim-at2} that the tree edit distance, radical distance and label distance are all remarkably similar, with the lines for these distances translated vertically on the $y$-axis. This suggests that these distance measures are fundamentally measuring the same thing, and as tree edit distance can be argued to be valid, similarly, both label and radical distance must likewise be valid.
@@ -16,21 +18,34 @@ Our main contribution to tree distance is the novel technique of comparing compo
 To further validate our approach, we apply our distance measurements
 
 
-We have shown that our method is able to calculate the distance between two attack trees, and that this distance is valid. We have also shown that this method can be used to compare attack trees in a real-world scenario, and that it can be used to identify similar attack trees.
 
+We have shown that our method is able to calculate the distance between two attack trees, and that this distance is valid. We have also shown that this method can be used to compare attack trees in a real-world scenario, and that it can be used to identify similar attack trees.
+ 
 
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
-\begin{table*}[]
-    \resizebox{\linewidth}{!}{%
-        \begin{tabular}{@{}lcccccccc@{}}
+\begin{table*}[t!]
+\resizebox{.9\linewidth}{!}{%
+\begin{tabular}{@{}lccccccccc@{}}
             \toprule
-            \textbf{Distance Measure} & \textbf{Simple} & \textbf{Unfiltered} & \textbf{Effect Size} & \textbf{Description} & \textbf{Labels} & \textbf{Refinements} & \textbf{Position} & \textbf{Metric} \\ \midrule
-            \textbf{Statistics}       &                 & \Checkmark          & \footnotemark        & \Checkmark           &                 & \Checkmark           &                   &                 \\
-            \textbf{TED}              & \Checkmark      & \Checkmark          & \Checkmark           & \Checkmark           & \Checkmark      & \Checkmark           & \Checkmark        & \Checkmark      \\
-            \textbf{LD}               & \Checkmark      & \Checkmark          & \Checkmark           &                      & \Checkmark      &                      &                   & \Checkmark      \\
-            \textbf{RD}               & \Checkmark      & \Checkmark          & \Checkmark           & \Checkmark           & \Checkmark      & \Checkmark           & \footnotemark     & \Checkmark      \\
-            \textbf{MSD}              & \Checkmark      & \Checkmark          &                      &                      & \Checkmark      &                      &                   &                 \\ \bottomrule
+\shortstack{\textbf{Distance}\\\textbf{Measure}} & \shortstack{\req{1}\\\textbf{Simple}} & \shortstack{\req{2}\\\textbf{Unfiltered}} & \shortstack{\req{3}\\\textbf{Effect Size}} & \shortstack{\req{4}\\\textbf{Description}} & \shortstack{\req{5}\\\textbf{Unordered}} & \shortstack{\req{6}\\\textbf{Labels}} & \shortstack{\req{6}\\\textbf{Refinements}} & \shortstack{\req{6}\\\textbf{Position}} & \shortstack{\req{7}\\\textbf{Metric}} \\ \midrule
+\textbf{Statistics}       & \Negate                & \Confirm\footnotemark[1]          & \Negate \footnotemark[2]        & \Confirm          &\Confirm   & \Negate                 & \Confirm           & \Negate                   & \Negate\footnotemark[2]                    \\
+\textbf{TED}              & \Confirm      & \Confirm          & \Confirm           & \Confirm          & \Negate & \Confirm      & \Confirm           & \Confirm        & \Confirm      \\
+\textbf{LD}               & \Confirm      & \Confirm          & \Confirm           & \Partial \footnotemark[3]                    &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm      \\
+\textbf{RD}               & \Confirm      & \Confirm          & \Confirm           & \Confirm          &\Confirm   & \Confirm      & \Confirm           & \Partial \footnotemark[4]     & \Confirm      \\
+\textbf{MSD}              & \Confirm      & \Confirm          & \Negate\footnotemark[5]                       &  \Partial  \footnotemark[3]                  &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm                 \\ \bottomrule
         \end{tabular}
-    }
+}
+\caption{A comparison of the different distance measures and their suitability w.r.t. the requirements defined in Section~\ref{ssec:requirements}\\
+    \footnotesize
+    1: As the statistic measure does not examine labels, it is equivalently applicable to unfiltered trees.\\
+    2: Without a simple definition of distance (requirement 1), this requirement is functionally impossible to meet\\
+    3: These measures exclude significant information, as such their edit descriptions do not offer fully suitable descriptions of difference.\\% This requirement is partially met.\\
+    4: Radical distance incorporates the position of nodes w.r.t. their parent, however, it does not incorporate the position of the radical within the whole attack tree. \\ %This requirement is partially met.
+    5: Multiset distance only measures the leaf nodes, which is unable to consider the magnitude of the distance between two trees.
+    \normalsize}
+\label{tab:requirmeent-suitability}
 \end{table*}
+
+
+\subsection{RQ3: Industry Applications}
