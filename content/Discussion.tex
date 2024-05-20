@@ -11,7 +11,7 @@ We have described five different measures of comparison between attack trees. As
 
 Most promising are the established tree edit distance (TED) and newly developed radical distance (RD). TED is a well-established measure of distance between trees, and as such, it is not surprising that it meets almost all requirements. The only requirement it does not meet is the ability to ignore difference caused by the order of children being changed. This is seen explicitly in Table~\ref{tab:counterexamples}. TED on unordered trees is an active area of research, and as we described in Section~\ref{sec:related-work}, much of the research into unordered TED relies on exact equivalence between nodes. This is not practical for attack trees, as the labels of nodes are not identical, but should still be considered equivalent. Further research will be needed to establish unordered TED using semantic similarity between node labels to define node equivalence. Overall, TED meets 8 of our 9 requirements.
 
-Similar to TED is our novel measure of RD. RD's primar
+Similar to TED is our novel measure of RD. RD's allows Overall, RD fully meets 8 of our 9 requirements; for the remaining requirement of node position, RD partially meets this requirement, as it takes into account the position of nodes w.r.t. their parents but does not consider the position of the radical to the tree as a whole. When compared to our defined counterexamples in Table~\ref{tab:counterexamples}, RD matches the intuitive distance for nearly all examples. RD only does not meet expectation when the number of radicals between two trees differs.
 
 \subsection{RQ2: Validity}
 
@@ -55,3 +55,18 @@ We have shown that our method is able to calculate the distance between two atta
 
 
 \subsection{RQ3: Industry Applications}
+
+
+
+\subsubsection{Sharing Threat Intelligence}
+
+Threat models are a recommended tool for threat analysis~\NS{TODO: cite anderson and schneier}. However, once these models are created, they may only be applicable to the analyst or the team of analysts that created them. Unlike other sources of threat intelligence, such as YARA Rules \NS{TODO: Cite something for this}, there is no means to share attack trees in this format.
+
+In order to allow for attack trees to be shared as threat intelligence, two aspects are needed: a common structure and a means of comparison. The common structure has already been defined, in the ADTool XML Schema~\cite{kordy_adtool_2013}. This is an XML format used by ADTool, a tool to create Attack-Defense Trees, an extension of ATs. The ADTool XML Schema can be used to define attack trees, and as such, can be used as a common structure for sharing attack trees. The dataset of ATs we describe in Section~\ref{sec:results} is in this format. The second aspect is a means of comparison, which is what we have defined in this paper. It will be possible to publish attack trees in the ADTool XML Schema, and then compare the resulting trees using the distance measures we have defined. This will allow for the sharing of attack trees as threat intelligence, and the comparison of these trees to identify similar threats.
+
+\subsubsection{Generative AI}
+
+Applying generative AI to security is an active area of research. Distance measures are critical for using generative AI to create threat models in general, and attack trees specifically. By using a distance measure, we can compare the output of a generative AI to a set of known attack trees, and determine how similar the output is to the known attack trees. As we can control the form of the output of generative AI, we can have an AI tool output AT in the ADTool XML Schema, and then compare the resulting attacks to our own output or to a dataset.
+
+Going further, in order to build and refine a generative AI tool to create attack trees, we need to define a cost function~\NS{TODO: cite something}. A cost function is necessary for training a model, as this is what the model will attempt to optimize for. Fundamental to this cost function is the ability to define distance, as we can offer a way to compare a generated solution to a ``ground truth''.
+

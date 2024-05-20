@@ -5,7 +5,7 @@
 \section{Related Work}
 \label{sec:related-work}
 
-Distance between data structures is not a new concept. Many works have explored the idea of ``distance'' between strings. In string edit distance, where the difference in strings is given my a min-cost path taken by either adding a character, removing a character or replacing a character. By fining the minimum cost needed to transform one string into another, a ``distance'' value can be given. As the higher cost a transformation, the further apart two strings must be \NS{cite all the string edit distance papers}.
+Distance between data structures is not a new concept. Many works have explored the idea of ``distance'' between strings. In string edit distance, where the difference in strings is given my a min-cost path taken by either adding a character, removing a character or replacing a character. By fining the minimum cost needed to transform one string into another, a ``distance'' value can be given. As the higher cost a transformation, the further apart two strings must be \NS{TODO: cite all the string edit distance papers}.
 
 Tree edit distance is seen as an extension of the string edit distance problem. Tai first tackled the problem, suggesting an edit distance metric for two directed acyclic graphs (DAG)s \cite{tai_tree--tree_1979}. Zhang and Shasha have written the seminal work on tree edit distance~\cite{zhang_simple_1989}. In their work, they describe a simple algorithm for calculating the distance between two trees. This algorithm is based on the idea of a \textit{forest} distance, which is the distance between two forests. A forest is possible disjoint a collection of trees, though a forest can consist of a single tree. The distance between two forests is the minimum cost of transforming one forest into another. This is calculated by finding the minimum cost of transforming each tree in the first forest into each tree in the second forest. This is done recursively until the minimum cost of transforming each node in the first tree into each node in the second tree is found. The minimum cost of transforming the first tree into the second tree is then given as the optimal \emph{tree edit distance} between two trees. This edit distance is given as both a value, the cost of the sequence of edits, as well as the sequence of edits itself. This sequence of edits has 3 possible operations.
 
@@ -19,7 +19,7 @@ McVicar~\etal\ have developed a method of calculating UTED in SuMoTED by focusin
 
 Pawlick and Augusten proposed RTED, a more optimal method of calculating ordered TED (OTED)~\cite{pawlik_rted_2011}. Their methodology is faster than Zhang and Shasha, but specifically for larger trees (500+ nodes). Attack trees by contrast cannot grow this large, and previous work has found that roughly 50 nodes would be an exceptionally large for attack trees \NS{I found this in acceptability 1}. As such, RTED, while an important optimization and contribution, does not offer a significant advantage for attack trees over Zhang and Shasha.
 
-Tree edit distance, like string edit distance, has a wide array of applications. Just as string edit distance has been used to compare sequences of DNA \NS{cite},
+Tree edit distance, like string edit distance, has a wide array of applications. Just as string edit distance has been used to compare sequences of DNA \NS{TODO: cite},
 
 
 
