@@ -7,7 +7,7 @@ We evaluate and validate our distance measurements in two ways. We performed an 
 
 
 
-\subsection{Counter Examples}
+\subsection{Theoretical Validation}
 \label{ssec:methodology-examples}
 
 
@@ -116,12 +116,9 @@ Each of these examples are simple enough that we can intuitively describe a dist
 
 
 
+\subsection{Experimental Validation}
 
-
-\subsection{Participants}
-The participants in this study were all third year bachelor students taking part in a minor on cyber security and governance. Most students were in policy related majors such as Security Studies or International Relations. The participants on average had only a few months of programming experience, which was a result of another course in the minor. Students were asked if they had any prior knowledge of threat models or attack trees, and only a few students had any prior knowledge. Students took this course in the fall semester of 2023. As shown by Naiakshina~\etal\ and Karpati~\etal, in the context of cyber security, students are a sufficient proxy for practitioners~\cite{karpatiComparingAttackTrees2014, naiakshinaConductingSecurityDeveloper2020}.
-
-\subsection{Experimental Study Design}
+\subsubsection{Experimental Study Design}
 \label{ssec:method-study-design}
 
 Students were assigned a project related to attack defense trees as a part of their regular coursework. The project was a mandatory, graded assignment. Students had the option to provide consent for their anonymized responses to be collected for research purposes, this is described in detail in Section~\ref{ssec:ethics}. The assignment consisted of four components. In each component, students were required to create an attack (defense) tree (ADT) using a web application of our own design. Of the four components, the third was included in the assignment for the purposes of validating our approach. The text of the entire study is included in Appendix~\NS{TODO: INCLUDE}; however, we only expound upon the relevant section in this work.
@@ -134,21 +131,26 @@ This description was created by reading the attack tree in Naik~\etal\ abstracti
 
 We then asked students in part B to expand upon their attack tree by ``doing your own research, add at least 5 new nodes and 2 new refinements to the attack tree you created in the previous section''. In all, this creates a relatively predictable, yet varied, dataset. In Part A, all trees should roughly be the same, baring minor changes in the label of nodes or the order of nodes. We expect that any large differences in part A to be due to misunderstanding the assignment or misreading the scenario. As Part B is built from each students' part A, we expect that the ``core'' of their attack tree to remain unchanged but the added nodes and refinement should introduce an ability to evaluate edit distance. Based on previous experience with similar studies, we expect most students to add exactly 5 new nodes and 2 new refinements, which should allows for some predictable edit distance (namely, the cost of adding 5 new nodes).
 
-\subsubsection{Web Application}
+\paragraph{Web Application}
 
 For this assignment, we created a web application which can be used to create attack defense trees. The web application contains a graphic interface with which users can add, delete and modify nodes~\cite{mohalaiaImplementingUserInterface2023}. Additionally, the web application contains an SQL-like language that can be used to generate ADTs~\cite{mezaADTLangDeclarativeLanguage2023}. The Web application additionally allows users to download ADTs as images as well as in the ADTool XML schema as defined by Kordy~\etal~\cite{kordy_adtool_2013}. The web application can be found here: \url{https://nschiele.github.io/ADT-Web-App}.
 
-\subsection{Processing}
+\subsubsection{Participants}
+The participants in this study were all third year bachelor students taking part in a minor on cyber security and governance. Most students were in policy related majors such as Security Studies or International Relations. The participants on average had only a few months of programming experience, which was a result of another course in the minor. Students were asked if they had any prior knowledge of threat models or attack trees, and only a few students had any prior knowledge. Students took this course in the fall semester of 2023. As shown by Naiakshina~\etal\ and Karpati~\etal, in the context of cyber security, students are a sufficient proxy for practitioners~\cite{karpatiComparingAttackTrees2014, naiakshinaConductingSecurityDeveloper2020}.
+
+
+
+\subsubsection{Processing}
 
 The attack tree data was collected in the form of XML data. This data was then processed using a Python script. The script was used to extract the attack trees from the XML data and to convert the attack trees into a format that could be used by our implementation of the Zhang and Shasha algorithm. We started with the pre-implemented and tested \texttt{zss} library from Tim Henderson~\cite{hendersonZssTreeEdit}. We then modified the library to include our semantic label replacement cost, refinement chang cost, and our abstraction layer-wise semantic node flipping to create an implementation of the Zhang and Shasha algorithm that should be effective for attack trees. We subsequently used this implementation to calculate the tree edit distance between the attacks trees. Our code is provided here: \url{http://}\NS{TODO: link.to.github?}.
 
 
-\subsection{Sentence Embeddings}
+\subsubsection{Sentence Embeddings}
 \label{ssec:method-embeddings}
 
 As we discussed in Section~\ref{ssec:semantic-similarity}, BERT is a state-of-the-art method for creating sentence embeddings. We use the \texttt{SentenceTransformers} library to calculate the sentence embeddings and cosine similarity to calculate embedding vector difference. As stated previously, our contribution is not the creation of these embeddings; additionally, our use of sentence embeddings is method agnostic, and any method for generating sentence or word embeddings could be used with our methodology. We used multiple different pre-trained BERT models and aggregated the results to illustrate that any results we found were not the result of the use of a specific model. Additionally, we did not fine tune any model. We used the following models: \texttt{paraphrase-multilingual-MiniLM-L12}, \texttt{all-mpnet-base}, and \texttt{all-MiniLM-L12}.
 
-\subsection{Ethics}
+\subsubsection{Ethics}
 \label{ssec:ethics}
 This study was approved by the the Ethics Review Board at a european university\anonfoot. Students were informed of study and were requested to give consent for their responses to be included in the study. Multiple safeguards were used to ensure that students did not feel pressured into giving consent, as the assignment was a mandatory course component. Students were informed that they could withdraw their consent at any time, and that their responses would be anonymized. 
 
