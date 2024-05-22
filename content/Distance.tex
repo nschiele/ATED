@@ -11,7 +11,7 @@ A comparison of a series of measurements of two attack trees. These measurements
 \subsection{Label Distance}
 \label{ssec:label-distance}
 
-Label distance is a measure of the difference between the labels of a given tree. This is derived from the mappings suggested in Tai~\cite{tai_tree--tree_1979} and Zhang and Shasha~\cite{Zhang_Shasha_1989}, with an algorithm influenced by the A$^*$ tree edit distance algorithm from Yoshino~\etal~\cite{yoshino_dynamic_2013}. We can calculate the distance between two labels by using a pre-trained BERT model to calculate the semantic similarity between two labels. This is done by calculating the cosine similarity between the embeddings of the two labels. This is shown in Figure~\ref{fig:semanticreplacement}. We create a matrix $D$ which is an $M \times N$ matrix which represents all of the distances between the labels between two trees. We then take the largest value at index $i, j$ of this matrix and remove that row ($i$) and column ($j$) from $D$, recording the mapping between $l_i$ and $l_j$. This is repeated until all nodes are included in a mapping set. If the largest value in $D$ is below some value $\epsilon$, we consider the labels to be different, and a direct mapping is not created. We add the nodes as individuals to the mapping (mapping to/from $\Lambda$ indicating that these labels would be removed or added). We then calculate the cost of each node that would be removed or added, giving a cost of 1. This algorithm is defined in detail in Algorithm~\ref{alg:label-distance}. We can divide this value by the number of nodes in the largest tree to get a normalized value.
+Label distance is a measure of the difference between the labels of a given tree. This is derived from the mappings suggested in Tai~\cite{tai_tree--tree_1979} and Zhang and Shasha~\cite{Zhang_Shasha_1989}, with an algorithm influenced by the A$^*$ tree edit distance algorithm from Yoshino~\etal~\cite{yoshino_dynamic_2013}. We can calculate the distance between two labels by using a pre-trained BERT model to calculate the semantic similarity between two labels. This is done by calculating the cosine similarity between the embeddings of the two labels. This is shown in Figure~\ref{fig:semanticreplacement}. We create a matrix $D$ which is an $M \times N$ matrix which represents all of the distances between the labels between two trees. We then take the largest value at index $i, j$ of this matrix and remove that row ($i$) and column ($j$) from $D$, recording the mapping between $l_i$ and $l_j$. This is repeated until all nodes are included in a mapping set. If the largest value in $D$ is below some value $\epsilon$, we consider the labels to be different, and a direct mapping is not created. We add the nodes as individuals to the mapping (mapping to/from $\Lambda$ indicating that these labels would be removed or added). We then calculate the cost of each node that would be removed or added, giving a cost of 1. This algorithm is defined in detail in Algorithm~\ref{alg:label-distance} in Appendix~\ref{appendix:alg:label-distance}. We can divide this value by the number of nodes in the largest tree to get a normalized value.
 
 \tikzstyle{block} = [rectangle, draw, fill=black!290,
 text width=5em, text=white,  text centered, rounded corners, minimum height=4em]
@@ -82,41 +82,6 @@ What we subsequently would desire is a method of comparing the two labels and ma
 In defining label distance, we encounter the threshold problem; the problem of defining a threshold $\epsilon$ for the semantic similarity between two labels. This threshold is necessary to determine if two labels are similar enough to be considered the same. As our definition of label distance does not allow for partial costs. In essence, either nodes are considered the same (label distance is above $\epsilon$), match with each other, and are given a cost of 0, or they are considered different (label distance is below $\epsilon$), do not match with each other, and are given a cost of 1. We do not offer a mechanism to account for partial similarity. This could be allowed, but would present a similar problem to the threshold problem; namely, where to set $\epsilon$. We simplify our calculation by not allowing partial calculations, and in Sections~\ref{sec:results}~and~\ref{sec:discussion}, we examine the effect of different $\epsilon$ on the results of our distance calculation.
 
 
-\begin{algorithm}
-    \caption{An algorithm to calculate the label distance between two attack trees.}
-    \label{alg:label-distance}
-    \begin{algorithmic}
-        \State Two attack trees $T_1$ and $T_2$ according to Definition~\ref{def:attack-tree} with $a$ and $b$ total nodes respectively
-        \State $M$ is the set of mappings between nodes in $T_1$ and $T_2$
-        \State $A$ is the list of node labels in $T_1$
-        \State $B$ is the list of node labels in $T_2$
-        \State $d$ is the distance between attack trees
-        \State $M \gets \emptyset$
-        \State Let $L$ be the $a \times b$ matrix of semantic similarity values between labels in $A$ and $B$
-        \While{$L$ is not empty}
-        \State Find the maximum value, $\delta$, in $L$ at index $i, j$
-        \State Remove row $i$ and column $j$ from $L$
-        \If{$\delta > \epsilon$}
-        \State Add $(A[i], B[j], \delta)$ to $M$
-        \Else
-        \State Add $(A[i], \Lambda, 0)$ to $M$
-        \State Add $(\Lambda, B[j], 0)$ to $M$
-        \State $d = d + 1$
-        \EndIf
-        \State Remove $A[i]$ from $A$
-        \State Remove $B[j]$ from $B$
-        \EndWhile
-        \For{each $a \in A$}
-        \State Add $(a, \Lambda, 1)$ to $M$
-        \State $d = d + 1$
-        \EndFor
-        \For{each $b \in B$}
-        \State Add $(\Lambda, b, 1)$ to $M$
-        \State $d = d + 1$
-        \EndFor
-        \State \Return $d$, $M$
-    \end{algorithmic}
-\end{algorithm}
 
 
 
@@ -145,52 +110,13 @@ One of the biggest differences between attack trees and other tree-like data str
 \end{definition}
 
 
-
 \begin{lemma}\label{lem:gamma-delta}
 
     $\gamma(\Delta)$ only applies in the case of changing one node into another.
 
-    \begin{proof}
-
-
-        \begin{enumerate}
-            \item In the case of node removal, there can be no additional cost for changing a refinement. That is, if we remove a node $\ATnode{d}{i}$ from $T$, then we have:
-
-                  $$\gamma(\ATnode{d}{i} \rightarrow {\Lambda})$$
-
-                  $\Lambda$ is an empty tree, and by definition does not contain any refinements. Therefore, the cost of changing the refinement is zero.
-
-            \item In the case of adding a node, the cost of adding a refinement would be included in the cost of adding the node. That is, if we add a node $\ATnode{d}{i}$ to $T$, then we have:
-
-                  $$\gamma(\Lambda \rightarrow {\ATnode{d}{i}})$$
-
-                  It is not possible to for a node in an attack tree to not have a refinement. If we separate the cost of adding a node and the cost of adding a refinement, we have one of the two following cases:
-                  \begin{enumerate}
-                      \item A node is added without a refinement, which gives a refinement addition cost of 0, but results in an attack tree which is not valid given our attack tree definition.
-                      \item The cost of adding a refinement is \textbf{always} added to the cost of adding a node, which results in the new cost of adding a node to always include $\gamma(\Delta)$.
-                  \end{enumerate}
-
-                  Given one of these cases results in an invalid tree, the other case must always apply. Therefore, by convention, we do not separate the cost of adding a node and the cost of adding a refinement, these are one and the same.
-
-            \item In the case of replacing a node, the cost of replacing a refinement would be:
-
-                  $$\gamma({\ATnode{d}{i}} \rightarrow {\ATnode{e}{j}})$$
-
-                  Which we declare to consist of the sum following two costs:
-
-                  $$\gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}})$$
-
-                  Which is the cost of changing one label to another. This is the original cost of replacing a node according to Zhang-Shasha. We also have:
-
-                  $$\gamma(\Delta)$$
-
-                  Which as previously stated is the cost of changing a refinement.
-
-
-
-        \end{enumerate}
-
-    \end{proof}
+  \begin{proof}
+    Proof is provided in Appendix~\ref{appendix:lem:gamma-delta}
+  \end{proof}
 
 \end{lemma}
 
@@ -203,41 +129,105 @@ One of the biggest differences between attack trees and other tree-like data str
     \[\gamma(\Delta) \le \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})\]
 
     \begin{proof}
-        Let $T$ be an attack tree.
+        Proof is provided in Appendix~\ref{appendix:lem:gamma-delta-2}
+      \end{proof}
 
-        Assume that $\gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$.
-
-        Let $S$ be the optimal sequence of edit operations according to the Zhang-Shasha algorithm. That is, $\gamma(S)$ is minimal for all possible edit sequences for $\delta(T_1, T_2)$ Let some operation $s \in S$ be an operation to replace some node, $\ATnode{d}{i}$, with another, $\ATnode{e}{j}$.
-
-        Thus, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}}) + \gamma(\Delta)$
-
-        We have two cases:
-
-        \begin{enumerate}
-            \item $\ATnode{d}{i}.\Delta = \ATnode{e}{j}.\Delta$
-
-                  In this case, both $\ATnode{d}{i}$ and $\ATnode{e}{j}$ have the same refinement. Thus, $\gamma(\Delta) = 0$. Therefore, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}})$.
-
-            \item $\ATnode{d}{i}.\Delta \ne \ATnode{e}{j}.\Delta$
-
-                  In this case, both $\ATnode{d}{i}$ and $\ATnode{e}{j}$ have different refinements. Thus, $\gamma(\Delta) > 0$. Therefore, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}}) + \gamma(\Delta)$.
-
-                  However, we have assumed that $\gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$. Therefore, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}}) + \gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$, as by convention $\gamma$ cannot result in a negative value.
-
-                  As such, we can replace $s$ with the sequence of operations $s_1$ and $s_2$, where $s_1$ is the operation to remove $\ATnode{d}{i}$ and $s_2$ is the operation to add $\ATnode{e}{j}$. Thus, $\gamma(s_1) = \gamma(\ATnode{e}{j} \rightarrow {\Lambda})$ and $\gamma(s_2) = \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$. Therefore, $\gamma(s_1) + \gamma(s_2) < \gamma(s)$.
-
-                  This results in a contradiction, as $S$ is the optimal sequence of edit operations according to the Zhang-Shasha algorithm, it must not be possible to replace any $s \in S$ with an operation, or sequence of operations, with lower cost.
-        \end{enumerate}
-
-        Therefore, if $\gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$, then $\gamma(\Delta)$ either must be 0 for a change node edit operation to be included in the optimal sequence of edit operations (case 1), or the optimal sequence of edit operations must always result in node removal then replacement (case 2). In both cases, $\gamma(\Delta)$ is not used.
-
-        Therefore, in order to include the cost of changing refinements in the cost of replacing a node, it must be the case that $\gamma(\Delta) \le \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$.
-
-
-    \end{proof}
-
+    
 
 \end{lemma}
+
+% \begin{lemma}\label{lem:gamma-delta}
+
+%     $\gamma(\Delta)$ only applies in the case of changing one node into another.
+
+%     \begin{proof}
+
+
+%         \begin{enumerate}
+%             \item In the case of node removal, there can be no additional cost for changing a refinement. That is, if we remove a node $\ATnode{d}{i}$ from $T$, then we have:
+
+%                   $$\gamma(\ATnode{d}{i} \rightarrow {\Lambda})$$
+
+%                   $\Lambda$ is an empty tree, and by definition does not contain any refinements. Therefore, the cost of changing the refinement is zero.
+
+%             \item In the case of adding a node, the cost of adding a refinement would be included in the cost of adding the node. That is, if we add a node $\ATnode{d}{i}$ to $T$, then we have:
+
+%                   $$\gamma(\Lambda \rightarrow {\ATnode{d}{i}})$$
+
+%                   It is not possible to for a node in an attack tree to not have a refinement. If we separate the cost of adding a node and the cost of adding a refinement, we have one of the two following cases:
+%                   \begin{enumerate}
+%                       \item A node is added without a refinement, which gives a refinement addition cost of 0, but results in an attack tree which is not valid given our attack tree definition.
+%                       \item The cost of adding a refinement is \textbf{always} added to the cost of adding a node, which results in the new cost of adding a node to always include $\gamma(\Delta)$.
+%                   \end{enumerate}
+
+%                   Given one of these cases results in an invalid tree, the other case must always apply. Therefore, by convention, we do not separate the cost of adding a node and the cost of adding a refinement, these are one and the same.
+
+%             \item In the case of replacing a node, the cost of replacing a refinement would be:
+
+%                   $$\gamma({\ATnode{d}{i}} \rightarrow {\ATnode{e}{j}})$$
+
+%                   Which we declare to consist of the sum following two costs:
+
+%                   $$\gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}})$$
+
+%                   Which is the cost of changing one label to another. This is the original cost of replacing a node according to Zhang-Shasha. We also have:
+
+%                   $$\gamma(\Delta)$$
+
+%                   Which as previously stated is the cost of changing a refinement.
+
+
+
+%         \end{enumerate}
+
+%     \end{proof}
+
+% \end{lemma}
+
+
+
+
+% \begin{lemma}\label{lem:gamma-delta-2}
+%     For attack trees within the definition of Definition~\ref{def:attack-tree}. It must be the case that
+
+%     \[\gamma(\Delta) \le \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})\]
+
+%     \begin{proof}
+%         Let $T$ be an attack tree.
+
+%         Assume that $\gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$.
+
+%         Let $S$ be the optimal sequence of edit operations according to the Zhang-Shasha algorithm. That is, $\gamma(S)$ is minimal for all possible edit sequences for $\delta(T_1, T_2)$ Let some operation $s \in S$ be an operation to replace some node, $\ATnode{d}{i}$, with another, $\ATnode{e}{j}$.
+
+%         Thus, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}}) + \gamma(\Delta)$
+
+%         We have two cases:
+
+%         \begin{enumerate}
+%             \item $\ATnode{d}{i}.\Delta = \ATnode{e}{j}.\Delta$
+
+%                   In this case, both $\ATnode{d}{i}$ and $\ATnode{e}{j}$ have the same refinement. Thus, $\gamma(\Delta) = 0$. Therefore, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}})$.
+
+%             \item $\ATnode{d}{i}.\Delta \ne \ATnode{e}{j}.\Delta$
+
+%                   In this case, both $\ATnode{d}{i}$ and $\ATnode{e}{j}$ have different refinements. Thus, $\gamma(\Delta) > 0$. Therefore, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}}) + \gamma(\Delta)$.
+
+%                   However, we have assumed that $\gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$. Therefore, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}}) + \gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$, as by convention $\gamma$ cannot result in a negative value.
+
+%                   As such, we can replace $s$ with the sequence of operations $s_1$ and $s_2$, where $s_1$ is the operation to remove $\ATnode{d}{i}$ and $s_2$ is the operation to add $\ATnode{e}{j}$. Thus, $\gamma(s_1) = \gamma(\ATnode{e}{j} \rightarrow {\Lambda})$ and $\gamma(s_2) = \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$. Therefore, $\gamma(s_1) + \gamma(s_2) < \gamma(s)$.
+
+%                   This results in a contradiction, as $S$ is the optimal sequence of edit operations according to the Zhang-Shasha algorithm, it must not be possible to replace any $s \in S$ with an operation, or sequence of operations, with lower cost.
+%         \end{enumerate}
+
+%         Therefore, if $\gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$, then $\gamma(\Delta)$ either must be 0 for a change node edit operation to be included in the optimal sequence of edit operations (case 1), or the optimal sequence of edit operations must always result in node removal then replacement (case 2). In both cases, $\gamma(\Delta)$ is not used.
+
+%         Therefore, in order to include the cost of changing refinements in the cost of replacing a node, it must be the case that $\gamma(\Delta) \le \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$.
+
+
+%     \end{proof}
+
+
+% \end{lemma}
 
 
 
@@ -313,36 +303,10 @@ Multiset semantics, like most mathematical attack tree semantics, contain only t
 
 \subsection{Radical Distance (RD)}
 
-In a previous work on attack trees, a proposed mechanism of attack tree decomposition focused on the concept of radicals, or subtrees consisting of a single parent, refinement, and set of children~\cite{schiele2021novel}. We take this decomposition and compare the resulting set of radicals. We define the distance between the resulting radicals according to Algorithm~\ref{alg:recursive-radical}.
+In a previous work on attack trees, a proposed mechanism of attack tree decomposition focused on the concept of radicals, or subtrees consisting of a single parent, refinement, and set of children~\cite{schiele2021novel}. We take this decomposition and compare the resulting set of radicals. We define the distance between the resulting radicals according to Algorithm~\ref{alg:recursive-radical} in Appendix~\ref{appendix:alg:radical-distance}.
 
 
-\begin{algorithm}
-    \caption{An algorithm to compute recursive radical distance}
-    \label{alg:recursive-radical}
-    \begin{algorithmic}
-        \State Two attack trees $T_1$ and $T_2$ according to Definition~\ref{def:attack-tree} with $a$ and $b$ total nodes respectively
-\State $D_1$, $D_2$ $\gets$ the radical dictionary according to the decomposition in \cite{schiele2021novel} for $T_1$ and $T_2$, respectively
-        \State $M$ $\gets$ the mapping between $D_1$ and $D_2$ indexed by radical root nodes according to semantic similarity (from semantic label distance)
-        \State $d \gets 0$
-        \For{$m \in M$, where $m = (\ATnode{d}{i}, \ATnode{e}{j})$ and $\ATnode{d}{i}, \ATnode{e}{j}$ are indices for $D_1$, and $D_2$, respectively}
-        \If {$\delta(\ATnode{d}{i}, \ATnode{e}{j}) < \epsilon$}
-        \State $d \gets d + 1$
-        \EndIf
-        \If {$Delta(\ATnode{d}{i}) \ne Delta(\ATnode{e}{j})$ and $\ATnode{d}{i}, \ATnode{e}{j} \ne \Lambda$}
-        \State $d \gets d + 0.5$
-        \EndIf
-        \State $M_c \gets$ the semantic mappings (from semantic label distance) between child$(\ATnode{d}{i})$ and child$(\ATnode{e}{j})$
-        \For{$c \in M_c$ where  $c = (\ATnode{d+1}{p}, \ATnode{e+1}{q})$}
-        \If{$\ATnode{d+1}{p} \not\in D_1$ and $\ATnode{e+1}{p} \not\in D_2$
-            \If $\delta(\ATnode{d+1}{p}, \ATnode{e+1}{q}) < \epsilon$}
-        \State $d \gets d + 1$
-        \EndIf
-        \EndIf
-        \EndFor
-        \EndFor
-        \State \Return $d$
-    \end{algorithmic}
-\end{algorithm}
+
 
 In Recursive Radical Distance (RRD), we first decompose into a collection of subtrees that are each a single height, indexed by each subtree's root node. We then perform a semantic comparison of each of the subtree roots, finding a semantic mapping similar to the one discussed for label distance in Section~\ref{ssec:label-distance}. We then calculate the distance subtree by subtree, adding a distance of 1 if the root nodes are not equal, a distance of 0.5 if the refinements are not equal. For the children, we perform an operation very similar to label distance, but we do not add distance to our calculation if one of the children is already present as a key of the radical dictionaries, as this would result in double counting of that child. This repeats until all children are compared, added or removed.
 

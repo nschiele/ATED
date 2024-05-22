@@ -1,28 +1,228 @@
 \section*{Appendix}
 
-\subsection{Operations table for counterexamples}
-\begin{table*}
-    \resizebox{\textwidth}{!}{
-        \begin{tabular}{lcccccccccccccccc}
-            \toprule
-            Counterexample       & \multicolumn{4}{|c|}{Label Distance} & \multicolumn{4}{|c|}{Tree Edit Distance} & \multicolumn{4}{|c|}{Radical Distance} & \multicolumn{4}{|c|}{Multiset Distance}                                                                                                 \\
-                                 & Remove                               & Add                                      & Change                                 & Match                                   & Remove & Add & Change & Match & Remove & Add & Change & Match & Remove & Add & Change & Match \\
-            \midrule
-            Order Reversed       & 0                                    & 0                                        & 0                                      & 7                                       & 0      & 0   & 6      & 1     & 0      & 0   & 0      & 7     & 0      & 0   & 0      & 4     \\
-            Refinement Switch    & 0                                    & 0                                        & 0                                      & 7                                       & 0      & 0   & 2      & 5     & 0      & 0   & 2      & 5     & 1      & 1   & 1      & 2     \\
-            Extra Intermediate   & 1                                    & 0                                        & 0                                      & 7                                       & 1      & 0   & 0      & 7     & 1      & 0   & 0      & 7     & 0      & 0   & 0      & 4     \\
-            Missing Intermediate & 0                                    & 1                                        & 0                                      & 6                                       & 0      & 1   & 0      & 6     & 1      & 3   & 0      & 4     & 0      & 0   & 0      & 4     \\
-            Extra Leaf           & 1                                    & 0                                        & 0                                      & 7                                       & 1      & 0   & 0      & 7     & 1      & 0   & 0      & 7     & 1      & 0   & 0      & 4     \\
-            Missing Leaf         & 0                                    & 1                                        & 0                                      & 6                                       & 0      & 1   & 0      & 6     & 0      & 1   & 0      & 6     & 0      & 1   & 0      & 3     \\
-            Changed Root         & 0                                    & 0                                        & 1                                      & 6                                       & 0      & 0   & 1      & 6     & 0      & 0   & 1      & 6     & 0      & 0   & 0      & 4     \\
-            Changed Intermediate & 0                                    & 0                                        & 1                                      & 6                                       & 0      & 0   & 1      & 6     & 0      & 0   & 1      & 6     & 0      & 0   & 0      & 4     \\
-            Changed Leaf         & 0                                    & 0                                        & 1                                      & 6                                       & 0      & 0   & 1      & 6     & 0      & 0   & 1      & 6     & 0      & 0   & 1      & 3     \\
-            Move Adjacent        & 0                                    & 0                                        & 0                                      & 7                                       & 1      & 1   & 0      & 6     & 1      & 1   & 0      & 6     & 1      & 2   & 0      & 2     \\
-            Move Up              & 0                                    & 0                                        & 0                                      & 7                                       & 1      & 1   & 0      & 6     & 1      & 1   & 0      & 6     & 0      & 0   & 0      & 4     \\
-            Move Down            & 0                                    & 0                                        & 0                                      & 7                                       & 1      & 1   & 0      & 6     & 2      & 1   & 0      & 5     & 0      & 1   & 0      & 3     \\
-            \bottomrule
-        \end{tabular}
 
-    }
-    \caption{Table showing the operations per counterexample and distance measure}
+
+\section{Proofs}
+\label{appendix:proofs}
+\subsection{Proof of Lemma~\ref{lem:gamma-delta}}
+\label{appendix:lem:gamma-delta}
+\begin{proof}
+
+
+    \begin{enumerate}
+        \item In the case of node removal, there can be no additional cost for changing a refinement. That is, if we remove a node $\ATnode{d}{i}$ from $T$, then we have:
+
+              $$\gamma(\ATnode{d}{i} \rightarrow {\Lambda})$$
+
+              $\Lambda$ is an empty tree, and by definition does not contain any refinements. Therefore, the cost of changing the refinement is zero.
+
+        \item In the case of adding a node, the cost of adding a refinement would be included in the cost of adding the node. That is, if we add a node $\ATnode{d}{i}$ to $T$, then we have:
+
+              $$\gamma(\Lambda \rightarrow {\ATnode{d}{i}})$$
+
+              It is not possible to for a node in an attack tree to not have a refinement. If we separate the cost of adding a node and the cost of adding a refinement, we have one of the two following cases:
+              \begin{enumerate}
+                  \item A node is added without a refinement, which gives a refinement addition cost of 0, but results in an attack tree which is not valid given our attack tree definition.
+                  \item The cost of adding a refinement is \textbf{always} added to the cost of adding a node, which results in the new cost of adding a node to always include $\gamma(\Delta)$.
+              \end{enumerate}
+
+              Given one of these cases results in an invalid tree, the other case must always apply. Therefore, by convention, we do not separate the cost of adding a node and the cost of adding a refinement, these are one and the same.
+
+        \item In the case of replacing a node, the cost of replacing a refinement would be:
+
+              $$\gamma({\ATnode{d}{i}} \rightarrow {\ATnode{e}{j}})$$
+
+              Which we declare to consist of the sum following two costs:
+
+              $$\gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}})$$
+
+              Which is the cost of changing one label to another. This is the original cost of replacing a node according to Zhang-Shasha. We also have:
+
+              $$\gamma(\Delta)$$
+
+              Which as previously stated is the cost of changing a refinement.
+
+
+
+    \end{enumerate}
+
+\end{proof}
+
+\subsection{Proof of Lemma~\ref{lem:gamma-delta-2}}
+\label{appendix:lem:gamma-delta-2}
+
+\begin{proof}
+    Let $T$ be an attack tree.
+
+    Assume that $\gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$.
+
+    Let $S$ be the optimal sequence of edit operations according to the Zhang-Shasha algorithm. That is, $\gamma(S)$ is minimal for all possible edit sequences for $\delta(T_1, T_2)$ Let some operation $s \in S$ be an operation to replace some node, $\ATnode{d}{i}$, with another, $\ATnode{e}{j}$.
+
+    Thus, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}}) + \gamma(\Delta)$
+
+    We have two cases:
+
+    \begin{enumerate}
+        \item $\ATnode{d}{i}.\Delta = \ATnode{e}{j}.\Delta$
+
+              In this case, both $\ATnode{d}{i}$ and $\ATnode{e}{j}$ have the same refinement. Thus, $\gamma(\Delta) = 0$. Therefore, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}})$.
+
+        \item $\ATnode{d}{i}.\Delta \ne \ATnode{e}{j}.\Delta$
+
+              In this case, both $\ATnode{d}{i}$ and $\ATnode{e}{j}$ have different refinements. Thus, $\gamma(\Delta) > 0$. Therefore, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}}) + \gamma(\Delta)$.
+
+              However, we have assumed that $\gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$. Therefore, $\gamma(s) = \gamma({\ATlabel{d}{i}} \rightarrow {\ATlabel{e}{j}}) + \gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$, as by convention $\gamma$ cannot result in a negative value.
+
+              As such, we can replace $s$ with the sequence of operations $s_1$ and $s_2$, where $s_1$ is the operation to remove $\ATnode{d}{i}$ and $s_2$ is the operation to add $\ATnode{e}{j}$. Thus, $\gamma(s_1) = \gamma(\ATnode{e}{j} \rightarrow {\Lambda})$ and $\gamma(s_2) = \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$. Therefore, $\gamma(s_1) + \gamma(s_2) < \gamma(s)$.
+
+              This results in a contradiction, as $S$ is the optimal sequence of edit operations according to the Zhang-Shasha algorithm, it must not be possible to replace any $s \in S$ with an operation, or sequence of operations, with lower cost.
+    \end{enumerate}
+
+    Therefore, if $\gamma(\Delta) > \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$, then $\gamma(\Delta)$ either must be 0 for a change node edit operation to be included in the optimal sequence of edit operations (case 1), or the optimal sequence of edit operations must always result in node removal then replacement (case 2). In both cases, $\gamma(\Delta)$ is not used.
+
+    Therefore, in order to include the cost of changing refinements in the cost of replacing a node, it must be the case that $\gamma(\Delta) \le \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})$.
+
+
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Experiment Questions}
+\label{app:exp-questions}
+
+\input{content/snippets/Assignment.tex}
+
+
+
+% \section{Operations table for counterexamples}
+\begin{table*}[b!]
+  \resizebox{\textwidth}{!}{
+      \begin{tabular}{lcccccccccccccccc}
+          \toprule
+          Counterexample       & \multicolumn{4}{|c|}{Label Distance} & \multicolumn{4}{|c|}{Tree Edit Distance} & \multicolumn{4}{|c|}{Radical Distance} & \multicolumn{4}{|c|}{Multiset Distance}                                                                                                 \\
+                               & Remove                               & Add                                      & Change                                 & Match                                   & Remove & Add & Change & Match & Remove & Add & Change & Match & Remove & Add & Change & Match \\
+          \midrule
+          Order Reversed       & 0                                    & 0                                        & 0                                      & 7                                       & 0      & 0   & 6      & 1     & 0      & 0   & 0      & 7     & 0      & 0   & 0      & 4     \\
+          Refinement Switch    & 0                                    & 0                                        & 0                                      & 7                                       & 0      & 0   & 2      & 5     & 0      & 0   & 2      & 5     & 1      & 1   & 1      & 2     \\
+          Extra Intermediate   & 1                                    & 0                                        & 0                                      & 7                                       & 1      & 0   & 0      & 7     & 1      & 0   & 0      & 7     & 0      & 0   & 0      & 4     \\
+          Missing Intermediate & 0                                    & 1                                        & 0                                      & 6                                       & 0      & 1   & 0      & 6     & 1      & 3   & 0      & 4     & 0      & 0   & 0      & 4     \\
+          Extra Leaf           & 1                                    & 0                                        & 0                                      & 7                                       & 1      & 0   & 0      & 7     & 1      & 0   & 0      & 7     & 1      & 0   & 0      & 4     \\
+          Missing Leaf         & 0                                    & 1                                        & 0                                      & 6                                       & 0      & 1   & 0      & 6     & 0      & 1   & 0      & 6     & 0      & 1   & 0      & 3     \\
+          Changed Root         & 0                                    & 0                                        & 1                                      & 6                                       & 0      & 0   & 1      & 6     & 0      & 0   & 1      & 6     & 0      & 0   & 0      & 4     \\
+          Changed Intermediate & 0                                    & 0                                        & 1                                      & 6                                       & 0      & 0   & 1      & 6     & 0      & 0   & 1      & 6     & 0      & 0   & 0      & 4     \\
+          Changed Leaf         & 0                                    & 0                                        & 1                                      & 6                                       & 0      & 0   & 1      & 6     & 0      & 0   & 1      & 6     & 0      & 0   & 1      & 3     \\
+          Move Adjacent        & 0                                    & 0                                        & 0                                      & 7                                       & 1      & 1   & 0      & 6     & 1      & 1   & 0      & 6     & 1      & 2   & 0      & 2     \\
+          Move Up              & 0                                    & 0                                        & 0                                      & 7                                       & 1      & 1   & 0      & 6     & 1      & 1   & 0      & 6     & 0      & 0   & 0      & 4     \\
+          Move Down            & 0                                    & 0                                        & 0                                      & 7                                       & 1      & 1   & 0      & 6     & 2      & 1   & 0      & 5     & 0      & 1   & 0      & 3     \\
+          \bottomrule
+      \end{tabular}
+
+  }
+  \caption{Table showing the operations per counterexample and distance measure}
 \end{table*}
+
+
+
+
+
+\section{Algorithms}
+\label{appendix:algorithms}
+
+\subsection{Label Distance Algorithm}
+\label{appendix:alg:label-distance}
+\begin{algorithm}[H]
+    \caption{An algorithm to calculate the label distance between two attack trees.}
+    \label{alg:label-distance}
+    \begin{algorithmic}
+        \State Two attack trees $T_1$ and $T_2$ according to Definition~\ref{def:attack-tree} with $a$ and $b$ total nodes respectively
+        \State $M$ is the set of mappings between nodes in $T_1$ and $T_2$
+        \State $A$ is the list of node labels in $T_1$
+        \State $B$ is the list of node labels in $T_2$
+        \State $d$ is the distance between attack trees
+        \State $M \gets \emptyset$
+        \State Let $L$ be the $a \times b$ matrix of semantic similarity values between labels in $A$ and $B$
+        \While{$L$ is not empty}
+        \State Find the maximum value, $\delta$, in $L$ at index $i, j$
+        \State Remove row $i$ and column $j$ from $L$
+        \If{$\delta > \epsilon$}
+        \State Add $(A[i], B[j], \delta)$ to $M$
+        \Else
+        \State Add $(A[i], \Lambda, 0)$ to $M$
+        \State Add $(\Lambda, B[j], 0)$ to $M$
+        \State $d = d + 1$
+        \EndIf
+        \State Remove $A[i]$ from $A$
+        \State Remove $B[j]$ from $B$
+        \EndWhile
+        \For{each $a \in A$}
+        \State Add $(a, \Lambda, 1)$ to $M$
+        \State $d = d + 1$
+        \EndFor
+        \For{each $b \in B$}
+        \State Add $(\Lambda, b, 1)$ to $M$
+        \State $d = d + 1$
+        \EndFor
+        \State \Return $d$, $M$
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Radical Distance Algorithm}
+\label{appendix:alg:radical-distance}
+\begin{algorithm}[H]
+    \caption{An algorithm to compute radical distance}
+    \label{alg:recursive-radical}
+    \begin{algorithmic}
+        \State Two attack trees $T_1$ and $T_2$ according to Definition~\ref{def:attack-tree} with $a$ and $b$ total nodes respectively
+\State $D_1$, $D_2$ $\gets$ the radical dictionary according to the decomposition in \cite{schiele2021novel} for $T_1$ and $T_2$, respectively
+        \State $M$ $\gets$ the mapping between $D_1$ and $D_2$ indexed by radical root nodes according to semantic similarity (from semantic label distance)
+        \State $d \gets 0$
+        \For{$m \in M$, where $m = (\ATnode{d}{i}, \ATnode{e}{j})$ and $\ATnode{d}{i}, \ATnode{e}{j}$ are indices for $D_1$, and $D_2$, respectively}
+        \If {$\delta(\ATnode{d}{i}, \ATnode{e}{j}) < \epsilon$}
+        \State $d \gets d + 1$
+        \EndIf
+        \If {$Delta(\ATnode{d}{i}) \ne Delta(\ATnode{e}{j})$ and $\ATnode{d}{i}, \ATnode{e}{j} \ne \Lambda$}
+        \State $d \gets d + 0.5$
+        \EndIf
+        \State $M_c \gets$ the semantic mappings (from semantic label distance) between child$(\ATnode{d}{i})$ and child$(\ATnode{e}{j})$
+        \For{$c \in M_c$ where  $c = (\ATnode{d+1}{p}, \ATnode{e+1}{q})$}
+        \If{$\ATnode{d+1}{p} \not\in D_1$ and $\ATnode{e+1}{p} \not\in D_2$
+            \If $\delta(\ATnode{d+1}{p}, \ATnode{e+1}{q}) < \epsilon$}
+        \State $d \gets d + 1$
+        \EndIf
+        \EndIf
+        \EndFor
+        \EndFor
+        \State \Return $d$
+    \end{algorithmic}
+\end{algorithm}
+
+
+
+
+
+
+

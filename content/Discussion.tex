@@ -13,6 +13,29 @@ Most promising are the established tree edit distance (TED) and newly developed 
 
 Similar to TED is our novel measure of RD. RD's allows Overall, RD fully meets 8 of our 9 requirements; for the remaining requirement of node position, RD partially meets this requirement, as it takes into account the position of nodes w.r.t. their parents but does not consider the position of the radical to the tree as a whole. When compared to our defined counterexamples in Table~\ref{tab:counterexamples}, RD matches the intuitive distance for nearly all examples. RD only does not meet expectation when the number of radicals between two trees differs.
 
+\begin{table*}[ht!]
+    \resizebox{.9\linewidth}{!}{%
+    \begin{tabular}{@{}lccccccccc@{}}
+                \toprule
+    \shortstack{\textbf{Distance}\\\textbf{Measure}} & \shortstack{\req{1}\\\textbf{Simple}} & \shortstack{\req{2}\\\textbf{Unfiltered}} & \shortstack{\req{3}\\\textbf{Effect Size}} & \shortstack{\req{4}\\\textbf{Description}} & \shortstack{\req{5}\\\textbf{Unordered}} & \shortstack{\req{6}\\\textbf{Labels}} & \shortstack{\req{6}\\\textbf{Refinements}} & \shortstack{\req{6}\\\textbf{Position}} & \shortstack{\req{7}\\\textbf{Metric}} \\ \midrule
+    \textbf{Statistics}       & \Negate                & \Confirm\footnotemark[1]          & \Negate \footnotemark[2]        & \Confirm          &\Confirm   & \Negate                 & \Confirm           & \Negate                   & \Negate\footnotemark[2]                    \\
+    \textbf{TED}              & \Confirm      & \Confirm          & \Confirm           & \Confirm          & \Negate & \Confirm      & \Confirm           & \Confirm        & \Confirm      \\
+    \textbf{LD}               & \Confirm      & \Confirm          & \Confirm           & \Partial \footnotemark[3]                    &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm      \\
+    \textbf{RD}               & \Confirm      & \Confirm          & \Confirm           & \Confirm          &\Confirm   & \Confirm      & \Confirm           & \Partial \footnotemark[4]     & \Confirm      \\
+    \textbf{MSD}              & \Confirm      & \Confirm          & \Negate\footnotemark[5]                       &  \Partial  \footnotemark[3]                  &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm                 \\ \bottomrule
+            \end{tabular}
+    }
+    \caption{A comparison of the different distance measures and their suitability w.r.t. the requirements defined in Section~\ref{ssec:requirements}\\
+        \footnotesize
+        1: As the statistic measure does not examine labels, it is equivalently applicable to unfiltered trees.\\
+        2: Without a simple definition of distance (requirement 1), this requirement is functionally impossible to meet\\
+        3: These measures exclude significant information, as such their edit descriptions do not offer fully suitable descriptions of difference.\\% This requirement is partially met.\\
+        4: Radical distance incorporates the position of nodes w.r.t. their parent, however, it does not incorporate the position of the radical within the whole attack tree. \\ %This requirement is partially met.
+        5: Multiset distance only measures the leaf nodes, which is unable to consider the magnitude of the distance between two trees.
+        \normalsize}
+    \label{tab:requirmeent-suitability}
+    \end{table*}
+
 \subsection{RQ2: Validity}
 
 To start, we apply tree edit distance, which is a well established and documented mechanism to describe the distance between two trees~\cite{Zhang_Shasha_1989,zhang_editing_1992,akutsu_tree_2021,pawlik_rted_2011,mcvicar_sumoted_2016}. If we can show the distance measures we suggest, label distance, radical distance, and multiset distance, behave similarly to tree edit distance, we can infer that these distance measures are similarly valid. In Figure~\ref{fig:semsim-at2}, we see distance measures for all distance measures as applied to a dataset of trees that all have the same base tree, but have been extended differently by participants. This distance is averaged across all samples we have, and modified by a changing semantic similarity limit. This figure shows how different distance measures change with different semantic similarity limits. This gives us a mechanism to compare different distance measures, as if measures are fundamentally measuring trees similarly, then these lines should roughly correspond to each other. We can see in Figure~\ref{fig:semsim-at2} that the tree edit distance, radical distance and label distance are all remarkably similar, with the lines for these distances translated vertically on the $y$-axis. This suggests that these distance measures are fundamentally measuring the same thing, and as tree edit distance can be argued to be valid, similarly, both label and radical distance must likewise be valid.
@@ -30,28 +53,7 @@ We have shown that our method is able to calculate the distance between two atta
 
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
-\begin{table*}[t!]
-\resizebox{.9\linewidth}{!}{%
-\begin{tabular}{@{}lccccccccc@{}}
-            \toprule
-\shortstack{\textbf{Distance}\\\textbf{Measure}} & \shortstack{\req{1}\\\textbf{Simple}} & \shortstack{\req{2}\\\textbf{Unfiltered}} & \shortstack{\req{3}\\\textbf{Effect Size}} & \shortstack{\req{4}\\\textbf{Description}} & \shortstack{\req{5}\\\textbf{Unordered}} & \shortstack{\req{6}\\\textbf{Labels}} & \shortstack{\req{6}\\\textbf{Refinements}} & \shortstack{\req{6}\\\textbf{Position}} & \shortstack{\req{7}\\\textbf{Metric}} \\ \midrule
-\textbf{Statistics}       & \Negate                & \Confirm\footnotemark[1]          & \Negate \footnotemark[2]        & \Confirm          &\Confirm   & \Negate                 & \Confirm           & \Negate                   & \Negate\footnotemark[2]                    \\
-\textbf{TED}              & \Confirm      & \Confirm          & \Confirm           & \Confirm          & \Negate & \Confirm      & \Confirm           & \Confirm        & \Confirm      \\
-\textbf{LD}               & \Confirm      & \Confirm          & \Confirm           & \Partial \footnotemark[3]                    &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm      \\
-\textbf{RD}               & \Confirm      & \Confirm          & \Confirm           & \Confirm          &\Confirm   & \Confirm      & \Confirm           & \Partial \footnotemark[4]     & \Confirm      \\
-\textbf{MSD}              & \Confirm      & \Confirm          & \Negate\footnotemark[5]                       &  \Partial  \footnotemark[3]                  &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm                 \\ \bottomrule
-        \end{tabular}
-}
-\caption{A comparison of the different distance measures and their suitability w.r.t. the requirements defined in Section~\ref{ssec:requirements}\\
-    \footnotesize
-    1: As the statistic measure does not examine labels, it is equivalently applicable to unfiltered trees.\\
-    2: Without a simple definition of distance (requirement 1), this requirement is functionally impossible to meet\\
-    3: These measures exclude significant information, as such their edit descriptions do not offer fully suitable descriptions of difference.\\% This requirement is partially met.\\
-    4: Radical distance incorporates the position of nodes w.r.t. their parent, however, it does not incorporate the position of the radical within the whole attack tree. \\ %This requirement is partially met.
-    5: Multiset distance only measures the leaf nodes, which is unable to consider the magnitude of the distance between two trees.
-    \normalsize}
-\label{tab:requirmeent-suitability}
-\end{table*}
+
 
 
 \subsection{RQ3: Industry Applications}
@@ -60,7 +62,7 @@ We have shown that our method is able to calculate the distance between two atta
 
 \subsubsection{Sharing Threat Intelligence}
 
-Threat models are a recommended tool for threat analysis~\NS{TODO: cite anderson and schneier}. However, once these models are created, they may only be applicable to the analyst or the team of analysts that created them. Unlike other sources of threat intelligence, such as YARA Rules \NS{TODO: Cite something for this}, there is no means to share attack trees in this format.
+Threat models are a recommended tool for threat analysis~\cite{andersonSecurityEngineeringGuide2020,schneierSecretsLiesDigital2000}. However, once these models are created, they may only be applicable to the analyst or the team of analysts that created them. Unlike other sources of threat intelligence, such as YARA Rules~\cite{naik2019cyberthreat,naik2020evaluating}, there is no means to share attack trees in this format.
 
 In order to allow for attack trees to be shared as threat intelligence, two aspects are needed: a common structure and a means of comparison. The common structure has already been defined, in the ADTool XML Schema~\cite{kordy_adtool_2013}. This is an XML format used by ADTool, a tool to create Attack-Defense Trees, an extension of ATs. The ADTool XML Schema can be used to define attack trees, and as such, can be used as a common structure for sharing attack trees. The dataset of ATs we describe in Section~\ref{sec:results} is in this format. The second aspect is a means of comparison, which is what we have defined in this paper. It will be possible to publish attack trees in the ADTool XML Schema, and then compare the resulting trees using the distance measures we have defined. This will allow for the sharing of attack trees as threat intelligence, and the comparison of these trees to identify similar threats.
 
