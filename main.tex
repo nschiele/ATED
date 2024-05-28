@@ -1,9 +1,18 @@
-\documentclass[sigconf, anonymous]{acmart}
+\documentclass[conference,compsoc]{IEEEtran}
+
+% This is because IEEE is a bad latex style
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proof}{Proof}
+% \documentclass[sigconf, anonymous]{acmart}
+
 % \usepackage{usenix-2020-09}
 
 
 
 \usepackage{enumitem}
+\usepackage{arydshln}
+% \usepackage{amsthm}
 \usepackage{subcaption}
 % \usepackage{subfig}
 \usepackage{subcaption}
@@ -72,10 +81,10 @@ tikz+={%
 
 
 
-\acmConference[ACSAC]{ACSAC}
-\acmYear{2024}
-\acmBooktitle{Proceedings of the 32nd ACM Symposium on the Foundations of Software Engineering (FSE '24), November 15--19, 2024, Porto de Galinhas, Brazil}
-\acmBooktitle{Submission to ACSAC'24}
+% \acmConference[ACSAC]{ACSAC}
+% \acmYear{2024}
+% \acmBooktitle{Proceedings of the 32nd ACM Symposium on the Foundations of Software Engineering (FSE '24), November 15--19, 2024, Porto de Galinhas, Brazil}
+% \acmBooktitle{Submission to ACSAC'24}
 
 % \settopmatter{printfolios=true}
 
@@ -92,30 +101,30 @@ tikz+={%
 % \end{teaserfigure}
 
 
-\begin{abstract}
-\textbf{Context}
-\textbf{Method}
-\textbf{Results}
-\textbf{Conclusion}
-\end{abstract}
+
 
 \maketitle              % typeset the header of the contribution
-
-
-
-
-
 \input{macros}
+
+
+
+
+\begin{abstract}
+    \absSection{Context} Attack trees are a recommended threat modeling tool, but there is no established method to compare them.
+    \absSection{Objective} We aim to establish a method to compare ``real'' attack trees, based on both the structure of the tree itself and the meaning of the node labels.
+    \absSection{Method} We define four methods of comparison (three novel and one established) and compare them to a dataset of attack trees created from a study run on students ($n=39$). These attack trees all follow from the same scenario, but have slightly different labels.
+    \absSection{Results} We find that applying semantic similarity as a means of comparing node labels is a valid approach. Further, we find that tree edit distance (established) and radical distance (novel) are the most promising methods of comparison in most circumstances.
+    \absSection{Conclusion} We show that these two methods are valid as means of comparing attack trees, and suggest a novel technique for using semantic similarity to compare node labels. We further suggest that these methods can be used to compare attack trees in a real-world scenario, and that they can be used to identify similar attack trees.
+\end{abstract}
+
+
+
 \input{content/Background.tex}
 \input{content/Research.tex}
 
 \input{content/RelatedWork.tex}
-
+\input{content/Labels.tex}
 \input{content/Distance.tex}
-% \input{content/Theory.tex}
-% \input{content/RefinementAware.tex}
-% \input{content/SemanticReplacement.tex}
-% \input{content/NodeFlipping.tex}
 \input{content/Methodology.tex}
 \input{content/Results.tex}
 \input{content/Discussion.tex}

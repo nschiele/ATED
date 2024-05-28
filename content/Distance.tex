@@ -1,10 +1,11 @@
 \section{Distance Measures}
+\label{sec:distance}
 
 In this section, we describe the distance measures that we use to compare attack trees. 
 
-\subsection{Measurement Comparison}
+% \subsection{Measurement Comparison}
 
-A comparison of a series of measurements of two attack trees. These measurements could include, but would not be limited to, the number of nodes, the number of leaf nodes, the number of refinements, the number of \AND\ and \OR\ refinements, the depth of the tree, and the average number of children per node. By comparing this series of measurements, we can roughly describe the difference between two attack trees. This means of measuring the difference between two trees has been used in lieu of a more established difference mechanism.
+% A comparison of a series of measurements of two attack trees. These measurements could include, but would not be limited to, the number of nodes, the number of leaf nodes, the number of refinements, the number of \AND\ and \OR\ refinements, the depth of the tree, and the average number of children per node. By comparing this series of measurements, we can roughly describe the difference between two attack trees. This means of measuring the difference between two trees has been used in lieu of a more established difference mechanism.
 
 % \NS{I'm refering to myself in acceptability 1}
 
@@ -13,74 +14,9 @@ A comparison of a series of measurements of two attack trees. These measurements
 
 Label distance is a measure of the difference between the labels of a given tree. This is derived from the mappings suggested in Tai~\cite{tai_tree--tree_1979} and Zhang and Shasha~\cite{Zhang_Shasha_1989}, with an algorithm influenced by the A$^*$ tree edit distance algorithm from Yoshino~\etal~\cite{yoshino_dynamic_2013}. We can calculate the distance between two labels by using a pre-trained BERT model to calculate the semantic similarity between two labels. This is done by calculating the cosine similarity between the embeddings of the two labels. This is shown in Figure~\ref{fig:semanticreplacement}. We create a matrix $D$ which is an $M \times N$ matrix which represents all of the distances between the labels between two trees. We then take the largest value at index $i, j$ of this matrix and remove that row ($i$) and column ($j$) from $D$, recording the mapping between $l_i$ and $l_j$. This is repeated until all nodes are included in a mapping set. If the largest value in $D$ is below some value $\epsilon$, we consider the labels to be different, and a direct mapping is not created. We add the nodes as individuals to the mapping (mapping to/from $\Lambda$ indicating that these labels would be removed or added). We then calculate the cost of each node that would be removed or added, giving a cost of 1. This algorithm is defined in detail in Algorithm~\ref{alg:label-distance} in Appendix~\ref{appendix:alg:label-distance}. We can divide this value by the number of nodes in the largest tree to get a normalized value.
 
-\tikzstyle{block} = [rectangle, draw, fill=black!290,
-text width=5em, text=white,  text centered, rounded corners, minimum height=4em]
-\begin{figure*}
-    \begin{tikzpicture}[node distance = 2cm, auto]
-        % Place nodes
-        \node [xshift=-5cm](t1) {$\ATlabel{d}{i}$};
-        \node [below of = t1] (t2) {$\ATlabel{e}{j}$};
-        \node [block, below right = .5cm and 1cm of t1, yshift=.3cm]  (genbeddings) {\shortstack{Generate\\Semantic\\Embeddings}};
-        \node [right of = t1, xshift=4cm]  (et1) {$\vec{e}(\ATlabel{d}{i})$};
-        \node [below of = et1]  (et2) {$\vec{e}(\ATlabel{e}{j})$};
-        \node [block, right of = genbeddings, xshift= 4.5cm]  (comp) {\shortstack{Vector\\Comparison}};
-        \node [right of = comp, xshift = 2cm]  (end) {$\delta(\ATlabel{d}{i}, \ATlabel{e}{j})$};
 
-
-        % Draw edges
-        \draw [->] (t1.east)  -| ($(t1)!0.5!(genbeddings)$) coordinate |-(genbeddings);
-        \draw [->] (t2.east)  -| ($(t2)!0.5!(genbeddings)$) coordinate |-(genbeddings);
-        \draw [->] (genbeddings.east)  -| ($(genbeddings)!0.5!(et1)$) coordinate |-(et1);
-        \draw [->] (genbeddings.east)  -| ($(genbeddings)!0.5!(et2)$) coordinate |-(et2);
-        \draw [->] (et1.east)  -| ($(et1)!0.5!(comp)$) coordinate |-(comp);
-        \draw [->] (et2.east)  -| ($(et2)!0.5!(comp)$) coordinate |-(comp);
-        \draw [->] (comp)  -- (end);
-    \end{tikzpicture}
-    \caption{Process of calculating the distance between two node labels.}
-    \label{fig:semanticreplacement}
-\end{figure*}
 
 This measurement considers all the labels of each node within an attack tree. It uses a semantic comparison to examine the meanings of the nodes, which would allow for this distance measure to work on unfiltered trees. However, this measure does not consider the structure of the tree in any way, and therefore does not represent how the nodes are organized. If we examine the attack tree in Figure~\ref{fig:tartgetAT}, if create an attack tree with all the same label names, but all nodes directly attached to the root (a single root node with 13 child nodes with identical names as in Figure~\ref{fig:tartgetAT}), the resulting label distance would be zero. As such, label distance offers a way to quickly examine if the meanings of the nodes are similar, but does not offer a way to examine the structure of the tree. 
-
-We can see the extreme example of ``door open'' and ``open door'' which has a Levenshtein distance of 8 (normalized Levenshtein distance of 0), as all letters must be changed. However, the semantic similarity is 0.992, which is the highest of our selected examples. This is because the two labels are near identical in meaning, and the only difference is the order of the words. In contrast, the two labels ``obtain personal data'' and ``obtain personnel'' have a normalized Levenshtein distance of .5882, but a semantic similarity of 0.4507. This is because the two labels are not related, but due to similar verbiage, the normalized string edit distance is relatively small. If we implemented a distance between the two labels  $\delta\left(\ATlabel{d}{i}, \ATlabel{e}{j}\right)$ to be based on Levenshtein distance, nodes that should incur a cost to edit may not while those that should not incur a cost to edit may.
-% This method is not ideal, as it is possible for two unrelated nodes to have small edit distances, such as ``obtain personnel'' and ``obtain personal data'' (edit distance of 7) while related nodes have larger edit distances; such as comparing ``obtain personal data'' and ``gather private info'' (edit distance of 15). In our first example, the two nodes are not related, but due to similar verbiage, the edit distance is relatively small. In the second example, the two nodes have identical meaning, but due to different vocabulary used, the Levenshtein distance between them is significantly larger. If we implemented a distance between the two labels  $\delta\left(\ATlabel{d}{i}, \ATlabel{e}{j}\right)$ to be based on Levenshtein distance, nodes that should incur a cost to edit may not while those that should not incur a cost to edit may.
-
-\begin{table}[]
-    \begin{tabular}{@{}llll@{}}
-        \toprule
-        Label 1              & Label 2             & \begin{tabular}[c]{@{}l@{}}Normalized\\Levenshtein\\ Distance\end{tabular} & \begin{tabular}[c]{@{}l@{}}Semantic \\ Similarity\end{tabular} \\ \midrule
-        obtain personal data & obtain personnel    & 0.5882                                                                     & 0.4507                                                         \\
-        obtain personal data & gather private info & 0.1176                                                                     & 0.5521                                                         \\
-        break open safe      & break open door     & 0.6923                                                                     & 0.7855                                                         \\
-        break open safe      & crack safe open     & 0.1538                                                                     & 0.814                                                          \\
-        crack safe           & crack door          & 0.5556                                                                     & 0.6692                                                         \\
-        door open            & open door           & 0.0                                                                        & 0.992                                                          \\ \bottomrule
-    \end{tabular}
-    \caption{Select examples of potential node label comparisons using both Levenshtein distance and semantic similarity. Semantic similarity is calculated using the methodology described in Section~\ref{sec:results}}
-    \label{tab:distances}
-\end{table}
-
-
-\subsubsection{Semantic Label Comparison}
-
-
-In the original Zhang and Shasha algorithm, nodes are only matched (``replaced'' with no cost) if the node labels are identical. In the examples we provide in Section~\ref{sec:results}, this would result in the node labels ``Obtain personal data'' and ``obtain personal data'' to not be matched, as these labels are not identical. While other label reconciliation schemes have been proposed, many are based on the string edit distance (Levenshtein distance) of the two node labels. This method is not ideal as it can result in two nodes that are entirely unrelated but with similar vocabulary having small edit distances, while two nodes that are related or identical having large edit distances. In Table~\ref{tab:distances}, we provide a few examples of potential node label comparisons using both normalized Levenshtein distance and semantic similarity. Semantic similarity is calculated using the methodology described in Section~\ref{sec:results}. The normalized Levenshtein distance is calculated as one minus the Levenshtein distance divided by the length of the longest string:
-
-\[
-    \delta_L\left(\ATlabel{d}{i}, \ATlabel{e}{j}\right) = 1 - \frac{\text{Levenshtein}\left(\ATlabel{d}{i}, \ATlabel{e}{j}\right)}{\max\left(\left|\ATlabel{d}{i}\right|, \left|\ATlabel{e}{j}\right|\right)}
-\]
-
-
-
-
-What we subsequently would desire is a method of comparing the two labels and making a determination of whether or not nodes are the same based on meaning. If nodes have identical, or relatively identical, meanings, then the cost of replacement should be 0 (\textit{i.e.} matching). If the nodes have dissimilar meanings, then the cost of replacement should be $>0$. We can achieve this by generating semantic embeddings for each node label, and comparing the resulting embeddings. If the semantic similarity is above a given threshold, $\epsilon$, we give the cost of replacement to be 0; otherwise, we give the cost of replacement to be 1. This allows for the Zhang and Shasha algorithm to replace nodes with similar labels at a lower cost than nodes with dissimilar labels.
-
-
-\subsubsection{Threshold Problem}
-\label{sssec:threshold-problem}
-
-In defining label distance, we encounter the threshold problem; the problem of defining a threshold $\epsilon$ for the semantic similarity between two labels. This threshold is necessary to determine if two labels are similar enough to be considered the same. As our definition of label distance does not allow for partial costs. In essence, either nodes are considered the same (label distance is above $\epsilon$), match with each other, and are given a cost of 0, or they are considered different (label distance is below $\epsilon$), do not match with each other, and are given a cost of 1. We do not offer a mechanism to account for partial similarity. This could be allowed, but would present a similar problem to the threshold problem; namely, where to set $\epsilon$. We simplify our calculation by not allowing partial calculations, and in Sections~\ref{sec:results}~and~\ref{sec:discussion}, we examine the effect of different $\epsilon$ on the results of our distance calculation.
-
 
 
 
@@ -305,12 +241,21 @@ Multiset semantics, like most mathematical attack tree semantics, contain only t
 
 In a previous work on attack trees, a proposed mechanism of attack tree decomposition focused on the concept of radicals, or subtrees consisting of a single parent, refinement, and set of children~\cite{schiele2021novel}. We take this decomposition and compare the resulting set of radicals. We define the distance between the resulting radicals according to Algorithm~\ref{alg:recursive-radical} in Appendix~\ref{appendix:alg:radical-distance}.
 
-
-
-
-In Recursive Radical Distance (RRD), we first decompose into a collection of subtrees that are each a single height, indexed by each subtree's root node. We then perform a semantic comparison of each of the subtree roots, finding a semantic mapping similar to the one discussed for label distance in Section~\ref{ssec:label-distance}. We then calculate the distance subtree by subtree, adding a distance of 1 if the root nodes are not equal, a distance of 0.5 if the refinements are not equal. For the children, we perform an operation very similar to label distance, but we do not add distance to our calculation if one of the children is already present as a key of the radical dictionaries, as this would result in double counting of that child. This repeats until all children are compared, added or removed.
+In Radical Distance (RD), we first decompose into a collection of subtrees that are each a single height, indexed by each subtree's root node. We then perform a semantic comparison of each of the subtree roots, finding a semantic mapping similar to the one discussed for label distance in Section~\ref{ssec:label-distance}. We then calculate the distance subtree by subtree, adding a distance of 1 if the root nodes are not equal, a distance of 0.5 if the refinements are not equal. For the children, we perform an operation very similar to label distance, but we do not add distance to our calculation if one of the children is already present as a key of the radical dictionaries, as this would result in double counting of that child. This repeats until all children are compared, added or removed.
 
 RRD as we have defined it does not contain a mechanism to enable tracking of modifications unlike tree edit distance. Unlike label distance however, the full structure of the tree is taken into account. Just as almost all distances we have proposed, our distance does account for the semantic difference between node labels.
+
+
+
+
+\subsection{Weighted Sum Distance (WSD)}
+
+This is a weighted average of the above distance values. We will validate and asses the four distance measures described in this section according to our experimental design described in Section~\ref{sec:methodology}. We will then attempt to propose a single distance measure that is the weighted sum of the other four distance measures. This weighted sum can be expressed as the following:
+\[
+    \alpha_1*\text{LD}+ \alpha_2*\text{TED} + \alpha_3*\text{RD} + \alpha_4*\text{MSD}
+\]
+
+For a given vector $\alpha = [\alpha_1, \alpha_2, \alpha_3, \alpha_4]$. We will attempt to provide an optimal alpha such that the performance of this weighted sum outperforms any individual distance measure shown above.
 
 
 

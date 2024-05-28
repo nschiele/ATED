@@ -1,7 +1,7 @@
 \section{Validation Methodology}
 \label{sec:methodology}
 
-We evaluate and validate our distance measurements in two ways. We performed an experiment in which participants created attack trees following a written scenario, and then modified those same attack trees using information they collected on their own. We also evaluated the distance measures using a selected set of counter examples, selected to encompass all of the ways a tree could have a distance of one.
+We designed an experimental methodology based on the requirements described in Section~\ref{ssec:requirements}
 
 
 
@@ -16,93 +16,94 @@ Outside of the real-world experiment we developed to test the attack tree distan
 Each of these examples are simple enough that we can intuitively describe a distance. From this, we can examine how each of our distance measures handle each case. If a distance measure differs significantly from what we expect, this is indicative of the measure being deficient in measure some aspect of the distance between attack trees. The examples are shown in Figure~\ref{fig:counterexamples}.
 
 
-\begin{figure}
+\newcommand{\CEWidth}{.24\linewidth}
+\begin{figure*}
     \centering
-    \begin{subfigure}[b]{0.95\linewidth}
+\begin{subfigure}[b]{\CEWidth}
         \centering
         \resizebox{2cm}{!}{
             \input{content/snippets/CE/CE_Base.tex}
         }
         \subcaption{Base Attack Tree}\label{sfig:base}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{\CEWidth}
         \centering
         \resizebox{2cm}{!}{
             \input{content/snippets/CE/CE_OrderReversed.tex}
         }
         \subcaption{Order Reversed}\label{fig:b}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{\CEWidth}
         \centering
         \resizebox{2cm}{!}{
             \input{content/snippets/CE/CE_RefinementSwitch.tex}
         }
         \subcaption{Refinements Switched}\label{fig:b}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{\CEWidth}
         \centering
         \resizebox{2cm}{!}{
             \input{content/snippets/CE/CE_ExtraIntermediate.tex}
         }
         \subcaption{Extra Intermediate}\label{fig:b}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{\CEWidth}
         \centering
         \resizebox{2cm}{!}{
             \input{content/snippets/CE/CE_MissingIntermediate.tex}
         }
         \subcaption{Missing Intermediate}\label{fig:b}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{\CEWidth}
         \centering
         \resizebox{2.5cm}{!}{
             \input{content/snippets/CE/CE_ExtraLeaf.tex}
         }
         \subcaption{Extra Leaf}\label{fig:b}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{\CEWidth}
         \centering
         \resizebox{2cm}{!}{
             \input{content/snippets/CE/CE_MissingLeaf.tex}
         }
         \subcaption{MissingLeaf}\label{fig:b}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{\CEWidth}
         \centering
         \resizebox{2cm}{!}{
             \input{content/snippets/CE/CE_ChangedRoot.tex}
         }
         \subcaption{Changed Root}\label{fig:b}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{\CEWidth}
         \centering
         \resizebox{2cm}{!}{
             \input{content/snippets/CE/CE_ChangedIntermediate.tex}
         }
         \subcaption{Changed Intermediate}\label{fig:b}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{\CEWidth}
         \centering
         \resizebox{2cm}{!}{
             \input{content/snippets/CE/CE_ChangedLeaf.tex}
         }
         \subcaption{Changed Leaf}\label{fig:b}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{\CEWidth}
         \centering
         \resizebox{2cm}{!}{
             \input{content/snippets/CE/CE_MoveAdjacent.tex}
         }
         \subcaption{Move Adjacent}\label{fig:b}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{\CEWidth}
         \centering
         \resizebox{2cm}{!}{
             \input{content/snippets/CE/CE_MoveUp.tex}
         }
         \subcaption{Move Up}\label{fig:b}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
+\begin{subfigure}[b]{\CEWidth}
         \centering
         \resizebox{1.8cm}{!}{
             \input{content/snippets/CE/CE_MoveDown.tex}
@@ -110,7 +111,7 @@ Each of these examples are simple enough that we can intuitively describe a dist
         \subcaption{Move Down}\label{fig:b}
     \end{subfigure}
     \caption{Counterexamples}\label{fig:counterexamples}
-\end{figure}
+\end{figure*}
 
 
 
@@ -148,7 +149,7 @@ The attack tree data was collected in the form of XML data. This data was then p
 \subsubsection{Sentence Embeddings}
 \label{ssec:method-embeddings}
 
-As we discussed in Section~\ref{ssec:semantic-similarity}, BERT is a state-of-the-art method for creating sentence embeddings. We use the \texttt{SentenceTransformers} library to calculate the sentence embeddings and cosine similarity to calculate embedding vector difference. As stated previously, our contribution is not the creation of these embeddings; additionally, our use of sentence embeddings is method agnostic, and any method for generating sentence or word embeddings could be used with our methodology. We used multiple different pre-trained BERT models and aggregated the results to illustrate that any results we found were not the result of the use of a specific model. Additionally, we did not fine tune any model. We used the following models: \texttt{paraphrase-multilingual-MiniLM-L12}, \texttt{all-mpnet-base}, and \texttt{all-MiniLM-L12}.
+As we discussed in Section~\ref{sssec:semantic-similarity}, BERT is a state-of-the-art method for creating sentence embeddings. We use the \texttt{SentenceTransformers} library to calculate the sentence embeddings and cosine similarity to calculate embedding vector difference. As stated previously, our contribution is not the creation of these embeddings; additionally, our use of sentence embeddings is method agnostic, and any method for generating sentence or word embeddings could be used with our methodology. We used multiple different pre-trained BERT models and aggregated the results to illustrate that any results we found were not the result of the use of a specific model. Additionally, we did not fine tune any model. We used the following models: \texttt{paraphrase-multilingual-MiniLM-L12}, \texttt{all-mpnet-base}, and \texttt{all-MiniLM-L12}.
 
 \subsubsection{Ethics}
 \label{ssec:ethics}

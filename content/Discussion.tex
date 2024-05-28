@@ -13,25 +13,27 @@ Most promising are the established tree edit distance (TED) and newly developed 
 
 Similar to TED is our novel measure of RD. RD's allows Overall, RD fully meets 8 of our 9 requirements; for the remaining requirement of node position, RD partially meets this requirement, as it takes into account the position of nodes w.r.t. their parents but does not consider the position of the radical to the tree as a whole. When compared to our defined counterexamples in Table~\ref{tab:counterexamples}, RD matches the intuitive distance for nearly all examples. RD only does not meet expectation when the number of radicals between two trees differs.
 
+\newcommand{\ReqTableRow}[7]{#1 & #2 & #3 & #4 & #5 & #6 & #7}
 \begin{table*}[ht!]
-    \resizebox{.9\linewidth}{!}{%
+\centering
+\resizebox{\linewidth}{!}{%
     \begin{tabular}{@{}lccccccccc@{}}
                 \toprule
     \shortstack{\textbf{Distance}\\\textbf{Measure}} & \shortstack{\req{1}\\\textbf{Simple}} & \shortstack{\req{2}\\\textbf{Unfiltered}} & \shortstack{\req{3}\\\textbf{Effect Size}} & \shortstack{\req{4}\\\textbf{Description}} & \shortstack{\req{5}\\\textbf{Unordered}} & \shortstack{\req{6}\\\textbf{Labels}} & \shortstack{\req{6}\\\textbf{Refinements}} & \shortstack{\req{6}\\\textbf{Position}} & \shortstack{\req{7}\\\textbf{Metric}} \\ \midrule
-    \textbf{Statistics}       & \Negate                & \Confirm\footnotemark[1]          & \Negate \footnotemark[2]        & \Confirm          &\Confirm   & \Negate                 & \Confirm           & \Negate                   & \Negate\footnotemark[2]                    \\
+%\textbf{Statistics}       & \Negate                & \Confirm\footnotemark[1]          & \Negate \footnotemark[2]        & \Confirm          &\Confirm   & \Negate                 & \Confirm           & \Negate                   & \Negate\footnotemark[2]                    \\
     \textbf{TED}              & \Confirm      & \Confirm          & \Confirm           & \Confirm          & \Negate & \Confirm      & \Confirm           & \Confirm        & \Confirm      \\
-    \textbf{LD}               & \Confirm      & \Confirm          & \Confirm           & \Partial \footnotemark[3]                    &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm      \\
-    \textbf{RD}               & \Confirm      & \Confirm          & \Confirm           & \Confirm          &\Confirm   & \Confirm      & \Confirm           & \Partial \footnotemark[4]     & \Confirm      \\
-    \textbf{MSD}              & \Confirm      & \Confirm          & \Negate\footnotemark[5]                       &  \Partial  \footnotemark[3]                  &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm                 \\ \bottomrule
+\textbf{LD}               & \Confirm      & \Confirm          & \Confirm           & \Partial \footnotemark[1]                    &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm      \\
+\textbf{RD}               & \Confirm      & \Confirm          & \Confirm           & \Confirm          &\Confirm   & \Confirm      & \Confirm           & \Partial \footnotemark[2]     & \Confirm      \\
+\textbf{MSD}              & \Confirm      & \Confirm          & \Negate\footnotemark[3]                       &  \Partial  \footnotemark[1]                  &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm                 \\ \bottomrule
             \end{tabular}
     }
     \caption{A comparison of the different distance measures and their suitability w.r.t. the requirements defined in Section~\ref{ssec:requirements}\\
         \footnotesize
-        1: As the statistic measure does not examine labels, it is equivalently applicable to unfiltered trees.\\
-        2: Without a simple definition of distance (requirement 1), this requirement is functionally impossible to meet\\
-        3: These measures exclude significant information, as such their edit descriptions do not offer fully suitable descriptions of difference.\\% This requirement is partially met.\\
-        4: Radical distance incorporates the position of nodes w.r.t. their parent, however, it does not incorporate the position of the radical within the whole attack tree. \\ %This requirement is partially met.
-        5: Multiset distance only measures the leaf nodes, which is unable to consider the magnitude of the distance between two trees.
+%1: As the statistic measure does not examine labels, it is equivalently applicable to unfiltered trees.\\
+%2: Without a simple definition of distance (requirement 1), this requirement is functionally impossible to meet\\
+1: These measures exclude significant information, as such their edit descriptions do not offer fully suitable descriptions of difference.\\% This requirement is partially met.\\
+2: Radical distance incorporates the position of nodes w.r.t. their parent, however, it does not incorporate the position of the radical within the whole attack tree.  %This requirement is partially met.
+%3: Multiset distance only measures the leaf nodes, which is unable to consider the magnitude of the distance between two trees.
         \normalsize}
     \label{tab:requirmeent-suitability}
     \end{table*}
@@ -56,19 +58,7 @@ We have shown that our method is able to calculate the distance between two atta
 
 
 
-\subsection{RQ3: Industry Applications}
+% \subsection{RQ3: Industry Applications}
 
-Fundamentally, distance measures provide a means of comparison, and means of comparison are critical for any industry. New applications of distance measures are easily found once the distance measure to defined~\cite{beham2011new}. We propose two potential and particularly obvious uses of these distance measures; however, future work will further specify new applications.
 
-\subsubsection{Sharing Threat Intelligence}
-
-Threat models are a recommended tool for threat analysis~\cite{andersonSecurityEngineeringGuide2020,schneierSecretsLiesDigital2000}. However, once these models are created, they may only be applicable to the analyst or the team of analysts that created them. Unlike other sources of threat intelligence, such as YARA Rules~\cite{naik2019cyberthreat,naik2020evaluating}, there is no means to share attack trees in this format.
-
-In order to allow for attack trees to be shared as threat intelligence, two aspects are needed: a common structure and a means of comparison. The common structure has already been defined, in the ADTool XML Schema~\cite{kordy_adtool_2013}. This is an XML format used by ADTool, a tool to create Attack-Defense Trees, an extension of ATs. The ADTool XML Schema can be used to define attack trees, and as such, can be used as a common structure for sharing attack trees. The dataset of ATs we describe in Section~\ref{sec:results} is in this format. The second aspect is a means of comparison, which is what we have defined in this paper. It will be possible to publish attack trees in the ADTool XML Schema, and then compare the resulting trees using the distance measures we have defined. This will allow for the sharing of attack trees as threat intelligence, and the comparison of these trees to identify similar threats.
-
-\subsubsection{Generative AI}
-
-Applying generative AI to security is an active area of research. Distance measures are critical for using generative AI to create threat models in general, and attack trees specifically. By using a distance measure, we can compare the output of a generative AI to a set of known attack trees, and determine how similar the output is to the known attack trees. As we can control the form of the output of generative AI, we can have an AI tool output AT in the ADTool XML Schema, and then compare the resulting attacks to our own output or to a dataset.
-
-Going further, in order to build and refine a generative AI tool to create attack trees, most method will require a cost function to be defined~\cite{bottou1991stochastic}. A cost function is necessary for most model training, as this is what the model will attempt to optimize for. Fundamental to this cost function is the ability to define distance, as we can offer a way to compare a generated solution to a ``ground truth''. Beyond this, distance measures can be used to better define which and how artificial intelligence systems should be applied to attack trees, as was shown by Terry Jones~\cite{jones1995fitness}.
 

@@ -9,8 +9,7 @@ We posit the following research questions:
 
 \begin{enumerate}
     \item[\RQ{1}] How can we best calculate the distance between two attack trees?
-    \item[\RQ{2}] Is this method of attack tree distance valid?
-    \item[\RQ{3}] What are the industry applications of attack tree distance?
+\item[\RQ{2}] Is this method of attack tree distance valid?
 \end{enumerate}
 
 \subsection{Motivation}
@@ -24,50 +23,106 @@ Threat modeling seeks to organize threat information that aids in comprehension 
 \subsection{Requirements}
 \label{ssec:requirements}
 
-The application of tree edit distance to attack trees requires a number of considerations. These considerations are as follows:
+We have defined a number of requirements to compare attack trees. These requirements are subsequently used in Section~\ref{sec:methodology} to inform our study design.
 
-\subsubsection{Simple definition of difference}
+\subsubsection{Theoretical Requirement}
 
-We aim to establish some means by which we can say that some tree $T_A$ differs from some tree $T_B$ by some amount $x$. This description of difference should be simple and intuitive, such that a practitioner can understand the difference between two trees without needing to understand the underlying mathematics.
-
-\subsubsection{Applicable to unfiltered trees}
-
-As the ultimate goal is to find a mechanism that is usable for attack trees that are drawn by practitioners. As such, the distance calculation must be effective and meaningful to trees that are not filtered or otherwise processed. 
-
-\subsubsection{Effect size}
-
-This distance between two attack trees should be indicative of how different the two trees. 
+Our main theoretical requirement is that the distance between two attack trees must be a \textbf{metric}. That is to say, the distance between two attack trees must be non-negative, symmetric, and satisfy the triangle inequality. This is a fundamental requirement for any distance measure, as it ensures that the distance between two trees is a meaningful value.
 
 
-\subsubsection{Detailed description of difference}
+\subsubsection{Usability Requirements}
 
-The calculation of a distance must produce a description of the difference between two trees. This description should be human readable and should be able to be used to inform a practitioner of the differences between two trees.
+As we are motivated by a desire to produce a metric has applications for practitioners, we have a number of requirements we expect a potential distance measure to meet. These requirements are as follows:
+We expect our distance measure to be able to describe distance between trees with \textbf{unfiltered} labels. A practitioner should be able to apply this distance measure without needing compared trees to have identical node labels; human developed labels can be noisy, and our distance measure should have some mechanism to compare these labels meaningfully. Finally, the distance measure should incorporate all aspects of a tree, including \textbf{position} of nodes within the tree, the \textbf{refinement} of nodes, and the \textbf{labels} of nodes. Additionally, our distance measure should work on \textbf{unordered} attack trees, as the standard definition of attack trees does not assign an order to children of nodes~\cite{mauw_foundations_2006}.
 
-\subsubsection{Can handle unordered trees}
 
-The distance calculation must incorporate all elements of attack trees. This includes the refinement  and the labels of nodes, for all nodes in the tree.
+\subsubsection{Validation Requirements}
 
-\subsubsection{Incorporates all elements of attack trees}
-
-The distance calculation must incorporate all elements of attack trees. This includes the refinement, position,  and the labels of nodes, for all nodes in the tree.
-
-\subsubsection{Difference is a metric}
-
-The distance between two attack trees must be a metric. That is to say, the distance between two attack trees must be non-negative, symmetric, and satisfy the triangle inequality.
+We must be able to validate these measures, which we will be able to do if the trees respond in a predictable manner and intuitive manner. We expect that the distance measure we find is \textbf{intuitive}ly understandable by a user; in other terms, a practitioner should be able to easily roughly understand why two trees are a given distance apart.
 
 
 
-\subsection{Assumptions}
 
-We make a series of assumptions in our comparisons of attack trees. These assumptions are as follows:  
 
-\subsubsection{Attack tree size}
 
-We assume that attack trees are of a relatively small size. In a previous study on self drawn attack defense trees, the largest attack trees were on the order of 50 nodes. While this is large for a human to comprehend, on the scale of data structures, this is miniscule. As such, it should be unnecessary to optimize for complexity, as attack trees, especially human drawn attack trees, do not reach the size where complexity becomes a significant issue. Even in the case of a large dataset of attack trees, due to the relatively small size of each individual attach tree, the complexity of a distance calculation should not impact computability. Therefore, we so not consider computational complexity as a requirement for our distance measurement.
 
-\subsubsection{Attack trees are correctly formed}
+
+
+
+
+
+
+% 
+
+
+
+\subsection{Other considerations}
+
+Most attack trees are drawn for specific situation by individual practitioners. In a previous study on self drawn attack defense trees, the largest attack trees were on the order of 50 nodes. As such, it should be unnecessary to optimize for complexity, as attack trees, especially human drawn attack trees, do not reach the size where complexity becomes a significant issue. Even in the case of a large dataset of attack trees, due to the relatively small size of each individual attach tree, the complexity of a distance calculation should not impact computability. Therefore, we so not consider computational complexity as a requirement for our distance measurement.
 
 We are examining the distance between trees that are correctly formed. We do not define potential distance values for trees that have some form of structural error. We assume that the compared attack trees follow all defined composition rules~\cite{mauw_foundations_2006}. Further, for the ``unfiltered'' trees we examine in Section~\ref{sec:results}, all trees are defined according to the ADTool XML Schema, which functionally guarantees that all tree are well formed~\cite{kordy_adtool_2013}.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% The application of tree edit distance to attack trees requires a number of considerations. These considerations are as follows:
+
+% \subsubsection{Simple definition of difference}
+
+% We aim to establish some means by which we can say that some tree $T_A$ differs from some tree $T_B$ by some amount $x$. This description of difference should be simple and intuitive, such that a practitioner can understand the difference between two trees without needing to understand the underlying mathematics.
+
+% \subsubsection{Applicable to unfiltered trees}
+
+% As the ultimate goal is to find a mechanism that is usable for attack trees that are drawn by practitioners. As such, the distance calculation must be effective and meaningful to trees that are not filtered or otherwise processed. 
+
+% \subsubsection{Effect size}
+
+% This distance between two attack trees should be indicative of how different the two trees. 
+
+
+% \subsubsection{Detailed description of difference}
+
+% The calculation of a distance must produce a description of the difference between two trees. This description should be human readable and should be able to be used to inform a practitioner of the differences between two trees.
+
+% \subsubsection{Can handle unordered trees}
+
+% The distance calculation must incorporate all elements of attack trees. This includes the refinement  and the labels of nodes, for all nodes in the tree.
+
+% \subsubsection{Incorporates all elements of attack trees}
+
+% The distance calculation must incorporate all elements of attack trees. This includes the refinement, position,  and the labels of nodes, for all nodes in the tree.
+
+% \subsubsection{Difference is a metric}
+
+% The distance between two attack trees must be a metric. That is to say, the distance between two attack trees must be non-negative, symmetric, and satisfy the triangle inequality.
+
+
+
+% \subsection{Assumptions}
+
+% We make a series of assumptions in our comparisons of attack trees. These assumptions are as follows:  
+
+% \subsubsection{Attack tree size}
+
+% We assume that attack trees are of a relatively small size. In a previous study on self drawn attack defense trees, the largest attack trees were on the order of 50 nodes. While this is large for a human to comprehend, on the scale of data structures, this is miniscule. As such, it should be unnecessary to optimize for complexity, as attack trees, especially human drawn attack trees, do not reach the size where complexity becomes a significant issue. Even in the case of a large dataset of attack trees, due to the relatively small size of each individual attach tree, the complexity of a distance calculation should not impact computability. Therefore, we so not consider computational complexity as a requirement for our distance measurement.
+
+% \subsubsection{Attack trees are correctly formed}
+
+% We are examining the distance between trees that are correctly formed. We do not define potential distance values for trees that have some form of structural error. We assume that the compared attack trees follow all defined composition rules~\cite{mauw_foundations_2006}. Further, for the ``unfiltered'' trees we examine in Section~\ref{sec:results}, all trees are defined according to the ADTool XML Schema, which functionally guarantees that all tree are well formed~\cite{kordy_adtool_2013}.
 
 
 % \subsubsection{Refinement Awareness}
