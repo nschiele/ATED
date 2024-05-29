@@ -22,18 +22,18 @@ Similar to TED is our novel measure of RD. RD's allows Overall, RD fully meets 8
     \shortstack{\textbf{Distance}\\\textbf{Measure}} & \shortstack{\req{1}\\\textbf{Simple}} & \shortstack{\req{2}\\\textbf{Unfiltered}} & \shortstack{\req{3}\\\textbf{Effect Size}} & \shortstack{\req{4}\\\textbf{Description}} & \shortstack{\req{5}\\\textbf{Unordered}} & \shortstack{\req{6}\\\textbf{Labels}} & \shortstack{\req{6}\\\textbf{Refinements}} & \shortstack{\req{6}\\\textbf{Position}} & \shortstack{\req{7}\\\textbf{Metric}} \\ \midrule
 %\textbf{Statistics}       & \Negate                & \Confirm\footnotemark[1]          & \Negate \footnotemark[2]        & \Confirm          &\Confirm   & \Negate                 & \Confirm           & \Negate                   & \Negate\footnotemark[2]                    \\
     \textbf{TED}              & \Confirm      & \Confirm          & \Confirm           & \Confirm          & \Negate & \Confirm      & \Confirm           & \Confirm        & \Confirm      \\
-\textbf{LD}               & \Confirm      & \Confirm          & \Confirm           & \Partial \footnotemark[1]                    &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm      \\
-\textbf{RD}               & \Confirm      & \Confirm          & \Confirm           & \Confirm          &\Confirm   & \Confirm      & \Confirm           & \Partial \footnotemark[2]     & \Confirm      \\
-\textbf{MSD}              & \Confirm      & \Confirm          & \Negate\footnotemark[3]                       &  \Partial  \footnotemark[1]                  &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm                 \\ \bottomrule
+\textbf{LD}               & \Confirm      & \Confirm          & \Confirm           & \Partial \footnotemark[3]                    &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm      \\
+\textbf{RD}               & \Confirm      & \Confirm          & \Confirm           & \Confirm          &\Confirm   & \Confirm      & \Confirm           & \Partial \footnotemark[4]     & \Confirm      \\
+\textbf{MSD}              & \Confirm      & \Confirm          & \Negate\footnotemark[5]                       &  \Partial  \footnotemark[1]                  &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm                 \\ \bottomrule
             \end{tabular}
     }
     \caption{A comparison of the different distance measures and their suitability w.r.t. the requirements defined in Section~\ref{ssec:requirements}\\
         \footnotesize
 %1: As the statistic measure does not examine labels, it is equivalently applicable to unfiltered trees.\\
 %2: Without a simple definition of distance (requirement 1), this requirement is functionally impossible to meet\\
-1: These measures exclude significant information, as such their edit descriptions do not offer fully suitable descriptions of difference.\\% This requirement is partially met.\\
-2: Radical distance incorporates the position of nodes w.r.t. their parent, however, it does not incorporate the position of the radical within the whole attack tree.  %This requirement is partially met.
-%3: Multiset distance only measures the leaf nodes, which is unable to consider the magnitude of the distance between two trees.
+3: These measures exclude significant information, as such their edit descriptions do not offer fully suitable descriptions of difference.\\% This requirement is partially met.\\
+4: Radical distance incorporates the position of nodes w.r.t. their parent, however, it does not incorporate the position of the radical within the whole attack tree.  %This requirement is partially met.
+%5: Multiset distance only measures the leaf nodes, which is unable to consider the magnitude of the distance between two trees.
         \normalsize}
     \label{tab:requirmeent-suitability}
     \end{table*}
