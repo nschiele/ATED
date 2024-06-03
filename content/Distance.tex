@@ -31,7 +31,7 @@ Tree edit distance is a measure of the difference between two trees by defining 
 The tree edit distance from Zhang and Shasha works on ordered trees, which for our purposes presents a challenge, as our attack trees are unordered. Zhang~\etal showed that unordered tree edit distance is a MAX SNP-Hard problem~\cite{zhang_max_1994}. Our assumption that attack trees do not grow to be very large allows us to remain unconcerned about the processing time of unordered tree distance. Previous work on unordered tree edit distance have offered various polynomial time approximate solutions, all making assumptions to speed up computations. Fundamentally, all make the same assumption, which is that there is absolute equivalence between nodes within two trees. Either nodes have identical labels or they do not. This would preclude their use on unfiltered data, as nodes are not guaranteed to have the same label. On unfiltered data, these algorithms may find a local maximum instead of the global maximum needed to create a mapping (as is done in label distance described in Section~\ref{ssec:label-distance}) has an issue of assuming nodes with absolute equivalence. That is, each algorithm will assume a mapping that may not be optimal if it finds two nodes to be ``equivalent'' if their similarity is above a given threshold (see Section~\ref{sssec:threshold-problem}), or it will not find a mapping between most similar nodes because these nodes do not have identical labels. As such, these algorithms are unsuitable for our purposes.
 
 
-We modify the Zhang and Shasha algorithm in three ways, we introduce a mechanism for comparing the semantic meaning of node labels (similar to label distance), we introduce a new cost for changing the refinement of a node, and we introduce a mechanism to reorder children.
+We modify the Zhang and Shasha algorithm in three ways, we introduce a mechanism for comparing the semantic meaning of node labels (similar to label distance) and  a new cost for changing the refinement of a node.
 
 
 
@@ -46,31 +46,31 @@ One of the biggest differences between attack trees and other tree-like data str
 \end{definition}
 
 
-\begin{lemma}\label{lem:gamma-delta}
+% \begin{lemma}\label{lem:gamma-delta}
 
-    $\gamma(\Delta)$ only applies in the case of changing one node into another.
+%     $\gamma(\Delta)$ only applies in the case of changing one node into another.
 
-  \begin{proof}
-    Proof is provided in Appendix~\ref{appendix:lem:gamma-delta}
-  \end{proof}
+%   \begin{proof}
+%     Proof is provided in Appendix~\ref{appendix:lem:gamma-delta}
+%   \end{proof}
 
-\end{lemma}
-
-
+% \end{lemma}
 
 
-\begin{lemma}\label{lem:gamma-delta-2}
-    For attack trees within the definition of Definition~\ref{def:attack-tree}. It must be the case that
 
-    \[\gamma(\Delta) \le \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})\]
 
-    \begin{proof}
-        Proof is provided in Appendix~\ref{appendix:lem:gamma-delta-2}
-      \end{proof}
+% \begin{lemma}\label{lem:gamma-delta-2}
+%     For attack trees within the definition of Definition~\ref{def:attack-tree}. It must be the case that
+
+%     \[\gamma(\Delta) \le \gamma(\ATnode{e}{j} \rightarrow {\Lambda}) + \gamma(\Lambda \rightarrow {\ATnode{e}{j}})\]
+
+%     \begin{proof}
+%         Proof is provided in Appendix~\ref{appendix:lem:gamma-delta-2}
+%       \end{proof}
 
     
 
-\end{lemma}
+% \end{lemma}
 
 % \begin{lemma}\label{lem:gamma-delta}
 
@@ -227,7 +227,7 @@ This method of computation works as it is not possible to have an intermediate a
 
 
 
-\subsection{Tree Semantic Difference (Multiset Difference)}
+\subsection{ultiset Difference (MSD)}
 
 Attack trees can be represented mathematically in many different ways. The definition we offer in Definition~\ref{def:attack-tree} is a recursive definition. Multiple different representations of attack trees have been proposed, the arguably most established attack tree semantics would be multiset semantics proposed by Mauw and Oostdijk~\cite{mauw_foundations_2006}. In multiset semantics, each multiset represents a single a complete attack vector within the attack tree. A multiset consisting of multisets represents a node with multiple children. For defining multiset difference, we can use the Jaccard distance between two multisets. However, if we were to use this method, we would need node labels in order for the elements to be considered identical.
 

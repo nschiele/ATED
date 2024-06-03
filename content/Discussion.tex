@@ -1,64 +1,183 @@
 \section{Discussion}
 \label{sec:dicsussion}
 
-% RQ1 How can we best calculate the distance between two attack trees?
-% RQ2 Are these methods of attack tree distance valid?
-% RQ3 What are the industry applications of attack tree distance?
 
-\subsection{RQ1: Best Measure}
 
-We have described five different measures of comparison between attack trees. As we see in Table~\ref{tab:counterexamples}, none of our distance measures exactly match the intuitive distance. We can confidently say that establishing distance based on underlying multiset semantics (multiset distance) and establishing distance based on a comparison of various measures is inadequate as an effective means of distance. This is further seen in Table~\ref{tab:requirmeent-suitability}, where statistical comparison and multiset distance only fully meet 3 and 5 of the 9 requirements, respectively.
 
-Most promising are the established tree edit distance (TED) and newly developed radical distance (RD). TED is a well-established measure of distance between trees, and as such, it is not surprising that it meets almost all requirements. The only requirement it does not meet is the ability to ignore difference caused by the order of children being changed. This is seen explicitly in Table~\ref{tab:counterexamples}. TED on unordered trees is an active area of research, and as we described in Section~\ref{sec:related-work}, much of the research into unordered TED relies on exact equivalence between nodes. This is not practical for attack trees, as the labels of nodes are not identical, but should still be considered equivalent. Further research will be needed to establish unordered TED using semantic similarity between node labels to define node equivalence. Overall, TED meets 8 of our 9 requirements.
+% Our fundamental research question is: \emph{How do we measure the distance between two attack trees?}
 
-Similar to TED is our novel measure of RD. RD's allows Overall, RD fully meets 8 of our 9 requirements; for the remaining requirement of node position, RD partially meets this requirement, as it takes into account the position of nodes w.r.t. their parents but does not consider the position of the radical to the tree as a whole. When compared to our defined counterexamples in Table~\ref{tab:counterexamples}, RD matches the intuitive distance for nearly all examples. RD only does not meet expectation when the number of radicals between two trees differs.
+% To answer this, we start by understanding the requirements behind measure distance metric, based on our experience with attack trees and related literature. We then propose a repeatable method for experimentally validating any tree distance metric. We further propose both a mechanism for processing different node labels with similar meanings and novel algorithms for calculating the distance between two attack trees. Finally, combine all of this to propose a distance function that behaves in a reasonable way.
 
-\newcommand{\ReqTableRow}[7]{#1 & #2 & #3 & #4 & #5 & #6 & #7}
+
+
+We have introduced a modification of a well studied tree distance algorithm (TED)~\cite{Zhang_Shasha_1989}; in addition, we have further introduced three novel distance measures in LD, RD and MSD. In Section~\ref{sec:results}, we show our theoretical and experimental attempts to validate these approaches. We showed in Figures~\ref{fig:semsim-at1}~and~\ref{fig:semsim-at2} that TED, LD and RD all behave similarly when comparing the distance between two trees. This suggests that these three distance measures are fundamentally measuring the same thing. In the same figures, we see MSD exhibiting behavior that does not follow the other distance measures or our expectations. This is further confirmed by Figure~\ref{fig:semsim-at1-2}, in which MSD suddenly increases in distance with increasing $\epsilon$, a behavior we would not expect, as the difference between AT1 and AT2 as described in Section~\ref{sec:methodology} is primarily node additions, which would not be affected by $\epsilon$. This suggests that MSD is not a suitable distance measure for comparing attack trees, or that MSD is comparing something other than what we want it to compare.
+
+Further, exploring the ``operations'' of the different distance measures in Figure~\ref{fig:operations}, we can see that MSD does not behave in the same way as other distance measures. Namely, in the AT1 vs AT2 plot for MSD, we see a large increase of change operations with rising $\epsilon$. As multiset semantics only include leaf nodes, as participants in our study added nodes to their trees to create AT2 from AT1, the multiset semantics fundamentally changed. This change is represented in the distance plots with rising $\epsilon$.
+
+When examining the responses to the BTEs, MSD behaves in a way that is completely unexpected. Some BTEs are shows as no distance (BTEs which do not change leaf nodes) while others are over-counted in terms of distance (all BTEs which do change leaf nodes). This results in our optimal $\alpha$ for WSD to not include MSD at all, as discussed in Section~\ref{ssec:results-alpha}. This should not be interpreted to say the semantics of attack trees are unimportant. Radical distance (RD) is heavily based on refinement semantics~\cite{gadyatskayaRefinementAwareGenerationAttack2017}. It may be the case that semantic representations require inclusion of intermediate nodes, which is a fundamental difference between multiset and refinement semantics. For this work, inclusion of intermediate nodes is necessary to meet our validation criteria.
+
+
+\newcommand{\ReqTableRow}[9]{#1 & #2 & #3 & #4 & #5 & #6 & #7 & #8 & #9}
 \begin{table*}[ht!]
 \centering
 \resizebox{\linewidth}{!}{%
-    \begin{tabular}{@{}lccccccccc@{}}
+\begin{tabular}{@{}lcccc:ccc:cc@{}}
                 \toprule
-    \shortstack{\textbf{Distance}\\\textbf{Measure}} & \shortstack{\req{1}\\\textbf{Simple}} & \shortstack{\req{2}\\\textbf{Unfiltered}} & \shortstack{\req{3}\\\textbf{Effect Size}} & \shortstack{\req{4}\\\textbf{Description}} & \shortstack{\req{5}\\\textbf{Unordered}} & \shortstack{\req{6}\\\textbf{Labels}} & \shortstack{\req{6}\\\textbf{Refinements}} & \shortstack{\req{6}\\\textbf{Position}} & \shortstack{\req{7}\\\textbf{Metric}} \\ \midrule
+\shortstack{\textbf{Distance}\\\textbf{Measure}\\\text{ }}
+&\shortstack{\req{1}\\\textbf{Metric}\\\text{ }}
+& \shortstack{\req{2}\\\textbf{Position}\\\text{ }}
+& \shortstack{\req{3}\\\textbf{Refinements}\\\text{ }}
+& \shortstack{\req{4}\\\textbf{Labels}\\\text{ }}
+& \shortstack{\req{5}\\\textbf{Unordered}\\\text{ }}
+& \shortstack{\req{6}\\\textbf{Unfiltered}\\\text{ }}
+& \shortstack{\req{7}\\\textbf{Intuitive}\\\text{ }}
+& \shortstack{\req{8}\\\textbf{Theoretically}\\\textbf{Valid}}
+& \shortstack{\req{9}\\\textbf{Experimentally}\\\textbf{Valid}}
+\\ \midrule
 %\textbf{Statistics}       & \Negate                & \Confirm\footnotemark[1]          & \Negate \footnotemark[2]        & \Confirm          &\Confirm   & \Negate                 & \Confirm           & \Negate                   & \Negate\footnotemark[2]                    \\
-    \textbf{TED}              & \Confirm      & \Confirm          & \Confirm           & \Confirm          & \Negate & \Confirm      & \Confirm           & \Confirm        & \Confirm      \\
-\textbf{LD}               & \Confirm      & \Confirm          & \Confirm           & \Partial \footnotemark[3]                    &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm      \\
-\textbf{RD}               & \Confirm      & \Confirm          & \Confirm           & \Confirm          &\Confirm   & \Confirm      & \Confirm           & \Partial \footnotemark[4]     & \Confirm      \\
-\textbf{MSD}              & \Confirm      & \Confirm          & \Negate\footnotemark[5]                       &  \Partial  \footnotemark[1]                  &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm                 \\ \bottomrule
+\textbf{TED} &\Confirm&\Confirm&\Confirm&\Confirm&\Negate&\Confirm&\Confirm&\Partial\footnotemark[3]&\Confirm\\
+\textbf{LD}  &\Confirm&\Negate&\Negate&\Confirm&\Confirm&\Confirm&\Confirm&\Partial\footnotemark[3]&\Confirm\\
+\textbf{RD}  &\Confirm&\Confirm&\Confirm&\Confirm&\Confirm&\Confirm&\Confirm&\Partial\footnotemark[3]&\Confirm\\
+\textbf{MSD} &\Confirm&\Negate&\Partial\footnotemark[4]&\Partial\footnotemark[4]&\Confirm&\Confirm&\Negate&\Partial\footnotemark[3]&\Partial\footnotemark[5]\\ \bottomrule
             \end{tabular}
     }
     \caption{A comparison of the different distance measures and their suitability w.r.t. the requirements defined in Section~\ref{ssec:requirements}\\
-        \footnotesize
-%1: As the statistic measure does not examine labels, it is equivalently applicable to unfiltered trees.\\
-%2: Without a simple definition of distance (requirement 1), this requirement is functionally impossible to meet\\
-3: These measures exclude significant information, as such their edit descriptions do not offer fully suitable descriptions of difference.\\% This requirement is partially met.\\
-4: Radical distance incorporates the position of nodes w.r.t. their parent, however, it does not incorporate the position of the radical within the whole attack tree.  %This requirement is partially met.
-%5: Multiset distance only measures the leaf nodes, which is unable to consider the magnitude of the distance between two trees.
+\footnotesize
+3: All distance measures failed on at least on of our BTEs\\
+4: MSD does not include all nodes, but does contain some information about refinements for the nodes that are included\\
+5: MSD exhibits behavior on the experimental dataset that does not align with our expectations. As such, the experimental validity is inconclusive.
         \normalsize}
     \label{tab:requirmeent-suitability}
     \end{table*}
 
-\subsection{RQ2: Validity}
 
-To start, we apply tree edit distance, which is a well established and documented mechanism to describe the distance between two trees~\cite{Zhang_Shasha_1989,zhang_editing_1992,akutsu_tree_2021,pawlik_rted_2011,mcvicar_sumoted_2016}. If we can show the distance measures we suggest, label distance, radical distance, and multiset distance, behave similarly to tree edit distance, we can infer that these distance measures are similarly valid. In Figure~\ref{fig:semsim-at2}, we see distance measures for all distance measures as applied to a dataset of trees that all have the same base tree, but have been extended differently by participants. This distance is averaged across all samples we have, and modified by a changing semantic similarity limit. This figure shows how different distance measures change with different semantic similarity limits. This gives us a mechanism to compare different distance measures, as if measures are fundamentally measuring trees similarly, then these lines should roughly correspond to each other. We can see in Figure~\ref{fig:semsim-at2} that the tree edit distance, radical distance and label distance are all remarkably similar, with the lines for these distances translated vertically on the $y$-axis. This suggests that these distance measures are fundamentally measuring the same thing, and as tree edit distance can be argued to be valid, similarly, both label and radical distance must likewise be valid.
 
-Figure~\ref{fig:semsim-at1-2}
-
-Our main contribution to tree distance is the novel technique of comparing components in DAGs by using semantic similarity. To our knowledge, all previous tree distance measurements have worked with either artificial data or with a ``clean'' dataset, which would entirely negate the need to assess node similarity by anything other than equivalence. We are the first to attempt to define tree distance for node labels that are not identical, but should still be considered equivalent. By applying this method to a series of attack trees that should be more or less equivalent, we can assess if this technique is valid. As described in Section~\ref{ssec:method-study-design}, the first attack tree that subjects drew was based on a provided written scenario. Subjects were instructed to include only information provided by the scenario, to include no additional information and to include all the information in the scenario. As such and as discussed in Section~\ref{ssec:method-study-design}, while we expect natural variations in these trees due to participants interpreting the scenario differently, missing information or organizing information different, ultimately the resulting trees should be fairly equivalent. As shown in Figure~\ref{fig:semsim-at1}, for semantic similarity limits  below 0.75, we see this expected equivalence. This suggests that our method is producing an output that is measuring the distance between two attack trees, and thus is valid.
-
-To further validate our approach, we apply our distance measurements
+Overall, we find that RD and TED show strong promise as means of establishing the distance between two attack trees. WSD is able to achieve theoretical performance that is better than either RD and TED, and it is able to match the experimental performance of both.
 
 
 
-We have shown that our method is able to calculate the distance between two attack trees, and that this distance is valid. We have also shown that this method can be used to compare attack trees in a real-world scenario, and that it can be used to identify similar attack trees.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% -------------------------- OLD DISCUSSION --------------------------
+
+% We have described five different measures of comparison between attack trees. As we see in Table~\ref{tab:counterexamples}, none of our distance measures exactly match the intuitive distance. We can confidently say that establishing distance based on underlying multiset semantics (multiset distance) and establishing distance based on a comparison of various measures is inadequate as an effective means of distance. This is further seen in Table~\ref{tab:requirmeent-suitability}, where statistical comparison and multiset distance only fully meet 3 and 5 of the 9 requirements, respectively.
+
+% Most promising are the established tree edit distance (TED) and newly developed radical distance (RD). TED is a well-established measure of distance between trees, and as such, it is not surprising that it meets almost all requirements. The only requirement it does not meet is the ability to ignore difference caused by the order of children being changed. This is seen explicitly in Table~\ref{tab:counterexamples}. TED on unordered trees is an active area of research, and as we described in Section~\ref{sec:related-work}, much of the research into unordered TED relies on exact equivalence between nodes. This is not practical for attack trees, as the labels of nodes are not identical, but should still be considered equivalent. Further research will be needed to establish unordered TED using semantic similarity between node labels to define node equivalence. Overall, TED meets 8 of our 9 requirements.
+
+% Similar to TED is our novel measure of RD. RD's allows Overall, RD fully meets 8 of our 9 requirements; for the remaining requirement of node position, RD partially meets this requirement, as it takes into account the position of nodes w.r.t. their parents but does not consider the position of the radical to the tree as a whole. When compared to our defined BTEs in Table~\ref{tab:counterexamples}, RD matches the intuitive distance for nearly all examples. RD only does not meet expectation when the number of radicals between two trees differs.
+
+% \newcommand{\ReqTableRow}[7]{#1 & #2 & #3 & #4 & #5 & #6 & #7}
+% \begin{table*}[ht!]
+% \centering
+% \resizebox{\linewidth}{!}{%
+%     \begin{tabular}{@{}lccccccccc@{}}
+%                 \toprule
+%     \shortstack{\textbf{Distance}\\\textbf{Measure}} & \shortstack{\req{1}\\\textbf{Simple}} & \shortstack{\req{2}\\\textbf{Unfiltered}} & \shortstack{\req{3}\\\textbf{Effect Size}} & \shortstack{\req{4}\\\textbf{Description}} & \shortstack{\req{5}\\\textbf{Unordered}} & \shortstack{\req{6}\\\textbf{Labels}} & \shortstack{\req{6}\\\textbf{Refinements}} & \shortstack{\req{6}\\\textbf{Position}} & \shortstack{\req{7}\\\textbf{Metric}} \\ \midrule
+% %\textbf{Statistics}       & \Negate                & \Confirm\footnotemark[1]          & \Negate \footnotemark[2]        & \Confirm          &\Confirm   & \Negate                 & \Confirm           & \Negate                   & \Negate\footnotemark[2]                    \\
+%     \textbf{TED}              & \Confirm      & \Confirm          & \Confirm           & \Confirm          & \Negate & \Confirm      & \Confirm           & \Confirm        & \Confirm      \\
+% \textbf{LD}               & \Confirm      & \Confirm          & \Confirm           & \Partial \footnotemark[3]                    &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm      \\
+% \textbf{RD}               & \Confirm      & \Confirm          & \Confirm           & \Confirm          &\Confirm   & \Confirm      & \Confirm           & \Partial \footnotemark[4]     & \Confirm      \\
+% \textbf{MSD}              & \Confirm      & \Confirm          & \Negate\footnotemark[5]                       &  \Partial  \footnotemark[1]                  &\Confirm   & \Confirm      & \Negate                      & \Negate                   & \Confirm                 \\ \bottomrule
+%             \end{tabular}
+%     }
+%     \caption{A comparison of the different distance measures and their suitability w.r.t. the requirements defined in Section~\ref{ssec:requirements}\\
+%         \footnotesize
+% %1: As the statistic measure does not examine labels, it is equivalently applicable to unfiltered trees.\\
+% %2: Without a simple definition of distance (requirement 1), this requirement is functionally impossible to meet\\
+% 3: These measures exclude significant information, as such their edit descriptions do not offer fully suitable descriptions of difference.\\% This requirement is partially met.\\
+% 4: Radical distance incorporates the position of nodes w.r.t. their parent, however, it does not incorporate the position of the radical within the whole attack tree.  %This requirement is partially met.
+% %5: Multiset distance only measures the leaf nodes, which is unable to consider the magnitude of the distance between two trees.
+%         \normalsize}
+%     \label{tab:requirmeent-suitability}
+%     \end{table*}
+
+% To start, we apply tree edit distance, which is a well established and documented mechanism to describe the distance between two trees~\cite{Zhang_Shasha_1989,zhang_editing_1992,akutsu_tree_2021,pawlik_rted_2011,mcvicar_sumoted_2016}. If we can show the distance measures we suggest, label distance, radical distance, and multiset distance, behave similarly to tree edit distance, we can infer that these distance measures are similarly valid. In Figure~\ref{fig:semsim-at2}, we see distance measures for all distance measures as applied to a dataset of trees that all have the same base tree, but have been extended differently by participants. This distance is averaged across all samples we have, and modified by a changing semantic similarity limit. This figure shows how different distance measures change with different semantic similarity limits. This gives us a mechanism to compare different distance measures, as if measures are fundamentally measuring trees similarly, then these lines should roughly correspond to each other. We can see in Figure~\ref{fig:semsim-at2} that the tree edit distance, radical distance and label distance are all remarkably similar, with the lines for these distances translated vertically on the $y$-axis. This suggests that these distance measures are fundamentally measuring the same thing, and as tree edit distance can be argued to be valid, similarly, both label and radical distance must likewise be valid.
+
+% Figure~\ref{fig:semsim-at1-2}
+
+% Our main contribution to tree distance is the novel technique of comparing components in DAGs by using semantic similarity. To our knowledge, all previous tree distance measurements have worked with either artificial data or with a ``clean'' dataset, which would entirely negate the need to assess node similarity by anything other than equivalence. We are the first to attempt to define tree distance for node labels that are not identical, but should still be considered equivalent. By applying this method to a series of attack trees that should be more or less equivalent, we can assess if this technique is valid. As described in Section~\ref{ssec:method-study-design}, the first attack tree that subjects drew was based on a provided written scenario. Subjects were instructed to include only information provided by the scenario, to include no additional information and to include all the information in the scenario. As such and as discussed in Section~\ref{ssec:method-study-design}, while we expect natural variations in these trees due to participants interpreting the scenario differently, missing information or organizing information different, ultimately the resulting trees should be fairly equivalent. As shown in Figure~\ref{fig:semsim-at1}, for semantic similarity limits  below 0.75, we see this expected equivalence. This suggests that our method is producing an output that is measuring the distance between two attack trees, and thus is valid.
+
+% To further validate our approach, we apply our distance measurements
+
+
+
+% We have shown that our method is able to calculate the distance between two attack trees, and that this distance is valid. We have also shown that this method can be used to compare attack trees in a real-world scenario, and that it can be used to identify similar attack trees.
  
-
-% Please add the following required packages to your document preamble:
-% \usepackage{booktabs}
-
-
-
-% \subsection{RQ3: Industry Applications}
-
-
 

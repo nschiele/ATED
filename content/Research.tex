@@ -3,14 +3,22 @@
 
 Our primary research goal is to determine a mechanism to calculate the distance between two attack trees. This is a novel problem, as attack trees contain the concept of refinements, and the application of tree edit distance to the cybersecurity domain has yet to be seen.
 
-\subsection{Research Questions}
+\subsection{Research Questions and Contributions}
 
-We posit the following research questions:
 
-\begin{enumerate}
-    \item[\RQ{1}] How can we best calculate the distance between two attack trees?
-\item[\RQ{2}] Is this method of attack tree distance valid?
-\end{enumerate}
+Our fundamental research question is: \emph{How do we measure the distance between two attack trees?}
+
+To answer this, we start by understanding the requirements behind measure distance metric, based on our experience with attack trees and related literature. We then propose a repeatable method for experimentally validating any tree distance metric. We further propose both a mechanism for processing different node labels with similar meanings and novel algorithms for calculating the distance between two attack trees. Finally, combine all of this to propose a distance function that behaves in a reasonable way.
+
+% - start understanding requirements, propose a way to experimentally validate any distance metric, then we propose the semantic similarity idea, and then we have collected a set of metrics based on attack tree and tree distance literature. We are able to propose a function that behaves in a somewhat reasonable way
+% - Main research question: How do we measure the distance between two attack trees?
+
+% We posit the following research questions:
+
+% \begin{enumerate}
+%     \item[\RQ{1}] How can we best calculate the distance between two attack trees?
+% \item[\RQ{2}] Is this method of attack tree distance valid?
+% \end{enumerate}
 
 \subsection{Motivation}
 
@@ -27,19 +35,19 @@ We have defined a number of requirements to compare attack trees. These requirem
 
 \subsubsection{Theoretical Requirement}
 
-Our main theoretical requirement is that the distance between two attack trees must be a \textbf{metric}. That is to say, the distance between two attack trees must be non-negative, symmetric, and satisfy the triangle inequality. This is a fundamental requirement for any distance measure, as it ensures that the distance between two trees is a meaningful value.
+Our main theoretical requirement is that the distance between two attack trees must be a \textbf{metric}. That is to say, the distance between two attack trees must be non-negative, symmetric, and satisfy the triangle inequality. This is a fundamental requirement for any distance measure, as it ensures that the distance between two trees is a meaningful value. Finally, the distance measure should incorporate all aspects of a tree, including \textbf{position} of nodes within the tree, the \textbf{refinement} of nodes, and the \textbf{labels} of nodes. Additionally, our distance measure should work on \textbf{unordered} attack trees, as the standard definition of attack trees does not assign an order to children of nodes~\cite{mauw_foundations_2006}.
 
 
 \subsubsection{Usability Requirements}
 
 As we are motivated by a desire to produce a metric has applications for practitioners, we have a number of requirements we expect a potential distance measure to meet. These requirements are as follows:
-We expect our distance measure to be able to describe distance between trees with \textbf{unfiltered} labels. A practitioner should be able to apply this distance measure without needing compared trees to have identical node labels; human developed labels can be noisy, and our distance measure should have some mechanism to compare these labels meaningfully. Finally, the distance measure should incorporate all aspects of a tree, including \textbf{position} of nodes within the tree, the \textbf{refinement} of nodes, and the \textbf{labels} of nodes. Additionally, our distance measure should work on \textbf{unordered} attack trees, as the standard definition of attack trees does not assign an order to children of nodes~\cite{mauw_foundations_2006}.
+We expect our distance measure to be able to describe distance between trees with \textbf{unfiltered} labels. A practitioner should be able to apply this distance measure without needing compared trees to have identical node labels; human developed labels can be noisy, and our distance measure should have some mechanism to compare these labels meaningfully. We expect that the distance measure we find is \textbf{intuitive}ly understandable by a user; in other terms, a practitioner should be able to easily roughly understand why two trees are a given distance apart.
 
 
-\subsubsection{Validation Requirements}
 
-We must be able to validate these measures, which we will be able to do if the trees respond in a predictable manner and intuitive manner. We expect that the distance measure we find is \textbf{intuitive}ly understandable by a user; in other terms, a practitioner should be able to easily roughly understand why two trees are a given distance apart.
+% \subsubsection{Validation Requirements}
 
+% We must be able to validate these measures, which we will be able to do if the trees respond in a predictable manner and intuitive manner. 
 
 
 

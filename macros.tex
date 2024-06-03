@@ -37,9 +37,21 @@
 \newcommand{\qsIndent}{2em}
 \newcommand{\surveyq}[1]{\textbf{#1:}}
 
-\newcommand{\Confirm}{\Checkmark}
-\newcommand{\Partial}{}
-\newcommand{\Negate}{}
+
+\newcommand{\tikzxmark}{% originally 6 - 3
+    \tikz[scale=0.23] {
+        \draw[line width=0.7,line cap=round] (0,0) to [bend left=0] (1,1);
+        \draw[line width=0.7,line cap=round] (0,1) to [bend right=0] (1,0);
+    }}
+\newcommand{\tikzcmark}{% originall 10 - 1
+    \tikz[scale=0.23] {
+        \draw[line width=0.7,line cap=round] (0.25,0) to [bend left=0] (1,1);
+        \draw[line width=0.7,line cap=round] (0,0.35) to [bend right=0] (0.23,0);
+    }}
+
+\newcommand{\Confirm}{\tikzcmark}
+\newcommand{\Partial}{\textemdash}
+\newcommand{\Negate}{\tikzxmark}
 
 
 \newcommand{\absSection}[1]{\uppercase{{#1}}.}

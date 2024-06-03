@@ -1,17 +1,14 @@
-\section{Validation Methodology}
+\section{Methodology}
 \label{sec:methodology}
 
-We designed an experimental methodology based on the requirements described in Section~\ref{ssec:requirements}
-
-
-
+We apply the validation methodology described in Section~\ref{sec:validation}.
 
 
 \subsection{Theoretical Validation}
 \label{ssec:methodology-examples}
 
 
-Outside of the real-world experiment we developed to test the attack tree distance measurements, we also examine the distances measures with a series of theoretical examples. For these examples, we are not concerned with the semantic similarity,  as this is assessed in our experiment. As such, all labels are single capital letters and we set the similar limit ($\epsilon$) to 1, which would require node to be equivalent in order to be matched.
+Outside of the real-world experiment we developed to test the attack tree distance measurements, we also examine the distances measures with a series of theoretical examples. For these basic transformation examples (BTEs), we are not concerned with the semantic similarity,  as this is assessed in our experiment. As such, all labels are single capital letters and we set the similar limit ($\epsilon$) to 1, which would require node to be equivalent in order to be matched.
 
 Each of these examples are simple enough that we can intuitively describe a distance. From this, we can examine how each of our distance measures handle each case. If a distance measure differs significantly from what we expect, this is indicative of the measure being deficient in measure some aspect of the distance between attack trees. The examples are shown in Figure~\ref{fig:counterexamples}.
 
@@ -110,7 +107,7 @@ Each of these examples are simple enough that we can intuitively describe a dist
         }
         \subcaption{Move Down}\label{fig:b}
     \end{subfigure}
-    \caption{Counterexamples}\label{fig:counterexamples}
+\caption{Basic Transformation Examples (BTEs)}\label{fig:counterexamples}
 \end{figure*}
 
 
