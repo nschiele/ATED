@@ -89,6 +89,23 @@ Move Down &\CERow{ 1}{0}{2}{3}{1}{1.25} \\
 \label{tab:counterexamples}
 \end{table*}
 
+\newcommand{\WSDWidth}{.45\linewidth}
+\begin{figure*}[t]
+    \centering
+    \begin{subfigure}[b]{\WSDWidth}
+        \includegraphics[width=\linewidth]{code/img/wsd-at1.pdf}
+        \caption{WSD on AT1}
+        \label{fig:wsd-at1}
+    \end{subfigure}
+    \begin{subfigure}[b]{\WSDWidth}
+        \includegraphics[width=\linewidth]{code/img/wsd-at2.pdf}
+        \caption{WSD on AT2}
+        \label{fig:wsd-at2}
+    \end{subfigure}
+    \caption{WSD on AT1 and AT2 using the optimal $\alpha$ value established in Section~\ref{ssec:results-alpha}}
+    \label{fig:wsd}
+\end{figure*}
+
 As enumerated in Section~\ref{ssec:methodology-examples}, we have 12 examples of various small changes that could occur between attack trees. These are meant to assess if each of our distance measures is able to represent these changes in a manner we would consider intuitive. The absolute distance for each distance measure for each example is provided in Table~\ref{tab:counterexamples}.
 
 In Table~\ref{tab:counterexamples}, we describe an ``intuitive answer''. This is what we believe a practitioner would describe as the distance between the given BTEs and the base attack tree, shown in Figure~\ref{sfig:base}. The intuitive answer is the number of ``operations'' that would be required to convert the base attack tree into the BTE.
