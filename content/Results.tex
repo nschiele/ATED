@@ -61,30 +61,37 @@ We can see this comparison in Figure~\ref{fig:operations}, the distribution of o
 \subsection{Basic Transformation Examples (BTEs)}
 \label{ssec:results-examples}
 
-\newcommand{\CERow}[6]{#1 & #2 & #3 & #4 & #5 & #6}
+\newcommand{\CERow}[9]{#1 & #2 & #3 & #4 & #5 & #7 & #8 & #9}
+\newcommand{\WSDFootOne}{2}
+\newcommand{\WSDFootTwo}{2}
+\newcommand{\WSDFootThree}{3}
+\newcommand{\WSDFootFour}{4}
 \begin{table*}[t]
 \centering
-\begin{tabular}{lccccc:c}
+\begin{tabular}{lccccc:ccc}
 \toprule
-\shortstack[l]{Basic Transformation\\Example (BTE)} & \CERow{\shortstack{Intuitive\\answer} }{ \shortstack{Label\\Distance} }{ \shortstack{Tree Edit\\Distance} }{ \shortstack{Radical\\Distance} }{ \multicolumn{1}{c}{\shortstack{Multiset\\Distance} }}{\multicolumn{1}{c}{\shortstack{Weight Sum\\Distance\footnotemark}}}\\
+\shortstack[l]{Basic Transformation\\Example (BTE)} & \CERow{\shortstack{Intuitive\\answer} }{ \shortstack{Label\\Distance} }{ \shortstack{Tree Edit\\Distance} }{ \shortstack{Radical\\Distance} }{ \multicolumn{1}{c}{\shortstack{Multiset\\Distance} }}{\multicolumn{1}{c}{\shortstack{Weight Sum\\Distance\footnotemark[\WSDFootOne]}}}{\multicolumn{1}{c}{\shortstack{Weight Sum\\Distance\footnotemark[\WSDFootTwo]}}}{\multicolumn{1}{c}{\shortstack{Weight Sum\\Distance\footnotemark[\WSDFootThree]}}}{\multicolumn{1}{c}{\shortstack{Weight Sum\\Distance\footnotemark[\WSDFootFour]}}}\\
 \midrule
-Order Reversed &\CERow{0}{0}{7}{0}{0}{1.75} \\\hdashline
-Refinement Switch &\CERow{ 1}{0}{1}{1}{3}{.5} \\
-Extra Intermediate &\CERow{ 1}{1}{1}{1}{0}{1} \\
-Missing Intermediate &\CERow{ 1}{1}{1}{4}{0}{1.75} \\
-Extra Leaf &\CERow{ 1}{1}{1}{1}{1}{1} \\
-Missing Leaf &\CERow{ 1}{1}{1}{1}{1}{1} \\
-Changed Root &\CERow{ 1}{1}{1}{1}{0}{1} \\
-Changed Intermediate&\CERow{1}{1}{1}{1}{0}{1} \\
-Changed Leaf &\CERow{ 1}{1}{1}{1}{1}{1} \\
-Move Adjacent &\CERow{ 1}{0}{2}{2}{3}{1} \\
-Move Up &\CERow{ 1}{0}{2}{2}{0}{1} \\
-Move Down &\CERow{ 1}{0}{2}{3}{1}{1.25} \\
+Order Reversed &\CERow{0}{0}{7}{0}{0}{1.75}{0}{3.5}{1.05} \\\hdashline
+Refinement Switch &\CERow{ 1}{0}{1}{1}{3}{0.5}{0.75}{0.5}{0.5} \\
+Extra Intermediate &\CERow{ 1}{1}{1}{1}{0}{1}{0.85}{1}{1}  \\
+Missing Intermediate &\CERow{ 1}{1}{1}{4}{0}{1.75}{1.75}{1}{2.05} \\
+Extra Leaf &\CERow{ 1}{1}{1}{1}{1}{1}{1}{1}{1}  \\
+Missing Leaf &\CERow{ 1}{1}{1}{1}{1}{1}{1}{1}{1}  \\
+Changed Root &\CERow{ 1}{1}{1}{1}{0}{1}{.85}{1}{1}  \\
+Changed Intermediate&\CERow{1}{1}{1}{1}{0}{1}{0.85}{1}{1}  \\
+Changed Leaf &\CERow{ 1}{1}{1}{1}{1}{1}{1}{1}{1}  \\
+Move Adjacent &\CERow{ 1}{0}{2}{2}{3}{1}{1.05}{1}{1}  \\
+Move Up &\CERow{ 1}{0}{2}{2}{0}{1}{0.6}{1}{1}  \\
+Move Down &\CERow{ 1}{0}{2}{3}{1}{1.25}{1.05}{1}{1.35} \\
 \bottomrule
     \end{tabular}
 \caption{The distances provided by each of the distance measurements. The intuitive distance for each of these BTEs is provided in column 1\\
 \footnotesize
-2: We use a weighted value of $\alpha = [.5, .25, .25, 0]$\\
+% \WSDFootOne: We use a weighted value of $\alpha = [.5, .25, .25, 0]$\\
+\WSDFootTwo: We use a weighted value of $\alpha = [0.55, 0, 0.30, 0.15]$\\
+\WSDFootThree: We use a weighted value of $\alpha = [0.5, 0.5, 0, 0]$\\
+\WSDFootFour: We use a weighted value of $\alpha = [0.5, 0.15, 0.35, 0]$\\
 \normalsize}
 \label{tab:counterexamples}
 \end{table*}
