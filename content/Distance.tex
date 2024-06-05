@@ -228,6 +228,7 @@ This method of computation works as it is not possible to have an intermediate a
 
 
 \subsection{Multiset Difference (MSD)}
+\label{ssec:msd}
 
 Attack trees can be represented mathematically in many different ways. The definition we offer in Definition~\ref{def:attack-tree} is a recursive definition. Multiple different representations of attack trees have been proposed, the arguably most established attack tree semantics would be multiset semantics proposed by Mauw and Oostdijk~\cite{mauw_foundations_2006}. In multiset semantics, each multiset represents a single a complete attack vector within the attack tree. A multiset consisting of multisets represents a node with multiple children. For defining multiset difference, we can use the Jaccard distance between two multisets. However, if we were to use this method, we would need node labels in order for the elements to be considered identical.
 
@@ -238,6 +239,7 @@ Multiset semantics, like most mathematical attack tree semantics, contain only t
 
 
 \subsection{Radical Distance (RD)}
+\label{ssec:rd}
 
 In a previous work on attack trees, a proposed mechanism of attack tree decomposition focused on the concept of radicals, or subtrees consisting of a single parent, refinement, and set of children~\cite{schiele2021novel}. We take this decomposition and compare the resulting set of radicals. We define the distance between the resulting radicals according to Algorithm~\ref{alg:recursive-radical} in Appendix~\ref{appendix:alg:radical-distance}.
 
@@ -249,6 +251,7 @@ RRD as we have defined it does not contain a mechanism to enable tracking of mod
 
 
 \subsection{Weighted Sum Distance (WSD)}
+\label{ssec:wsd}
 
 This is a weighted average of the above distance values. We will validate and asses the four distance measures described in this section according to our experimental design described in Section~\ref{sec:methodology}. We will then attempt to propose a single distance measure that is the weighted sum of the other four distance measures. This weighted sum can be expressed as the following:
 \[
