@@ -1,5 +1,9 @@
 \section{Discussion}
 \label{sec:dicsussion}
+
+\newcommand{\ReqFootOne}{3}
+\newcommand{\ReqFootTwo}{4}
+\newcommand{\ReqFootThree}{5}
 \newcommand{\ReqTableRow}[9]{#1 & #2 & #3 & #4 & #5 & #6 & #7 & #8 & #9}
 \begin{table*}[ht!]
 \centering
@@ -18,17 +22,17 @@
 & \shortstack{\req{9}\\\textbf{Experimentally}\\\textbf{Valid}}
 \\ \midrule
 %\textbf{Statistics}       & \Negate                & \Confirm\footnotemark[1]          & \Negate \footnotemark[2]        & \Confirm          &\Confirm   & \Negate                 & \Confirm           & \Negate                   & \Negate\footnotemark[2]                    \\
-\textbf{TED} &\Confirm&\Confirm&\Confirm&\Confirm&\Negate&\Confirm&\Confirm&\Partial\footnotemark[3]&\Confirm\\
-\textbf{LD}  &\Confirm&\Negate&\Negate&\Confirm&\Confirm&\Confirm&\Confirm&\Partial\footnotemark[3]&\Confirm\\
-\textbf{RD}  &\Confirm&\Confirm&\Confirm&\Confirm&\Confirm&\Confirm&\Confirm&\Partial\footnotemark[3]&\Confirm\\
-\textbf{MSD} &\Confirm&\Negate&\Partial\footnotemark[4]&\Partial\footnotemark[4]&\Confirm&\Confirm&\Negate&\Partial\footnotemark[3]&\Partial\footnotemark[5]\\ \bottomrule
+\textbf{TED} &\Confirm&\Confirm&\Confirm&\Confirm&\Negate&\Confirm&\Confirm&\Partial\footnotemark[\ReqFootOne]&\Confirm\\
+\textbf{LD}  &\Confirm&\Negate&\Negate&\Confirm&\Confirm&\Confirm&\Confirm&\Partial\footnotemark[\ReqFootOne]&\Confirm\\
+\textbf{RD}  &\Confirm&\Confirm&\Confirm&\Confirm&\Confirm&\Confirm&\Confirm&\Partial\footnotemark[\ReqFootOne]&\Confirm\\
+\textbf{MSD} &\Confirm&\Negate&\Partial\footnotemark[\ReqFootTwo]&\Partial\footnotemark[\ReqFootTwo]&\Confirm&\Confirm&\Negate&\Partial\footnotemark[\ReqFootOne]&\Partial\footnotemark[\ReqFootThree]\\ \bottomrule
             \end{tabular}
     }
     \caption{A comparison of the different distance measures and their suitability w.r.t. the requirements defined in Section~\ref{ssec:requirements}\\
 \footnotesize
-3: All distance measures failed on at least on of our BTEs\\
-4: MSD does not include all nodes, but does contain some information about refinements for the nodes that are included\\
-5: MSD exhibits behavior on the experimental dataset that does not align with our expectations. As such, the experimental validity is inconclusive.
+\ReqFootOne: All distance measures failed on at least on of our BTEs\\
+\ReqFootTwo: MSD does not include all nodes, but does contain some information about refinements for the nodes that are included\\
+\ReqFootThree: MSD exhibits behavior on the experimental dataset that does not align with our expectations. As such, the experimental validity is inconclusive.
         \normalsize}
     \label{tab:requirmeent-suitability}
     \end{table*}
