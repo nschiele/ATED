@@ -42,38 +42,38 @@ The ability to compare methods is an important aspects of further development of
     \label{fig:tartgetAT}
 \end{figure*}
 
-\begin{figure*}
-    \resizebox{\linewidth}{!}{
-        \begin{forest}
-            for tree={
-            draw,
-            minimum height=.25cm,
-            anchor=parent,
-            align=center,
-            child anchor=parent,
-            edge=-
-            },
-            adnode/.style={rounded rectangle,},
-            [{Obtain personal data}, adnode,
-                    [{Unauthorized profile access}, adnode, small angle below,
-                            [{Gaining user cred.}, adnode,
-                                    [{Malware}, adnode,]
-                                        [{Social engineering}, adnode,]]
-                                [{Access profile}, adnode,
-                                    [{Remote access}, adnode,]
-                                        [{Steal phone}, adnode,]]]
-                        [{Background data attack}, adnode, small angle below,
-                            [{Obtain dataset}, adnode,]
-                                [{Link dataset}, adnode,]]
-                        [{Cred. creep}, adnode,
-                            [{User profiling}, adnode,]
-                                [{Request additional data}, adnode,]]
-                ]
-        \end{forest}
-    }
-    \caption{An attack tree that was also adapted from Naik~\etal~\cite{naikEvaluationPotentialAttack2022} which should be equivalent to Figure~\ref{fig:tartgetAT}. This will be used in Section~\ref{sec:distance} to model the different distance measurements.}
-    \label{fig:tartgetAT2}
-\end{figure*}
+% \begin{figure*}
+%     \resizebox{\linewidth}{!}{
+%         \begin{forest}
+%             for tree={
+%             draw,
+%             minimum height=.25cm,
+%             anchor=parent,
+%             align=center,
+%             child anchor=parent,
+%             edge=-
+%             },
+%             adnode/.style={rounded rectangle,},
+%             [{Obtain personal data}, adnode,
+%                     [{Unauthorized profile access}, adnode, small angle below,
+%                             [{Gaining user cred.}, adnode,
+%                                     [{Malware}, adnode,]
+%                                         [{Social engineering}, adnode,]]
+%                                 [{Access profile}, adnode,
+%                                     [{Remote access}, adnode,]
+%                                         [{Steal phone}, adnode,]]]
+%                         [{Background data attack}, adnode, small angle below,
+%                             [{Obtain dataset}, adnode,]
+%                                 [{Link dataset}, adnode,]]
+%                         [{Cred. creep}, adnode,
+%                             [{User profiling}, adnode,]
+%                                 [{Request additional data}, adnode,]]
+%                 ]
+%         \end{forest}
+%     }
+%     \caption{An attack tree that was also adapted from Naik~\etal~\cite{naikEvaluationPotentialAttack2022} which should be equivalent to Figure~\ref{fig:tartgetAT}. This will be used in Section~\ref{sec:distance} to model the different distance measurements.}
+%     \label{fig:tartgetAT2}
+% \end{figure*}
 
 We define attack trees, as initially described by Bruce Schneier~\cite{schneierAttackTrees1999}, to be a rooted acyclic structure with the following recursive definition  from Gadyatskaya~\etal~\cite{gadyatskayaRefinementAwareGenerationAttack2017}.
 
