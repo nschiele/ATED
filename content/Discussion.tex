@@ -1,22 +1,5 @@
 \section{Discussion}
 \label{sec:dicsussion}
-
-
-
-
-% Our fundamental research question is: \emph{How do we measure the distance between two attack trees?}
-
-% To answer this, we start by understanding the requirements behind measure distance metric, based on our experience with attack trees and related literature. We then propose a repeatable method for experimentally validating any tree distance metric. We further propose both a mechanism for processing different node labels with similar meanings and novel algorithms for calculating the distance between two attack trees. Finally, combine all of this to propose a distance function that behaves in a reasonable way.
-
-
-
-We have introduced a modification of a well studied tree distance algorithm (TED)~\cite{Zhang_Shasha_1989}; in addition, we have further introduced three novel distance measures in LD, RD and MSD. In Section~\ref{sec:results}, we show our theoretical and experimental attempts to validate these approaches. We showed in Figures~\ref{fig:semsim-at1}~and~\ref{fig:semsim-at2} that TED, LD and RD all behave similarly when comparing the distance between two trees. This suggests that these three distance measures are fundamentally measuring the same thing. In the same figures, we see MSD exhibiting behavior that does not follow the other distance measures or our expectations. This is further confirmed by Figure~\ref{fig:semsim-at1-2}, in which MSD suddenly increases in distance with increasing $\epsilon$, a behavior we would not expect, as the difference between AT1 and AT2 as described in Section~\ref{sec:methodology} is primarily node additions, which would not be affected by $\epsilon$. This suggests that MSD is not a suitable distance measure for comparing attack trees, or that MSD is comparing something other than what we want it to compare.
-
-Further, exploring the ``operations'' of the different distance measures in Figure~\ref{fig:operations}, we can see that MSD does not behave in the same way as other distance measures. Namely, in the AT1 vs AT2 plot for MSD, we see a large increase of change operations with rising $\epsilon$. As multiset semantics only include leaf nodes, as participants in our study added nodes to their trees to create AT2 from AT1, the multiset semantics fundamentally changed. This change is represented in the distance plots with rising $\epsilon$.
-
-When examining the responses to the BTEs, MSD behaves in a way that is completely unexpected. Some BTEs are shows as no distance (BTEs which do not change leaf nodes) while others are over-counted in terms of distance (all BTEs which do change leaf nodes). This results in our optimal $\alpha$ for WSD to not include MSD at all, as discussed in Section~\ref{ssec:results-alpha}. This should not be interpreted to say the semantics of attack trees are unimportant. Radical distance (RD) is heavily based on refinement semantics~\cite{gadyatskayaRefinementAwareGenerationAttack2017}. It may be the case that semantic representations require inclusion of intermediate nodes, which is a fundamental difference between multiset and refinement semantics. For this work, inclusion of intermediate nodes is necessary to meet our validation criteria.
-
-
 \newcommand{\ReqTableRow}[9]{#1 & #2 & #3 & #4 & #5 & #6 & #7 & #8 & #9}
 \begin{table*}[ht!]
 \centering
@@ -49,6 +32,23 @@ When examining the responses to the BTEs, MSD behaves in a way that is completel
         \normalsize}
     \label{tab:requirmeent-suitability}
     \end{table*}
+
+
+
+% Our fundamental research question is: \emph{How do we measure the distance between two attack trees?}
+
+% To answer this, we start by understanding the requirements behind measure distance metric, based on our experience with attack trees and related literature. We then propose a repeatable method for experimentally validating any tree distance metric. We further propose both a mechanism for processing different node labels with similar meanings and novel algorithms for calculating the distance between two attack trees. Finally, combine all of this to propose a distance function that behaves in a reasonable way.
+
+
+
+We have introduced a modification of a well studied tree distance algorithm (TED)~\cite{Zhang_Shasha_1989}; in addition, we have further introduced three novel distance measures in LD, RD and MSD. In Section~\ref{sec:results}, we show our theoretical and experimental attempts to validate these approaches. We showed in Figures~\ref{fig:semsim-at1}~and~\ref{fig:semsim-at2} that TED, LD and RD all behave similarly when comparing the distance between two trees. This suggests that these three distance measures are fundamentally measuring the same thing. In the same figures, we see MSD exhibiting behavior that does not follow the other distance measures or our expectations. This is further confirmed by Figure~\ref{fig:semsim-at1-2}, in which MSD suddenly increases in distance with increasing $\epsilon$, a behavior we would not expect, as the difference between AT1 and AT2 as described in Section~\ref{sec:methodology} is primarily node additions, which would not be affected by $\epsilon$. This suggests that MSD is not a suitable distance measure for comparing attack trees, or that MSD is comparing something other than what we want it to compare.
+
+Further, exploring the ``operations'' of the different distance measures in Figure~\ref{fig:operations}, we can see that MSD does not behave in the same way as other distance measures. Namely, in the AT1 vs AT2 plot for MSD, we see a large increase of change operations with rising $\epsilon$. As multiset semantics only include leaf nodes, as participants in our study added nodes to their trees to create AT2 from AT1, the multiset semantics fundamentally changed. This change is represented in the distance plots with rising $\epsilon$.
+
+When examining the responses to the BTEs, MSD behaves in a way that is completely unexpected. Some BTEs are shows as no distance (BTEs which do not change leaf nodes) while others are over-counted in terms of distance (all BTEs which do change leaf nodes). This results in our optimal $\alpha$ for WSD to not include MSD at all, as discussed in Section~\ref{ssec:results-alpha}. This should not be interpreted to say the semantics of attack trees are unimportant. Radical distance (RD) is heavily based on refinement semantics~\cite{gadyatskayaRefinementAwareGenerationAttack2017}. It may be the case that semantic representations require inclusion of intermediate nodes, which is a fundamental difference between multiset and refinement semantics. For this work, inclusion of intermediate nodes is necessary to meet our validation criteria.
+
+
+
 
 
 
