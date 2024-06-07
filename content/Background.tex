@@ -15,15 +15,13 @@ Another question, posed in~\cite{gadyatskaya2023chatgpt}, relates to establishin
 %Our primary research goal is to determine a mechanism to calculate the distance between two attack trees. This is a novel problem, as a distance measure between attack trees has not been established. Further, a means of experimentally validating distance measures has yet to be established.
 
 
-%\textbf{Research Questions and Contributions}
-
-
-Thus, our fundamental research question is: \emph{How do we measure the distance between two attack trees?} 
+\textbf{Research question and contributions.} 
+Our fundamental research question is: \emph{How do we measure the distance between two attack trees?} 
 To answer this, we start by examining the requirements for measuring distance between attack trees (or their similarity), based on the related literature and our experience with attack trees. We then propose a repeatable method for experimentally validating any attack tree distance metric to ensure that it meets the requirements. We also design and execute a human study with students ($n=39$) to collect a dataset of human-designed attack tree models that can be used in the validation process.
 
 Subsequently, we examine the idea that human experts can relatively easily recognize when two attack tree nodes represent similar attacks, and we propose the notion of \emph{semantic similarity of labels} based on the popular BERT transformer model~\cite{devlin2018bert}. We then define four attack tree distance metrics: (1) \emph{tree edit distance}~\cite{zhang_editing_1992}; (2) \emph{label distance} that estimates how close the whole sets of labels of two trees; (3) \emph{radical distance} that is inspired by~\cite{schiele2021novel} and the refinement semantics discussed in~\cite{gadyatskayaRefinementAwareGenerationAttack2017}; and (4) \emph{multiset distance} that stems from the multiset attack tree semantics proposed in~\cite{mauwFoundationsAttackTrees2006}. Finally, we evaluate the behavior of the proposed metrics using the proposed validation method and propose a combined approach that calculates a \emph{weighted sum distance} of the studied metrics.
 
-Our study finds that there   
+Our study finds that, overall, the radical distance and the tree edit distance are the most promising metrics and they can be used by practitioners to assess the similarity of real-world attack trees, while the semantics-based multiset distance is inadequate.  A weighted combination of the studied distances is a promising approach, yet it introduces substantial computational overhead. In the future, when we can expect attack models to be synthesized using dedicated generative AI methods~\cite{elshareffacilitating,happe2023getting,xu2024autoattacker,zhang2024attackg,zhang2024vtt}, model similarity measurement can become an important problem, and our work paves the way in solving it. 
 
 %propose both a mechanism for processing different node labels with similar meanings and novel algorithms for calculating the distance between two attack trees. Finally, combine all of this to propose a distance function that behaves in a reasonable and intuitive manner.
 
