@@ -42,18 +42,18 @@ We can see this comparison in Figure~\ref{fig:operations}, the distribution of o
 
 \begin{figure*}
 \centering
-\resizebox{.75\linewidth}{!}{
-\begin{tabular}{lccc}
-    Distance & AT1                                                                         & AT1 vs AT2                                                                    & AT2                                                                         \\
-\shortstack{Label\\Distance\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }}       & \includegraphics[width=.25\linewidth]{code/img/operation_count_ld_AT1.pdf}  & \includegraphics[width=.25\linewidth]{code/img/operation_count_ld_AT1-2.pdf}  & \includegraphics[width=.25\linewidth]{code/img/operation_count_ld_AT2.pdf}  \\
-\shortstack{Tree Edit\\Distance\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }}      & \includegraphics[width=.25\linewidth]{code/img/operation_count_zss_AT1.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_zss_AT1-2.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_zss_AT2.pdf} \\
-\shortstack{Radical\\Distance\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }}       & \includegraphics[width=.25\linewidth]{code/img/operation_count_rrd_AT1.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_rrd_AT1-2.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_rrd_AT2.pdf} \\
-\shortstack{Multiset\\Distance\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }\\\text{ }}       & \includegraphics[width=.25\linewidth]{code/img/operation_count_ms_AT1.pdf}  & \includegraphics[width=.25\linewidth]{code/img/operation_count_ms_AT1-2.pdf}  & \includegraphics[width=.25\linewidth]{code/img/operation_count_ms_AT2.pdf}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lcccc}
+Distance & Label Distance & Tree Edit Distance & Radical Distance & Multiset Distance \\
+AT1 & \includegraphics[width=.25\linewidth]{code/img/operation_count_ld_AT1.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_zss_AT1.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_rrd_AT1.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_ms_AT1.pdf} \\
+AT1 vs AT2 & \includegraphics[width=.25\linewidth]{code/img/operation_count_ld_AT1-2.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_zss_AT1-2.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_rrd_AT1-2.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_ms_AT1-2.pdf} \\
+AT2 & \includegraphics[width=.25\linewidth]{code/img/operation_count_ld_AT2.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_zss_AT2.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_rrd_AT2.pdf} & \includegraphics[width=.25\linewidth]{code/img/operation_count_ms_AT2.pdf}
 \end{tabular}
 }
 \caption{Plots showing each type of modification operation as a percentage of the total number of operations for increasing similarity limit $\epsilon$. {\color{color1} \textbf{Blue}} indicates a removal operation. {\color{color2} \textbf{Orange}} indicates an addition operation. {\color{color3} \textbf{Green}} indicates a changing operation, and {\color{color4} \textbf{Red}} indicates a matching operation. }
 \label{fig:operations}
 \end{figure*}
+
 
 
 
@@ -154,6 +154,41 @@ Our three optimal $\alpha$ values are shown on Table~\ref{tab:counterexamples}. 
 
 
 
+\newcommand{\ReqFootOne}{3}
+\newcommand{\ReqFootTwo}{4}
+\newcommand{\ReqFootThree}{5}
+\newcommand{\ReqTableRow}[9]{#1 & #2 & #3 & #4 & #5 & #6 & #7 & #8 & #9}
+\begin{table*}[ht!]
+    \centering
+    \resizebox{\linewidth}{!}{%
+        \begin{tabular}{@{}lcccc:ccc:cc@{}}
+            \toprule
+            \shortstack{\textbf{Distance}                                                                                                                                                                                                        \\\textbf{Measure}\\\text{ }}
+                         & \shortstack{\req{1}                                                                                                                                                                                                   \\\textbf{Metric}\\\text{ }}
+                         & \shortstack{\req{2}                                                                                                                                                                                                   \\\textbf{Position}\\\text{ }}
+                         & \shortstack{\req{3}                                                                                                                                                                                                   \\\textbf{Refinements}\\\text{ }}
+                         & \shortstack{\req{4}                                                                                                                                                                                                   \\\textbf{Labels}\\\text{ }}
+                         & \shortstack{\req{5}                                                                                                                                                                                                   \\\textbf{Unordered}\\\text{ }}
+                         & \shortstack{\req{6}                                                                                                                                                                                                   \\\textbf{Unfiltered}\\\text{ }}
+                         & \shortstack{\req{7}                                                                                                                                                                                                   \\\textbf{Intuitive}\\\text{ }}
+                         & \shortstack{\req{8}                                                                                                                                                                                                   \\\textbf{Theoretically}\\\textbf{Valid}}
+                         & \shortstack{\req{9}                                                                                                                                                                                                   \\\textbf{Experimentally}\\\textbf{Valid}}
+            \\ \midrule
+            %\textbf{Statistics}       & \Negate                & \Confirm\footnotemark[1]          & \Negate \footnotemark[2]        & \Confirm          &\Confirm   & \Negate                 & \Confirm           & \Negate                   & \Negate\footnotemark[2]                    \\
+            \textbf{TED} & \Confirm            & \Confirm & \Confirm                           & \Confirm                           & \Negate  & \Confirm & \Confirm & \Partial\footnotemark[\ReqFootOne] & \Confirm                             \\
+            \textbf{LD}  & \Confirm            & \Negate  & \Negate                            & \Confirm                           & \Confirm & \Confirm & \Confirm & \Partial\footnotemark[\ReqFootOne] & \Confirm                             \\
+            \textbf{RD}  & \Confirm            & \Confirm & \Confirm                           & \Confirm                           & \Confirm & \Confirm & \Confirm & \Partial\footnotemark[\ReqFootOne] & \Confirm                             \\
+            \textbf{MSD} & \Confirm            & \Negate  & \Partial\footnotemark[\ReqFootTwo] & \Partial\footnotemark[\ReqFootTwo] & \Confirm & \Confirm & \Negate  & \Partial\footnotemark[\ReqFootOne] & \Partial\footnotemark[\ReqFootThree] \\ \bottomrule
+        \end{tabular}
+    }
+    \caption{A comparison of the different distance measures and their suitability w.r.t. the requirements defined in Section~\ref{ssec:requirements}\\
+        \footnotesize
+        \ReqFootOne: All distance measures failed on at least on of our BTEs\\
+        \ReqFootTwo: MSD does not include all nodes, but does contain some information about refinements for the nodes that are included\\
+        \ReqFootThree: MSD exhibits behavior on the experimental dataset that does not align with our expectations. As such, the experimental validity is inconclusive.
+        \normalsize}
+    \label{tab:requirmeent-suitability}
+\end{table*}
 
 
 
