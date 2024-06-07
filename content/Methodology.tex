@@ -8,9 +8,13 @@ We apply the validation methodology described in Section~\ref{sec:validation}.
 \label{ssec:methodology-examples}
 
 
-Outside of the real-world experiment we developed to test the attack tree distance measurements, we also examine the distances measures with a series of theoretical examples. For these basic transformation examples (BTEs), we are not concerned with the semantic similarity,  as this is assessed in our experiment. As such, all labels are single capital letters and we set the similar limit ($\epsilon$) to 1, which would require node to be equivalent in order to be matched.
+We created a comprehensive set of basic transformation examples (BTEs) such that any difference between two attack trees could be described as a series of our set of BTEs. That is, there is no transformation which would result in a BTE not expressed in our set of BTEs. We describe and show all of our BTEs in Figure~\ref{fig:counterexamples}. In all of our BTEs except for Figure~\ref{sfig:bte-order-reversed}, we expect the distance between Figure~\ref{sfig:base} and the provided BTE to be one. In Figure~\ref{sfig:bte-order-reversed}, we expect the distance to be 0, as one of our requirements is that the distance is not affected by node order.
 
-Each of these examples are simple enough that we can intuitively describe a distance. From this, we can examine how each of our distance measures handle each case. If a distance measure differs significantly from what we expect, this is indicative of the measure being deficient in measure some aspect of the distance between attack trees. The examples are shown in Figure~\ref{fig:counterexamples}.
+By examining the performance of each of our distance measures on our set of BTEs, we can evaluate the theoretical validity of each distance measure. Further, we can use the distance according to the BTEs to determine an optimal $\alpha$ for WSD. With theoretical validation, we are not examining the ability of distance measures to process ``unfiltered'' nodes, as such we label all nodes with simple capital letters and set the similarity limit $\epsilon$ to 1 (effectively requiring strict equivalence to determine if nodes are equivalent).
+
+% Outside of the real-world experiment we developed to test the attack tree distance measurements, we also examine the distances measures with a series of theoretical examples. For these basic transformation examples (BTEs), we are not concerned with the semantic similarity,  as this is assessed in our experiment. As such, all labels are single capital letters and we set the similar limit ($\epsilon$) to 1, which would require node to be equivalent in order to be matched.
+
+% Each of these examples are simple enough that we can intuitively describe a distance. From this, we can examine how each of our distance measures handle each case. If a distance measure differs significantly from what we expect, this is indicative of the measure being deficient in measure some aspect of the distance between attack trees. The examples are shown in Figure~\ref{fig:counterexamples}.
 
 
 \newcommand{\CEWidth}{.45\linewidth}
@@ -28,7 +32,7 @@ Each of these examples are simple enough that we can intuitively describe a dist
         \resizebox{2cm}{!}{
             \input{content/snippets/CE/CE_OrderReversed.tex}
         }
-        \subcaption{Order Reversed}\label{fig:b}
+\subcaption{Order Reversed}\label{sfig:bte-order-reversed}
     \end{subfigure}
 \begin{subfigure}[b]{\CEWidth}
         \centering
@@ -116,6 +120,8 @@ Each of these examples are simple enough that we can intuitively describe a dist
 
 \subsection{Experimental Validation}
 
+We designed a experiment to collect attack tree data as we described in Section~\ref{sec:validation}. This experiment is primarily meant to assess the distance measures behavior on an intuitive level as well as the ability of each distance measure to apply the semantic similarity comparison and process ``unfiltered'' labels.
+
 \subsubsection{Experimental Study Design}
 \label{ssec:method-study-design}
 
@@ -131,7 +137,7 @@ We then asked students in part B to expand upon their attack tree by ``doing you
 
 \subsubsection{Analysis}
 \label{ssec:method-analysis}
-From the first task (AT1), we would expect all trees to be roughly equal. There may be some variation due to missing or added information, from participants who may have deviated from the instructions. We would expect for the average distance of all AT1 trees to remain the same for increasing values of $\epsilon$. From this, we can establish ideal values of $\epsilon$, as once the average distance starts increasing, values that were previously equivalent and likely should be equivalent will start to rise. We can further validate by comparing AT1 to AT2 per participant, as these graphs should be constant for any value of $\epsilon$, as the only difference should be added nodes and added nodes are unaffected by the semantic similarity limit (as added nodes will always have a distance of 1). If the distance measures comparing AT1 to AT2 are not constant for all values of $\epsilon$, this would indicate a distance measure that behaves in an unexpected and potentially invalid manner. Finally, by comparing the difference distance measures on AT2, which are truly different attack trees, we can see if the distance measures behave similarly. Ideally, distance measures incorporate all aspects of attack trees, so their behavior should be similar. If the distance measures do not behave similarly, it may be a sign of an invalid distance measure. Our code for all distance algorithms and analysis is provided here: \url{https://anonymous.4open.science/r/ATD-FB1F/README.md}.
+From the first task (AT1), we would expect all trees to be roughly equal. There may be some variation due to missing or added information, from participants who may have deviated from the instructions. We would expect for the average distance of all AT1 trees to remain the same for increasing values of $\epsilon$. From this, we can establish ideal values of $\epsilon$, as once the average distance starts increasing, values that were previously equivalent and likely should be equivalent will start to rise. We can further validate by comparing AT1 to AT2 per participant, as these graphs should be constant for any value of $\epsilon$, as the only difference should be added nodes and added nodes are unaffected by the semantic similarity limit (as added nodes will always have a distance of 1). If the distance measures comparing AT1 to AT2 are not constant for all values of $\epsilon$, this would indicate a distance measure that behaves in an unexpected and potentially invalid manner. Finally, by comparing the difference distance measures on AT2, which are truly different attack trees, we can see if the distance measures behave similarly. Ideally, distance measures incorporate all aspects of attack trees, so their behavior should be similar. If the distance measures do not behave similarly, it may be a sign of an invalid distance measure. Our code for all distance algorithms and analysis is provided here: \url{https://anonymous.4open.science/r/ATD-FB1F/}.
 
 \paragraph{Web Application}
 
